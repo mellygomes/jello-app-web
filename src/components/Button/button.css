@@ -1,0 +1,23 @@
+.jello-button {
+  width: fit-content;
+  padding: 0.4rem 5rem;
+
+  background-color: #242424;
+  color: white;
+
+  border: none;
+  border-radius: 14px;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+
+  cursor: pointer;
+}
+
+.jello-button:hover {
+  background-color: #333333;
+  box-shadow: 0 8px 18px #FFFF;
+  transform: scale(0.98);
+}
