@@ -1,59 +1,65 @@
-import './register.css'
-import signInIcon from '../../assets/icons/icon-sign-in-48.png'
-import userIcon from '../../assets/icons/icon-user-30.png'
-import emailIcon from '../../assets/icons/icon-email-48.png'
-import lockIcon from '../../assets/icons/icon-lock-48.png'
-import Button from '../../components/Button/button.jsx'
+// import registerStyles from './register.module.css';
+import styles from '../../components/AuthLayout/AuthLayout.module.css';
+import signInIcon from '../../assets/icons/icon-sign-in-48.png';
+import userIcon from '../../assets/icons/icon-user-30.png';
+import emailIcon from '../../assets/icons/icon-email-48.png';
+import lockIcon from '../../assets/icons/icon-lock-48.png';
+
+import {AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button} from '../../components';
 
 export default function Register() {
-  return (
-    <div className='container'>
+    return (
+        <div className="container">
+            <div className={styles["auth-container"]}>
 
-      <div className="register-card">
-        <img src={signInIcon} alt="Entrar" className='icon-sign-in'/>
+                <AuthHeader
+                    icon={signInIcon}
+                    alt={"Entrar"}
+                    title={"Registre-se!"}
+                    description={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"}
+                />
 
-        <p className="title">Registre-se</p>
+                <AuthForm>
 
-        <p className="sub">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-          sed do eiusmod tempor incididunt
-        </p>
+                    <AuthInputGroup
+                        icon={userIcon}
+                        alt={"Ícone de usuário"}
+                        type={"text"}
+                        placeholder={"Nome"}
+                    />
+                    <AuthInputGroup
+                        icon={emailIcon}
+                        alt={"Ícone de envelope"}
+                        type={"email"}
+                        placeholder={"E-mail"}
+                    />
 
-      <div className='mb-5'>
-        <form action="">
+                    <div className="p-1"></div>
 
-            <div className="input-group">
-              <img src={userIcon} alt="" className="input-icon" />
-              <input type="text" className="form-input" placeholder="Nome"/>
+                    <AuthInputGroup
+                        icon={lockIcon}
+                        alt={"Ícone de cadeado"}
+                        type={"password"}
+                        placeholder={"Senha"}
+                    />
+                    <AuthInputGroup
+                        icon={lockIcon}
+                        alt={"Ícone de cadeado"}
+                        type={"password"}
+                        placeholder={"Confirmar senha"}
+                    />
+
+                    <Button type="submit">Cadastrar</Button>
+
+                </AuthForm>
+
+                <AuthLink
+                    content={"Já possui uma conta?"}
+                    link={"/login"}
+                    anchor={"Entrar"}
+                />
+
             </div>
-
-            <div className="input-group">
-              <img src={emailIcon} alt="" className="input-icon" />
-              <input type="email" className="form-input" placeholder="E-mail"/>
-            </div>
-
-            <div className='p-1'></div>
-
-            <div className="input-group">
-              <img src={lockIcon} alt="" className="input-icon" />
-              <input type="password" className="form-input" placeholder="Senha"/>
-            </div>
-
-            <div className="input-group">
-              <img src={lockIcon} alt="" className="input-icon" />
-              <input type="password" className="form-input" placeholder="Confirmar senha"/>
-            </div>
-
-            <div className='p-3'></div>
-
-            <div className='button-register'><Button>Cadastrar</Button></div>
-
-        </form>
-      </div>
-
-      <p className='login-link '> Já possui uma conta?<a href="/">Entrar</a></p>
-
-      </div>
-    </div>
-  )
+        </div>
+    )
 }
