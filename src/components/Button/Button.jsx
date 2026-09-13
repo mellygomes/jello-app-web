@@ -1,7 +1,7 @@
-import buttonStyles from './Button.module.css';
-import authStyles from '../AuthLayout/AuthLayout.module.css';
+import buttonStyles from './button.module.css';
+import authStyles from '../AuthLayout/auth-layout.module.css';
 
-export default function Button({children, type = 'button'}) {
+export default function Button({ children, type = 'button' }) {
     return (
         <div className={authStyles["auth-button-register"]}>
             <button type={type} className={buttonStyles["jello-button"]}>

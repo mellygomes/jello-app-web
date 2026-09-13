@@ -1,6 +1,6 @@
-import styles from "./AuthLayout.module.css";
+import styles from "./auth-layout.module.css";
 
-export default function AuthHeader({icon, alt, title, description}) {
+export default function AuthHeader({ icon, alt, title, description }) {
     return (
         <>
             <img src={icon} alt={alt} className={styles['auth-icon']}/>
