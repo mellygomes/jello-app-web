@@ -1,4 +1,4 @@
-import styles from "./AuthLayout.module.css";
+import styles from "./auth-layout.module.css";
 
 export default function AuthForm({ children, onSubmit }) {
     return (

@@ -1,5 +1,5 @@
 // import registerStyles from './register.module.css';
-import styles from '../../components/AuthLayout/AuthLayout.module.css';
+import styles from '../../components/AuthLayout/auth-layout.module.css';
 import signInIcon from '../../assets/icons/icon-sign-in-48.png';
 import userIcon from '../../assets/icons/icon-user-30.png';
 import emailIcon from '../../assets/icons/icon-email-48.png';
