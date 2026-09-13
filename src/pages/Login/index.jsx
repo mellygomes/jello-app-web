@@ -1,17 +1,38 @@
-// import { useContext } from 'react';
-// import { AuthContext } from '../contexts/auth/AuthContext';
-import styles from '../../components/AuthLayout/AuthLayout.module.css';
+import {useContext} from 'react';
+import {AuthContext} from '../../contexts/auth/AuthContext';
+import styles from '../../components/AuthLayout/auth-layout.module.css';
 import loginIcon from '../../assets/icons/icon-sign-in-48.png';
 import emailIcon from '../../assets/icons/icon-email-48.png';
 import lockIcon from '../../assets/icons/icon-lock-48.png';
+import {useNavigate} from "react-router-dom";
 
 import {AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button} from '../../components';
 
+import {useState} from "react";
+import axios from "axios";
+
 export default function Login() {
-    // const { login } = useContext(AuthContext)
-    const handleLogin = (e) => {
+    const {login} = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleLogin = async (e) => {
         e.preventDefault()
-        // Super mega logica de consumir a API mesmo
+
+        const response = await axios.post("http://localhost:8080/api/v1/auth/login", {
+            username,
+            password
+        });
+
+        // Token do usuario salvo no localStorage pra manter login ativo por enquanto
+        const token = response.data.data.token;
+        localStorage.setItem("token", token);
+
+        login(response.data);
+
+        navigate("/");
     }
 
     return (
@@ -29,8 +50,10 @@ export default function Login() {
                     <AuthInputGroup
                         icon={emailIcon}
                         alt={"Ícone de envelope"}
-                        type={"email"}
+                        type={"text"}
                         placeholder={"E-mail"}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
 
                     <AuthInputGroup
@@ -38,6 +61,8 @@ export default function Login() {
                         alt={"Ícone de cadeado"}
                         type={"password"}
                         placeholder={"Senha"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
 
                     <Button type="submit">Login</Button>
