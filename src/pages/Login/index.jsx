@@ -1,18 +1,15 @@
-import {useContext} from 'react';
-import {AuthContext} from '../../contexts/auth/AuthContext';
 import styles from '../../components/AuthLayout/auth-layout.module.css';
 import loginIcon from '../../assets/icons/icon-sign-in-48.png';
 import emailIcon from '../../assets/icons/icon-email-48.png';
 import lockIcon from '../../assets/icons/icon-lock-48.png';
-import {useNavigate} from "react-router-dom";
-
-import {AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button} from '../../components';
-
-import {useState} from "react";
 import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button } from '../../components';
+import { useAuth } from "../../contexts/auth/useAuth.js";
 
 export default function Login() {
-    const {login} = useContext(AuthContext);
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const [username, setUsername] = useState("");
@@ -21,18 +18,27 @@ export default function Login() {
     const handleLogin = async (e) => {
         e.preventDefault()
 
-        const response = await axios.post("http://localhost:8080/api/v1/auth/login", {
-            username,
-            password
-        });
+        try {
+            // Envia os dados de login
+            await axios.post(
+                "http://localhost:8080/api/v1/auth/login",
+                { username, password },
+                { withCredentials: true }
+            );
 
-        // Token do usuario salvo no localStorage pra manter login ativo por enquanto
-        const token = response.data.data.token;
-        localStorage.setItem("token", token);
+            // Valida o login e retorna com os dados caso estejam corretos
+            const response = await axios.get(
+                "http://localhost:8080/api/v1/auth/me",
+                { withCredentials: true }
+            );
 
-        login(response.data);
+            login(response.data.data);
 
-        navigate("/");
+            // Navega para a pagina inicial ou de perfil setada apos o login com sucesso
+            navigate("/");
+        } catch (error) {
+            console.error("Erro ao fazer login:", error);
+        }
     }
 
     return (
