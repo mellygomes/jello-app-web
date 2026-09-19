@@ -9,7 +9,7 @@ import {AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button} from '../../comp
 
 export default function Register() {
     return (
-        <div className="container">
+        <div className={styles["container"]}>
             <div className={styles["auth-container"]}>
 
                 <AuthHeader
@@ -49,7 +49,7 @@ export default function Register() {
                         placeholder={"Confirmar senha"}
                     />
 
-                    <Button type="submit">Cadastrar</Button>
+                    <Button type="submit" className={styles["auth-button-register"]}>Cadastrar</Button>
 
                 </AuthForm>
 
