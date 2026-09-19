@@ -1,0 +1,33 @@
+.profile-wrapper {
+    width: 24rem;
+}
+
+.text-label {
+    font-weight: 600;
+}
+
+.profile-input {
+    background: transparent;
+    border: 2px solid #D9D5D5FF;
+    padding: .5rem 1rem;
+    border-radius: 10px;
+    outline: none;
+    color: #333333;
+    width: 100%;
+}
+
+.profile-input:focus-within {
+    border-color: #169EF92A;
+}
+
+@media (max-width: 1200px) {
+    .profile-wrapper {
+        width: 20rem;
+    }
+}
+
+@media (max-width: 760px) {
+    .profile-wrapper {
+        width: 100%;
+    }
+}
