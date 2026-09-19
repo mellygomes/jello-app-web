@@ -1,0 +1,23 @@
+.header-stats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #ADADAD;
+}
+
+.dot {
+    background-color: #ADADAD;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 390px) {
+    .header-stats {
+        gap: .5rem;
+        font-size: 14px;
+    }
+}

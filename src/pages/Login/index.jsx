@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button } from '../../components';
 import { useAuth } from "../../contexts/auth/useAuth.js";
+// import { extraStyles } from "../../components/AuthLayout/auth-layout.module.css";
 
 export default function Login() {
     const { login } = useAuth();
@@ -42,7 +43,7 @@ export default function Login() {
     }
 
     return (
-        <div className="container">
+        <div className={styles["container"]}>
             <div className={styles['auth-container']}>
 
                 <AuthHeader
@@ -71,7 +72,7 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
 
-                    <Button type="submit">Login</Button>
+                    <Button type="submit" className={styles["auth-button-register"]}>Login</Button>
                 </AuthForm>
 
                 <AuthLink

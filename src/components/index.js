@@ -3,3 +3,8 @@ export { default as AuthHeader} from './AuthLayout/AuthHeader.jsx';
 export { default as AuthForm } from './AuthLayout/AuthForm.jsx';
 export { default as AuthInputGroup } from './AuthLayout/AuthInputGroup.jsx';
 export { default as AuthLink } from './AuthLayout/AuthLink.jsx';
+export { default as ProfilePic } from '../pages/Profile/components/ProfilePic/ProfilePic.jsx';
+export { default as ProfileHeader } from '../pages/Profile/components/ProfileHeader/ProfileHeader.jsx';
+export { default as ProfileDescription } from '../pages/Profile/components/ProfileDescription/ProfileDescription.jsx';
+export { default as ProfileInput } from '../pages/Profile/components/ProfileInput/ProfileInput.jsx';
+export { default as ProfileCover } from '../pages/Profile/components/ProfileCover/ProfileCover.jsx';
