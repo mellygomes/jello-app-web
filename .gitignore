@@ -51,3 +51,8 @@ dist-ssr
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# enviroments 
+.env
+.env.local"
+.env.*.local

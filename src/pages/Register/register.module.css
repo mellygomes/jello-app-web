@@ -1,14 +1,13 @@
-/* Estilos ( ͡• _•) sus aqui, nao vejo uso em lugar nenhum */
-/*.brand {*/
-/*    font-size: 1.7rem;*/
-/*    font-weight: 600;*/
-/*    letter-spacing: -0.5px;*/
-/*    color: #1e293b;*/
-/*    margin-bottom: 0.25rem;*/
-/*}*/
+.erro {
+  background-color: #fdecea;
+  color: #b71c1c;
+  border: 1px solid #f5c6cb;
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  margin-top: 0.75rem;
+}
 
-/*.form-group {*/
-/*    margin-bottom: 0.8rem;*/
-/*}*/
-
-/* Apaguei tudo daqui mané rs */
+/* .erro::before { // Achei feio isso aqui
+  content: "⚠ ";
+} */
