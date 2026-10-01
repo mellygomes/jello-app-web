@@ -11,12 +11,14 @@
 
 .info-container {
     width: 100%;
+    max-width: 53.5rem;
     padding-top: 20px;
     background-color: white;
     min-height: 150px;
     display: flex;
     gap: 3rem;
     flex-direction: column;
+    margin-bottom: 5rem;
 }
 
 .header-wrapper {
@@ -24,6 +26,10 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 6rem;
+
+    flex-direction: column;
+    text-align: center;
+    gap: 3rem;
 }
 
 .form-wrapper {
@@ -41,7 +47,7 @@
 @media (max-width: 1024px) {
     .info-container {
         padding: 0;
-        margin-block: 5rem;
+        margin-block: 3rem;
     }
 
     .input-wrapper {
@@ -49,10 +55,5 @@
         align-items: center;
         gap: 2rem;
         width: 100%;
-    }
-
-    .header-wrapper {
-        flex-direction: column;
-        text-align: center;
     }
 }

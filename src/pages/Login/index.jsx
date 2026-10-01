@@ -2,11 +2,12 @@ import styles from '../../components/AuthLayout/auth-layout.module.css';
 import loginIcon from '../../assets/icons/icon-sign-in-48.png';
 import emailIcon from '../../assets/icons/icon-email-48.png';
 import lockIcon from '../../assets/icons/icon-lock-48.png';
-import axios from "axios";
+// import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button } from '../../components';
 import { useAuth } from "../../contexts/auth/useAuth.js";
+import { getUserLogged, logIn } from "../../services/auth.js";
 // import { extraStyles } from "../../components/AuthLayout/auth-layout.module.css";
 
 export default function Login() {
@@ -21,17 +22,10 @@ export default function Login() {
 
         try {
             // Envia os dados de login
-            await axios.post(
-                "http://localhost:8080/api/v1/auth/login",
-                { username, password },
-                { withCredentials: true }
-            );
+            await logIn({ username, password });
 
             // Valida o login e retorna com os dados caso estejam corretos
-            const response = await axios.get(
-                "http://localhost:8080/api/v1/auth/me",
-                { withCredentials: true }
-            );
+            const response = await getUserLogged()
 
             login(response.data.data);
 

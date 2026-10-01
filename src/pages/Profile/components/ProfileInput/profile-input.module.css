@@ -20,6 +20,12 @@
     border-color: #169EF92A;
 }
 
+.profile-input.disabled {
+    background-color: #f3f3f3;
+    color: #afa9a9;
+    cursor: not-allowed;
+}
+
 @media (max-width: 1200px) {
     .profile-wrapper {
         width: 20rem;

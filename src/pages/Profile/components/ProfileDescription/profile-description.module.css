@@ -2,6 +2,30 @@
     padding: 0;
 }
 
+.description-textarea {
+    background: transparent;
+    border: 2px solid #D9D5D5FF;
+    padding: .5rem 1rem;
+    border-radius: 10px;
+    outline: none;
+    color: #333333;
+    width: 100%;
+    resize: unset;
+}
+
+.description-textarea:focus-within {
+    border-color: #169EF92A;
+}
+
+.description-textarea.disabled {
+    background-color: #f3f3f3;
+    color: #afa9a9;
+    cursor: not-allowed;
+    border: 2px solid #D9D5D5FF;
+    padding: .5rem 1rem;
+    border-radius: 10px;
+}
+
 @media (max-width: 580px) {
     .description-container {
         padding-inline: 12px;
