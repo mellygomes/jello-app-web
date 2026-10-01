@@ -10,3 +10,22 @@
     object-fit: cover;
     display: block;
 }
+
+.cover-button {
+    position: absolute;
+    color: black;
+    left: 90%;
+    padding: 12px;
+    border-radius: 50%;
+    background: white;
+    border: white;
+    bottom: 1rem;
+}
+
+.cover-button.disabled {
+    cursor: not-allowed;
+}
+
+.button-img {
+    /*cursor: not-allowed;*/
+}

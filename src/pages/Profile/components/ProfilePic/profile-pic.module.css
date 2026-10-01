@@ -1,7 +1,5 @@
 .profile-photo {
     position: absolute;
-    top: 160px;
-    left: 20rem;
     width: 180px;
     height: 180px;
     border-radius: 50%;
@@ -10,6 +8,21 @@
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     z-index: 10;
+
+    top: unset;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.profile-photo :global(.ant-upload-wrapper),
+.profile-photo :global(.ant-upload-select),
+.profile-photo :global(.ant-upload) {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: white;
 }
 
 .photo-image {
@@ -17,12 +30,4 @@
     height: 100%;
     object-fit: cover;
     background-color: green;
-}
-
-@media (max-width: 1024px) {
-    .profile-photo {
-        top: unset;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
 }
