@@ -2,7 +2,7 @@ import styles from "./profile.module.css";
 import { useAuth } from "../../contexts/auth/useAuth.js";
 import { ProfilePic, ProfileCover, ProfileHeader, ProfileDescription, ProfileInput, Button, Spinner } from "../../components";
 import { useEffect, useState } from "react";
-import { api } from "../../lib/api.js";
+import { getAvatarUrl, getCoverUrl, getProfile, updateProfile } from "../../services/profile.js";
 
 const emptyForm = {
     firstName: "",
@@ -68,7 +68,7 @@ export default function Profile() {
             setError("");
 
             try {
-                const response = await api.get("/api/v1/users/profile");
+                const response = await getProfile()
                 const loadedProfile = response.data.data;
 
                 if (!loadedProfile) {
@@ -78,8 +78,8 @@ export default function Profile() {
                 if (!cancelled) {
                     setProfile(loadedProfile);
                     console.log("LOADED PROFILE:   ", loadedProfile);
-                    setAvatarUrl("http://localhost:8080/api/v1/images/avatars/" + loadedProfile.avatar.id);
-                    setCoverUrl("http://localhost:8080/api/v1/images/covers/" + loadedProfile.cover.id);
+                    setAvatarUrl(getAvatarUrl(loadedProfile.avatar?.id));
+                    setCoverUrl(getCoverUrl(loadedProfile.cover?.id));
                     setFormData(profileToForm(loadedProfile));
                 }
             } catch (error) {
@@ -178,15 +178,20 @@ export default function Profile() {
                 body.append("cover", coverFile);
             }
 
-            const response = await api.put('/api/v1/users/update', body);
+            const response = await updateProfile(body);   
 
+            if (!response?.data?.data) {
+                throw new Error("Resposta inesperada do servidor");
+            }
+            
             const savedUser = response.data.data;
+            
             console.log("SAVED USER", savedUser);
 
             setProfile(savedUser);
             setFormData(profileToForm(savedUser));
-            setAvatarUrl("http://localhost:8080/api/v1/images/avatars/" + savedUser.avatar.id);
-            setCoverUrl("http://localhost:8080/api/v1/images/covers/" + savedUser.cover.id)
+            setAvatarUrl(getAvatarUrl(savedUser.avatar?.id));
+            setCoverUrl(getCoverUrl(savedUser.cover?.id));
             setAvatarFile(null);
             setCoverFile(null);
             setIsEditing(false);
