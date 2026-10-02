@@ -193,20 +193,28 @@ export default function Profile() {
                         following={`${profile?.following ?? 0} seguindo`}
                         posts={`${profile?.posts ?? 0} posts`}
                     />
-                    {isEditing ? (
-                        <>
-                            <Button onClick={() => setIsEditing(false)}>
-                                Cancelar
+                    <div className="d-flex gap-2">
+                        {isEditing ? (
+                            <>
+                                <Button 
+                                    onClick={() => setIsEditing(false)}
+                                    variant="ghost"
+                                    >
+                                    Cancelar
+                                </Button>
+                                <Button 
+                                    onClick={handleSave} disabled={saving}
+                                    variant="primary"
+                                >
+                                    {saving ? "Salvando..." : "Salvar"}
+                                </Button>
+                            </>
+                        ) : (
+                            <Button onClick={() => setIsEditing(true)}>
+                                Editar
                             </Button>
-                            <Button onClick={handleSave} disabled={saving}>
-                                {saving ? "Salvando..." : "Salvar"}
-                            </Button>
-                        </>
-                    ) : (
-                        <Button onClick={() => setIsEditing(true)}>
-                            Editar
-                        </Button>
-                    )}
+                        )}
+                    </div>
                 </div>
 
                 <ProfileDescription

@@ -1,23 +1,49 @@
 .jello-button {
-    width: fit-content;
-    padding: 0.4rem 5rem;
+  --btn-bg: #1f1f1f;
+  --btn-bg-hover: #2b2b2b;
+  --btn-text: #ffffff;
+  --btn-border: none;           
 
-    background-color: #242424;
-    color: white;
+  width: fit-content;
+  min-width: 150px;
+  padding: 0.4rem 0.5rem;
 
-    border: none;
-    border-radius: 14px;
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  border: var(--btn-border);    
 
-    font-size: 16px;
-    font-weight: 600;
-
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
-
-    cursor: pointer;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: background-color 0.15s, box-shadow 0.15s,
+              transform 0.1s, color 0.15s, border-color 0.15s;
 }
 
 .jello-button:hover {
-    background-color: #333333;
-    box-shadow: 0 8px 18px #FFFF;
-    transform: scale(0.98);
+    background-color: var(--btn-bg-hover);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.152);  /* ← MAS aplica o shadow padrão */
+    transform: translateY(-1px);
+}
+
+.primary {
+  --btn-bg: #1E1E1E;
+  --btn-bg-hover: #373737;
+}
+
+.ghost {
+  --btn-bg: transparent;
+  --btn-bg-hover: #f3f4f6;
+  --btn-text: #6b7280;      /* cinza do texto */
+  --btn-border: 1px solid #9ca3af;   /* borda cinza */
+
+  border: var(--btn-border);
+  box-shadow: none;
+}
+
+.ghost:hover {
+  --btn-bg: #f3f4f6;
+  --btn-bg-hover: #e5e7eb;
+  --btn-text: #576272;
 }
