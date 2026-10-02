@@ -1,8 +1,8 @@
 import styles from "./profile.module.css";
 import { useAuth } from "../../contexts/auth/useAuth.js";
-import { ProfilePic, ProfileCover, ProfileHeader, ProfileDescription, ProfileInput, Button } from "../../components";
+import { ProfilePic, ProfileCover, ProfileHeader, ProfileDescription, ProfileInput, Button, Spinner } from "../../components";
 import { useEffect, useState } from "react";
-import { api } from "../../lib/api.js";
+import { getAvatarUrl, getCoverUrl, getProfile, updateProfile } from "../../services/profile.js";
 
 const emptyForm = {
     firstName: "",
@@ -47,6 +47,11 @@ export default function Profile() {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
 
+    const [errorsValidate, setErrorsValidate] = useState({})
+    const [submitAttempt, setSubmitAttempt] = useState(0)
+
+
+
     useEffect(() => {
 
         if (loading) return;
@@ -63,7 +68,7 @@ export default function Profile() {
             setError("");
 
             try {
-                const response = await api.get("/api/v1/users/profile");
+                const response = await getProfile()
                 const loadedProfile = response.data.data;
 
                 if (!loadedProfile) {
@@ -73,8 +78,8 @@ export default function Profile() {
                 if (!cancelled) {
                     setProfile(loadedProfile);
                     console.log("LOADED PROFILE:   ", loadedProfile);
-                    setAvatarUrl("http://localhost:8080/api/v1/images/avatars/" + loadedProfile.avatar.id);
-                    setCoverUrl("http://localhost:8080/api/v1/images/covers/" + loadedProfile.cover.id);
+                    setAvatarUrl(getAvatarUrl(loadedProfile.avatar?.id));
+                    setCoverUrl(getCoverUrl(loadedProfile.cover?.id));
                     setFormData(profileToForm(loadedProfile));
                 }
             } catch (error) {
@@ -101,6 +106,13 @@ export default function Profile() {
             ...current,
             [name]: value
         }));
+
+        // Isso aqui limpa o erro assim que o usuário começa a digitar de novo
+        setErrorsValidate((prev) => {
+            if (!prev[name]) return prev;
+            const { [name]: _, ...rest } = prev;
+            return rest;
+        });
     };
 
     function handleAvatarChange(info) {
@@ -121,9 +133,33 @@ export default function Profile() {
         setCoverUrl(previewUrl);
     }
 
-    async function handleSave() {
-        setSaving(true);
+    function handleCancel() {
+        setIsEditing(false);
+        setErrorsValidate({});
         setError("");
+        setAvatarFile(null);
+        setCoverFile(null);
+    }
+
+    async function handleSave() {
+        setError("");
+
+        setErrorsValidate({})
+
+        const novosErros = {}
+
+        if (!formData.firstName.trim()) novosErros.firstName = 'Campo obrigatório'
+        if (!formData.email.trim())     novosErros.email = 'Campo obrigatório'
+        if (!formData.username.trim())  novosErros.username = 'Campo obrigatório'
+        if (!formData.lastName.trim())  novosErros.lastName = 'Campo obrigatório'
+
+        if (Object.keys(novosErros).length > 0) {
+            setErrorsValidate(novosErros)
+            setSubmitAttempt((n) => n + 1)
+            return                         
+        }
+
+        setSaving(true);
 
         try {
             const body = new FormData();
@@ -142,15 +178,20 @@ export default function Profile() {
                 body.append("cover", coverFile);
             }
 
-            const response = await api.put('/api/v1/users/update', body);
+            const response = await updateProfile(body);   
 
+            if (!response?.data?.data) {
+                throw new Error("Resposta inesperada do servidor");
+            }
+            
             const savedUser = response.data.data;
+            
             console.log("SAVED USER", savedUser);
 
             setProfile(savedUser);
             setFormData(profileToForm(savedUser));
-            setAvatarUrl("http://localhost:8080/api/v1/images/avatars/" + savedUser.avatar.id);
-            setCoverUrl("http://localhost:8080/api/v1/images/covers/" + savedUser.cover.id)
+            setAvatarUrl(getAvatarUrl(savedUser.avatar?.id));
+            setCoverUrl(getCoverUrl(savedUser.cover?.id));
             setAvatarFile(null);
             setCoverFile(null);
             setIsEditing(false);
@@ -163,7 +204,7 @@ export default function Profile() {
 
     }
 
-    if (loading || loadingProfile) return <p>Carregando perfil...</p>;
+    if (loading || loadingProfile) return <p><Spinner size={14} color="#fff" aria-hidden="true" /> Carregando perfil...</p>;
     if (!user) return <p>Entre na sua conta para ver seu perfil.</p>;
     if (!profile && error) return <p>{error}</p>
 
@@ -193,26 +234,36 @@ export default function Profile() {
                         following={`${profile?.following ?? 0} seguindo`}
                         posts={`${profile?.posts ?? 0} posts`}
                     />
-                    {isEditing ? (
-                        <>
-                            <Button onClick={() => setIsEditing(false)}>
-                                Cancelar
+                    <div className="d-flex gap-2">
+                        {isEditing ? (
+                            <>
+                                <Button
+                                    onClick={handleCancel} variant="ghost"> Cancelar
+                                </Button>
+                                <Button onClick={handleSave} disabled={saving} variant="primary">
+                                    {saving ? (
+                                        <>
+                                            <Spinner size={14} aria-hidden="true" />
+                                            <span>Salvando...</span>
+                                        </>
+                                    ) : (
+                                        "Salvar"
+                                    )}
+                                </Button>
+                            </>
+                        ) : (
+                            <Button onClick={() => setIsEditing(true)}>
+                                Editar
                             </Button>
-                            <Button onClick={handleSave} disabled={saving}>
-                                {saving ? "Salvando..." : "Salvar"}
-                            </Button>
-                        </>
-                    ) : (
-                        <Button onClick={() => setIsEditing(true)}>
-                            Editar
-                        </Button>
-                    )}
+                        )}
+                    </div>
                 </div>
 
                 <ProfileDescription
                     value={formData.bio}
                     onChange={handleChange}
                     disabled={!isEditing}
+                    maxLength={255}
                 />
 
                 <div className={`container ${styles["form-wrapper"]}`}>
@@ -224,6 +275,11 @@ export default function Profile() {
                             value={formData.firstName}
                             onChange={handleChange}
                             disabled={!isEditing}
+                            maxLength={30}
+                            errorValidate={errorsValidate.firstName}
+                            // Notinhaaa: esse shakeKey serve basicamente pra fazer a validação rodar de novo sempre 
+                            // que clica em confirm, daí a animação aparece no campo com erro e usuário pode ver :)  
+                            shakeKey={submitAttempt} 
                         />
                         <ProfileInput
                             id="lastName"
@@ -232,6 +288,9 @@ export default function Profile() {
                             value={formData.lastName}
                             onChange={handleChange}
                             disabled={!isEditing}
+                            maxLength={30}
+                            errorValidate={errorsValidate.lastName}
+                            shakeKey={submitAttempt} 
                         />
                     </div>
                     <div className={styles["input-wrapper"]}>
@@ -243,6 +302,9 @@ export default function Profile() {
                             value={formData.email}
                             onChange={handleChange}
                             disabled={!isEditing}
+                            maxLength={80}
+                            errorValidate={errorsValidate.email}
+                            shakeKey={submitAttempt} 
                         />
                         <ProfileInput
                             id="username"
@@ -251,6 +313,9 @@ export default function Profile() {
                             value={formData.username}
                             onChange={handleChange}
                             disabled={!isEditing}
+                            maxLength={20}
+                            errorValidate={errorsValidate.username}
+                            shakeKey={submitAttempt} 
                         />
                     </div>
                 </div>

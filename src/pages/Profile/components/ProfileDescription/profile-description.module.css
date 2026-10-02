@@ -26,6 +26,36 @@
     border-radius: 10px;
 }
 
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0rem;
+}
+
+.char-counter {
+  opacity: 0;
+  font-size: 0.7rem;
+  color: #9ca3af;
+  transition: color 0.15s;
+  margin-right: 0.3rem;
+}
+
+.description-container:focus-within .char-counter {
+  opacity: 1;
+}
+
+/* perto do limite: amarelo/laranja */
+.char-counter.near-limit {
+  color: #f59e0b;
+}
+
+/* no limite: vermelho */
+.char-counter.at-limit {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
 @media (max-width: 580px) {
     .description-container {
         padding-inline: 12px;

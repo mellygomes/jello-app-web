@@ -1,3 +1,5 @@
+// Instancia a axios e define a URL do back
+
 import axios from 'axios'
 
 export const api = axios.create({
