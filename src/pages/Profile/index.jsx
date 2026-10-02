@@ -1,6 +1,6 @@
 import styles from "./profile.module.css";
 import { useAuth } from "../../contexts/auth/useAuth.js";
-import { ProfilePic, ProfileCover, ProfileHeader, ProfileDescription, ProfileInput, Button } from "../../components";
+import { ProfilePic, ProfileCover, ProfileHeader, ProfileDescription, ProfileInput, Button, Spinner } from "../../components";
 import { useEffect, useState } from "react";
 import { api } from "../../lib/api.js";
 
@@ -163,7 +163,7 @@ export default function Profile() {
 
     }
 
-    if (loading || loadingProfile) return <p>Carregando perfil...</p>;
+    if (loading || loadingProfile) return <p><Spinner size={14} color="#fff" aria-hidden="true" /> Carregando perfil...</p>;
     if (!user) return <p>Entre na sua conta para ver seu perfil.</p>;
     if (!profile && error) return <p>{error}</p>
 
@@ -196,17 +196,18 @@ export default function Profile() {
                     <div className="d-flex gap-2">
                         {isEditing ? (
                             <>
-                                <Button 
-                                    onClick={() => setIsEditing(false)}
-                                    variant="ghost"
-                                    >
+                                <Button onClick={() => setIsEditing(false)} variant="ghost">
                                     Cancelar
                                 </Button>
-                                <Button 
-                                    onClick={handleSave} disabled={saving}
-                                    variant="primary"
-                                >
-                                    {saving ? "Salvando..." : "Salvar"}
+                                <Button onClick={handleSave} disabled={saving} variant="primary">
+                                    {saving ? (
+                                        <>
+                                            <Spinner size={14} aria-hidden="true" />
+                                            <span>Salvando...</span>
+                                        </>
+                                    ) : (
+                                        "Salvar"
+                                    )}
                                 </Button>
                             </>
                         ) : (

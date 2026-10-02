@@ -2,7 +2,12 @@
   --btn-bg: #1f1f1f;
   --btn-bg-hover: #2b2b2b;
   --btn-text: #ffffff;
-  --btn-border: none;           
+  --btn-border: none;       
+  
+  display: inline-flex;            
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 
   width: fit-content;
   min-width: 150px;

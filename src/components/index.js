@@ -8,3 +8,4 @@ export { default as ProfileHeader } from '../pages/Profile/components/ProfileHea
 export { default as ProfileDescription } from '../pages/Profile/components/ProfileDescription/ProfileDescription.jsx';
 export { default as ProfileInput } from '../pages/Profile/components/ProfileInput/ProfileInput.jsx';
 export { default as ProfileCover } from '../pages/Profile/components/ProfileCover/ProfileCover.jsx';
+export { default as Spinner } from '../components/Spinner/Spinner.jsx';
