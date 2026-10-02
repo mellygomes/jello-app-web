@@ -1,5 +1,7 @@
 .profile-wrapper {
     width: 24rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .text-label {
@@ -24,6 +26,61 @@
     background-color: #f3f3f3;
     color: #afa9a9;
     cursor: not-allowed;
+}
+
+@keyframes shake {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(-6px); }
+  40%  { transform: translateX(6px); }
+  60%  { transform: translateX(-4px); }
+  80%  { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+.profile-input.error {
+    border-color: #d32f2f84;
+    animation: shake 0.35s ease-in-out;
+}
+
+.profile-input.error:focus {
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
+}
+/* Mensagem embaixo, bem pequena */
+.error-message {
+  color: #d32f2f;
+  font-size: 0.7rem;
+  margin: 0.25rem 0 0 0.5rem;
+  line-height: 1.2;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0rem;
+}
+
+.char-counter {
+  opacity: 0;
+  font-size: 0.7rem;
+  color: #9ca3af;
+  transition: color 0.15s;
+  margin-right: 0.3rem;
+}
+
+.profile-wrapper-group:focus-within .char-counter {
+  opacity: 1;
+}
+
+/* perto do limite: amarelo/laranja */
+.char-counter.near-limit {
+  color: #f59e0b;
+}
+
+/* no limite: vermelho */
+.char-counter.at-limit {
+  color: #d32f2f;
+  font-weight: 600;
 }
 
 @media (max-width: 1200px) {

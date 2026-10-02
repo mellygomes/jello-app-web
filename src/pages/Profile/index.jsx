@@ -47,6 +47,11 @@ export default function Profile() {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
 
+    const [errorsValidate, setErrorsValidate] = useState({})
+    const [submitAttempt, setSubmitAttempt] = useState(0)
+
+
+
     useEffect(() => {
 
         if (loading) return;
@@ -101,6 +106,13 @@ export default function Profile() {
             ...current,
             [name]: value
         }));
+
+        // Isso aqui limpa o erro assim que o usuário começa a digitar de novo
+        setErrorsValidate((prev) => {
+            if (!prev[name]) return prev;
+            const { [name]: _, ...rest } = prev;
+            return rest;
+        });
     };
 
     function handleAvatarChange(info) {
@@ -121,9 +133,33 @@ export default function Profile() {
         setCoverUrl(previewUrl);
     }
 
-    async function handleSave() {
-        setSaving(true);
+    function handleCancel() {
+        setIsEditing(false);
+        setErrorsValidate({});
         setError("");
+        setAvatarFile(null);
+        setCoverFile(null);
+    }
+
+    async function handleSave() {
+        setError("");
+
+        setErrorsValidate({})
+
+        const novosErros = {}
+
+        if (!formData.firstName.trim()) novosErros.firstName = 'Campo obrigatório'
+        if (!formData.email.trim())     novosErros.email = 'Campo obrigatório'
+        if (!formData.username.trim())  novosErros.username = 'Campo obrigatório'
+        if (!formData.lastName.trim())  novosErros.lastName = 'Campo obrigatório'
+
+        if (Object.keys(novosErros).length > 0) {
+            setErrorsValidate(novosErros)
+            setSubmitAttempt((n) => n + 1)
+            return                         
+        }
+
+        setSaving(true);
 
         try {
             const body = new FormData();
@@ -196,8 +232,8 @@ export default function Profile() {
                     <div className="d-flex gap-2">
                         {isEditing ? (
                             <>
-                                <Button onClick={() => setIsEditing(false)} variant="ghost">
-                                    Cancelar
+                                <Button
+                                    onClick={handleCancel} variant="ghost"> Cancelar
                                 </Button>
                                 <Button onClick={handleSave} disabled={saving} variant="primary">
                                     {saving ? (
@@ -222,6 +258,7 @@ export default function Profile() {
                     value={formData.bio}
                     onChange={handleChange}
                     disabled={!isEditing}
+                    maxLength={255}
                 />
 
                 <div className={`container ${styles["form-wrapper"]}`}>
@@ -233,6 +270,11 @@ export default function Profile() {
                             value={formData.firstName}
                             onChange={handleChange}
                             disabled={!isEditing}
+                            maxLength={30}
+                            errorValidate={errorsValidate.firstName}
+                            // Notinhaaa: esse shakeKey serve basicamente pra fazer a validação rodar de novo sempre 
+                            // que clica em confirm, daí a animação aparece no campo com erro e usuário pode ver :)  
+                            shakeKey={submitAttempt} 
                         />
                         <ProfileInput
                             id="lastName"
@@ -241,6 +283,9 @@ export default function Profile() {
                             value={formData.lastName}
                             onChange={handleChange}
                             disabled={!isEditing}
+                            maxLength={30}
+                            errorValidate={errorsValidate.lastName}
+                            shakeKey={submitAttempt} 
                         />
                     </div>
                     <div className={styles["input-wrapper"]}>
@@ -252,6 +297,9 @@ export default function Profile() {
                             value={formData.email}
                             onChange={handleChange}
                             disabled={!isEditing}
+                            maxLength={80}
+                            errorValidate={errorsValidate.email}
+                            shakeKey={submitAttempt} 
                         />
                         <ProfileInput
                             id="username"
@@ -260,6 +308,9 @@ export default function Profile() {
                             value={formData.username}
                             onChange={handleChange}
                             disabled={!isEditing}
+                            maxLength={20}
+                            errorValidate={errorsValidate.username}
+                            shakeKey={submitAttempt} 
                         />
                     </div>
                 </div>
