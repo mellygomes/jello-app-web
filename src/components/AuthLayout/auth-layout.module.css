@@ -1,3 +1,11 @@
+/*Tira estilos padrão dos navegadores (fundo amarelo etc)*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 /* estilos para aproximar do layout da imagem */
 .container {
     /* background: #F6F6F6; */
@@ -72,6 +80,9 @@
     box-sizing: border-box;
 
     margin: 0.4rem;
+
+    transition: border-color 0.15s, box-shadow 0.15s;
+    border: 1px solid #ccc;
 }
 
 .auth-input-icon {
@@ -125,4 +136,93 @@
 
 .auth-link a:hover {
     text-decoration: none;
+}
+
+/* Animação de tremor */
+@keyframes shake {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(-6px); }
+  40%  { transform: translateX(6px); }
+  60%  { transform: translateX(-4px); }
+  80%  { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes shakeVertical {
+  0%   { transform: translateY(0); }
+  20%  { transform: translateY(-6px); }
+  40%  { transform: translateY(6px); }
+  60%  { transform: translateY(-4px); }
+  80%  { transform: translateY(4px); }
+  100% { transform: translateY(0); }
+}
+
+/* Aplica no estado de erro */
+.auth-input-group.error {
+  border-color: #d32f2f;
+  animation: shake 0.35s ease-in-out;
+}
+
+/* Container externo que empilha input + mensagem */
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ERRO: borda vermelha SEMPRE que a classe for aplicada */
+.auth-input-group.error {
+  border-color: #d32f2f;
+}
+
+/* Foco em erro: leve destaque opcional */
+.auth-input-group.error:focus-within {
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
+}
+
+/* Mensagem embaixo, bem pequena */
+.error-message {
+  color: #d32f2f;
+  font-size: 0.7rem;
+  margin: 0.25rem 0 0 0.5rem;
+  line-height: 1.2;
+}
+
+/*Tira animação se a opção de acessibilidade estiver selecionada*/
+@media (prefers-reduced-motion: reduce) {
+  .auth-input-group.error {
+    animation: none;
+  }
+}
+
+.login-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  width: fit-content;
+  max-width: calc(100% - 2rem);
+  margin: 0 auto 0.75rem;
+  padding: 0.65rem 1rem;
+
+  background: rgba(255, 235, 238, 0.85);
+  color: #c62828;
+  border: 1px solid rgba(239, 154, 154, 0.6);
+  border-radius: 12px;
+
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+
+  box-shadow: 0 4px 12px rgba(198, 40, 40, 0.08);
+  backdrop-filter: blur(8px);
+
+  animation: shakeVertical 0.25s ease-out; 
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-error {
+    animation: none;
+  }
 }

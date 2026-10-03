@@ -1,4 +1,4 @@
-import { useState } from 'react'                                    // ← FALTAVA
+import { useState } from 'react'                                    
 import { useNavigate } from 'react-router-dom'
 
 import stylesRegister from './register.module.css';
@@ -8,7 +8,7 @@ import userIcon from '../../assets/icons/icon-user-30.png'
 import emailIcon from '../../assets/icons/icon-email-48.png'
 import lockIcon from '../../assets/icons/icon-lock-48.png'
 
-import { AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button } from '../../components'
+import { AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button, Spinner } from '../../components'
 import { register } from '../../services/auth'
 
 export default function Register() {
@@ -23,21 +23,45 @@ export default function Register() {
  
   const [erro, setErro] = useState('')
   const [loading, setLoading] = useState(false)
+  const [errorsValidate, setErrorsValidate] = useState({})
+  const [submitAttempt, setSubmitAttempt] = useState(0)
+
+  const handleChange = (field, setter) => (event) => {
+    setter(event.target.value)
+    setErrorsValidate((prev) => {
+      
+      if (!prev[field]) return prev          
+        const { [field]: _, ...rest } = prev   
+        return rest
+      })
+  }
 
   const handleRegister = async (e) => {
     e.preventDefault()
     setErro('')
 
-    if (password.length < 4) {
-      setErro('A senha deve ter pelo menos 4 caracteres')
-      return
+    const novosErros = {}
+
+    if (!firstName.trim()) novosErros.firstName = 'Campo obrigatório'
+    if (!email.trim())     novosErros.email = 'Campo obrigatório'
+    
+    if (!password) {
+      novosErros.password = 'Campo obrigatório'
+    } else if (password.length < 4) {
+      novosErros.password = 'A senha deve ter pelo menos 4 caracteres'
     }
 
     if (password !== confirmPassword) {
-      setErro('As senhas não coincidem')
+      novosErros.confirmPassword = 'As senhas não coincidem'
+    }
+
+    if (Object.keys(novosErros).length > 0) {
+      setErrorsValidate(novosErros)
+      setSubmitAttempt((n) => n + 1)   // ← força o shake
       return
     }
 
+    setErrorsValidate({})
     setLoading(true)
 
     try {
@@ -71,7 +95,10 @@ export default function Register() {
             type="text"
             placeholder="Nome"
             value={firstName}
-            onChange={(event) => setfirstName(event.target.value)}
+            onChange={handleChange('firstName', setfirstName)}
+            maxLength={46}
+            errorValidate={errorsValidate.firstName}
+            shakeKey={submitAttempt}
           />
 
           <AuthInputGroup
@@ -80,7 +107,10 @@ export default function Register() {
             type="email"
             placeholder="E-mail"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            maxLength={46}
+            onChange={handleChange('email', setEmail)}
+            errorValidate={errorsValidate.email}
+            shakeKey={submitAttempt} 
           />
 
           <div className="p-1"></div>
@@ -91,7 +121,10 @@ export default function Register() {
             type="password"
             placeholder="Senha"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            maxLength={46}
+            onChange={handleChange('password', setPassword)}
+            errorValidate={errorsValidate.password}
+            shakeKey={submitAttempt}  
           />
 
           <AuthInputGroup
@@ -100,7 +133,10 @@ export default function Register() {
             type="password"
             placeholder="Confirmar senha"
             value={confirmPassword}
-            onChange={(event) => setConfirmPassword(event.target.value)}
+            maxLength={46}
+            onChange={handleChange('confirmPassword', setConfirmPassword)}
+            errorValidate={errorsValidate.confirmPassword}
+            shakeKey={submitAttempt}  
           />
 
             {erro && <p className={stylesRegister['erro']}>{erro}</p>}
@@ -110,7 +146,8 @@ export default function Register() {
             className={styles['auth-button-register']}
             disabled={loading}
           >
-            {loading ? 'Cadastrando...' : 'Cadastrar'}
+            {loading  ? <><Spinner size={14} aria-hidden="true" /><span>Cadastrando...</span></> 
+                      : 'Cadastrar'}
           </Button>
 
         </AuthForm>
