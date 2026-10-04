@@ -1,0 +1,50 @@
+.filter-container {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    flex-direction: column;
+    width: 60%;
+    border: 1px solid #c9c1c1;
+    padding: 1rem;
+}
+
+.filter-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 3rem;
+}
+
+.filter-wrapper-hidden {
+    display: none;
+}
+
+.toggle-ai {
+    display: flex;
+    flex-direction: column;
+}
+
+.toggle-ai button {
+    max-width: 1rem;
+}
+
+.filter-icon {
+    cursor: pointer;
+}
+
+.filter-button {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.filter-tags {
+    display: flex;
+    flex-direction: column;
+    flex: 1
+}
+
+.filter-date {
+    display: flex;
+    flex-direction: column;
+}
