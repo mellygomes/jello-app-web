@@ -1,9 +1,6 @@
 import { Switch } from "antd";
 
-export default function ToggleAI() {
-    const onChange = checked => {
-        console.log(`switch to ${checked}`);
-    };
+export default function ToggleAI({ onChange }) {
     return (
         <Switch onChange={onChange} />
     )
