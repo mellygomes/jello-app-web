@@ -1,20 +1,39 @@
 import { Select, Tag } from "antd";
+import { getTags } from "../../services/filter.js";
+import { useEffect, useState } from "react";
 
-export default function TagSelect() {
+export default function TagSelect({onChange}) {
 
-    const options = [{value: 'gold'}, {value: 'lime'}, {value: 'green'}];
+    const [tags, setTags] = useState([]);
 
-    const tagRender = props => {
+    const selectOptions = tags.map((tag) => ({
+        label: tag.name,
+        value: tag.id,
+        color: tag.color,
+    }));
+
+    useEffect(() => {
+        async function loadTags() {
+            try {
+                const response = await getTags();
+                setTags(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        loadTags();
+    }, []);
+
+    const tagRender = (props) => {
         const {label, value, closable, onClose} = props;
-        const onPreventMouseDown = event => {
-            event.preventDefault();
-            event.stopPropagation();
-        };
+        const tagData = selectOptions.find((opt) => opt.value === value);
+        const color = tagData ? tagData.color : undefined;
 
         return (
             <Tag
-                color={value}
-                onMouseDown={onPreventMouseDown}
+                key={value}
+                color={color}
                 closable={closable}
                 onClose={onClose}
                 style={{marginInlineEnd: 4}}
@@ -24,19 +43,14 @@ export default function TagSelect() {
         );
     };
 
-    const handleChange = value => {
-        console.log(`selected ${value}`);
-    }
-
     return (
         <Select
             mode="multiple"
             tagRender={tagRender}
-            defaultValue={['gold', 'lime']}
-            placeholder="Tags"
+            placeholder="Selecione as tags"
             style={{width: '100%'}}
-            onChange={handleChange}
-            options={options}
+            options={selectOptions}
+            onChange={onChange}
         />
     );
 }
