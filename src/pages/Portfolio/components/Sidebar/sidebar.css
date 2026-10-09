@@ -1,0 +1,86 @@
+.sidebar {
+  width: 61px;
+  min-width: 61px;
+  align-self: stretch;
+  min-height: calc(100vh - 64px);
+  max-height: 700px;
+  padding: 16px 5px 10px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  box-shadow: 0 1px 4px rgba(50, 50, 70, 0.13);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar button {
+  border: 0;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  color: #252525;
+  flex-shrink: 0;
+}
+
+.sidebar-menu {
+  width: 36px;
+  height: 32px;
+  margin-bottom: 1px;
+}
+
+.avatar-button {
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.avatar-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.explore-button {
+  width: 36px;
+  height: 36px;
+  margin-top: 14px;
+  margin-bottom: 18px;
+  border-radius: 6px;
+}
+
+.sidebar .explore-button.selected {
+  background: #292929;
+  color: #fff;
+}
+
+.side-navigation {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px 0;
+  background: #effcff;
+  border-radius: 4px;
+}
+
+.nav-button {
+  width: 46px;
+  height: 35px;
+  border-radius: 5px;
+}
+
+.sidebar .nav-button.selected {
+  color: #111;
+  background: #dff8ff;
+}
+
+.sidebar-bottom {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 9px;
+  border-top: 1px solid #bdbdbd;
+  display: flex;
+  justify-content: center;
+}
