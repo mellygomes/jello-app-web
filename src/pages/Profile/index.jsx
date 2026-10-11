@@ -69,7 +69,7 @@ export default function Profile() {
 
             try {
                 const response = await getProfile()
-                const loadedProfile = response.data.data;
+                const loadedProfile = response.data;
 
                 if (!loadedProfile) {
                     throw new Error("A resposta não contém os dados do perfil");
@@ -184,7 +184,7 @@ export default function Profile() {
                 throw new Error("Resposta inesperada do servidor");
             }
             
-            const savedUser = response.data.data;
+            const savedUser = response.data;
             
             console.log("SAVED USER", savedUser);
 

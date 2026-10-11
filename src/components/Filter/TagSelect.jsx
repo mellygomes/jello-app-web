@@ -16,7 +16,7 @@ export default function TagSelect({onChange}) {
         async function loadTags() {
             try {
                 const response = await getTags();
-                setTags(response.data.data);
+                setTags(response.data);
             } catch (error) {
                 console.log(error);
             }

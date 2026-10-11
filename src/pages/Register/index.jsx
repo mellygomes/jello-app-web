@@ -1,12 +1,13 @@
-import { useState } from 'react'                                    
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import stylesRegister from './register.module.css';
-import styles from '../../components/AuthLayout/auth-layout.module.css';
+import stylesRegister from './register.module.css'
+import styles from '../../components/AuthLayout/auth-layout.module.css'
 import signInIcon from '../../assets/icons/icon-sign-in-48.png'
 import userIcon from '../../assets/icons/icon-user-30.png'
 import emailIcon from '../../assets/icons/icon-email-48.png'
 import lockIcon from '../../assets/icons/icon-lock-48.png'
+import crachaIcon from '../../assets/icons/icon-cracha-48.png'
 
 import { AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button, Spinner } from '../../components'
 import { register } from '../../services/auth'
@@ -15,11 +16,11 @@ export default function Register() {
   const navigate = useNavigate()
 
   const [password, setPassword] = useState('')
-  const [firstName, setfirstName] = useState('')
+  const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')       
-  //   const [username, setUserName] = useState('')
-  //   const [lastName, lastNameName] = useState('')
+  const [username, setUserName] = useState('')
+  const [lastName, setLastName] = useState('')
  
   const [erro, setErro] = useState('')
   const [loading, setLoading] = useState(false)
@@ -43,8 +44,10 @@ export default function Register() {
     const novosErros = {}
 
     if (!firstName.trim()) novosErros.firstName = 'Campo obrigatório'
+    if (!lastName.trim())  novosErros.lastName = 'Campo obrigatório'
     if (!email.trim())     novosErros.email = 'Campo obrigatório'
-    
+    if (!username.trim())  novosErros.username = 'Campo obrigatório'
+
     if (!password) {
       novosErros.password = 'Campo obrigatório'
     } else if (password.length < 4) {
@@ -65,8 +68,13 @@ export default function Register() {
     setLoading(true)
 
     try {
-        // Criar o campo de username e lastname depois talvez, por enquanto tá essa gambiarra
-        await register({ username: email, email, firstName, lastName: firstName, password })
+        await register({
+          firstName: firstName,
+          lastName: lastName,
+          username: username,
+          email: email,
+          password: password,
+        })
         navigate('/login')
     } catch (error) {                                              
         setErro('Erro ao cadastrar usuário')
@@ -95,10 +103,22 @@ export default function Register() {
             type="text"
             placeholder="Nome"
             value={firstName}
-            onChange={handleChange('firstName', setfirstName)}
+            onChange={handleChange('firstName', setFirstName)}
             maxLength={46}
             errorValidate={errorsValidate.firstName}
             shakeKey={submitAttempt}
+          />
+
+          <AuthInputGroup
+              icon={userIcon}
+              alt="Ícone de usuário"
+              type="text"
+              placeholder="Sobrenome"
+              value={lastName}
+              onChange={handleChange('lastName', setLastName)}
+              maxLength={46}
+              errorValidate={errorsValidate.lastName}
+              shakeKey={submitAttempt}
           />
 
           <AuthInputGroup
@@ -111,6 +131,18 @@ export default function Register() {
             onChange={handleChange('email', setEmail)}
             errorValidate={errorsValidate.email}
             shakeKey={submitAttempt} 
+          />
+
+          <AuthInputGroup
+              icon={crachaIcon}
+              alt="Ícone de nome de usuário"
+              type="text"
+              placeholder="Username"
+              value={username}
+              maxLength={46}
+              onChange={handleChange('username', setUserName)}
+              errorValidate={errorsValidate.username}
+              shakeKey={submitAttempt}
           />
 
           <div className="p-1"></div>

@@ -49,9 +49,9 @@ export default function Filter() {
 
             const response = await submitFilter(filterData);
 
-            // const posts = response.data.data;
+            // const posts = response.data;
             // Mudar essa bomba ai quando for inserir o filtro no feed principal
-            // os posts retornados estao dentro do response.data.data
+            // os posts retornados estao dentro do response.data
             // Usar como quiser e ser feliz com o retorno dos posts
             console.log("resposta: ", response);
         } catch (error) {

@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
             }
         )
             .then(response => {
-                setUser(response.data.data || null);
+                setUser(response.data || null);
             })
             .catch(() => {
                 setUser(null);

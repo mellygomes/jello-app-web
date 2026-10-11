@@ -54,7 +54,7 @@ export default function Login() {
 
             // Valida o login e retorna com os dados caso estejam corretos
             const response = await getUserLogged()
-            login(response.data.data);
+            login(response.data);
             navigate("/");
 
         } catch (error) {
