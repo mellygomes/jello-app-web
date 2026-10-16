@@ -1,4 +1,4 @@
-import styles from "./profile.module.css";
+import styles from "./my-profile.module.css";
 import { useAuth } from "../../contexts/auth/useAuth.js";
 import { ProfilePic, ProfileCover, ProfileHeader, ProfileDescription, ProfileInput, Button, Spinner } from "../../components";
 import { useEffect, useState } from "react";
@@ -32,7 +32,7 @@ function profileToForm(profile) {
     }
 }
 
-export default function Profile() {
+export default function MyProfile() {
 
     const {user, loading} = useAuth();
 
@@ -77,10 +77,10 @@ export default function Profile() {
 
                 if (!cancelled) {
                     setProfile(loadedProfile);
-                    console.log("LOADED PROFILE:   ", loadedProfile);
+                    setFormData(profileToForm(loadedProfile));
+
                     setAvatarUrl(getAvatarUrl(loadedProfile.avatar?.id));
                     setCoverUrl(getCoverUrl(loadedProfile.cover?.id));
-                    setFormData(profileToForm(loadedProfile));
                 }
             } catch (error) {
                 if (!cancelled) {
@@ -260,6 +260,7 @@ export default function Profile() {
                 </div>
 
                 <ProfileDescription
+                    title="Descrição"
                     value={formData.bio}
                     onChange={handleChange}
                     disabled={!isEditing}
