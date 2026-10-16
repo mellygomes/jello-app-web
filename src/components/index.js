@@ -14,3 +14,4 @@ export { default as FilterPic } from '../components/Filter/FilterPic.jsx';
 export { default as TagSelect } from '../components/Filter/TagSelect.jsx';
 export { default as Date } from '../components/Filter/Date.jsx';
 export { default as Filter } from '../components/Filter/Filter.jsx';
+export { default as Report } from './Report/Report.jsx';
