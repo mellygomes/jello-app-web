@@ -102,7 +102,7 @@ export default function Login() {
                         icon={emailIcon}
                         alt={"Ícone de envelope"}
                         type={"text"}
-                        placeholder={"E-mail"}
+                        placeholder={"Nome de usuário"}
                         value={username}
                         maxLength={46}
                         onChange={handleChange('username', setUsername)}
