@@ -7,11 +7,12 @@ dayjs.locale('pt-br');
 
 const {RangePicker} = DatePicker;
 
-export default function Date({ onChange }) {
+export default function Date({ value, onChange }) {
     return (
         <ConfigProvider locale={ptBR}>
             <RangePicker
                 format="DD/MM/YYYY"
+                value={value}
                 onChange={onChange}
             />
         </ConfigProvider>
