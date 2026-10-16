@@ -82,3 +82,31 @@ body {
 .avatar {
     cursor: default;
 }
+
+@media (max-width: 1400px) {
+    .container {
+        gap: 1rem;
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        height: unset;
+        padding: 3rem;
+    }
+
+    .user, .posts {
+        width: 100%;
+    }
+
+    .posts {
+        overflow: unset;
+        overflow-y: unset;
+    }
+
+    .postsScroll {
+        padding: unset;
+    }
+}
