@@ -2,7 +2,7 @@ import styles from "./profile-cover.module.css";
 import camIcon from "../../../../assets/icons/cam-icon.png";
 import { Upload } from "antd";
 
-export default function ProfileCover({ src, onChange, disabled }) {
+export default function ProfileCover({ src, className = "", onChange, disabled }) {
     return (
         <div className={styles["cover-container"]}>
             <img
@@ -21,7 +21,7 @@ export default function ProfileCover({ src, onChange, disabled }) {
                 <button
                     type="button"
                     disabled={ disabled }
-                    className={`${styles["cover-button"]} ${disabled ? styles["disabled"] : ""}`}
+                    className={`${className} ${styles["cover-button"]} ${disabled ? styles["disabled"] : ""}`}
                 >
                     <img src={ camIcon } className={styles["button-img"]} alt="Alterar imagem de capa"/>
                 </button>

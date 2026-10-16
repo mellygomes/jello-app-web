@@ -1,7 +1,10 @@
 import { Switch } from "antd";
 
-export default function ToggleAI({ onChange }) {
+export default function ToggleAI({ value, onChange }) {
     return (
-        <Switch onChange={onChange} />
+        <Switch
+            value={value}
+            onChange={onChange}
+        />
     )
 }

@@ -1,6 +1,6 @@
 import styles from "./profile-description.module.css";
 
-export default function ProfileDescription({ value, onChange, disabled, maxLength }) {
+export default function ProfileDescription({ value, title, onChange, disabled, maxLength }) {
     const length = value.length;
     const isAtLimit = maxLength && length >= maxLength;
     const isNearLimit = maxLength && length >= maxLength * 0.8;
@@ -8,7 +8,7 @@ export default function ProfileDescription({ value, onChange, disabled, maxLengt
     return (
         <div className={`container w-100 ${styles["description-container"]}`}>
                 <div className={styles["label-row"]}>
-                    <h2>Descrição</h2>
+                    <h2>{ title }</h2>
                     {maxLength && (
                         <span
                         className={`${styles["char-counter"]} ${
@@ -27,6 +27,7 @@ export default function ProfileDescription({ value, onChange, disabled, maxLengt
                     className={`${styles["description-textarea"]} ${disabled ? styles["disabled"] : ""}`}
                     onChange={onChange}
                     disabled={disabled}
+                    readOnly={disabled}
                     maxLength={maxLength}
                     placeholder="Escreva algo sobre você..."
                     rows={4}

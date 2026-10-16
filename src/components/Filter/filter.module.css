@@ -1,10 +1,12 @@
 .filter-container {
     display: flex;
-    gap: 3rem;
+    gap: 1.5rem;
     align-items: center;
     flex-direction: column;
     /*width: 60%;*/
-    border: 1px solid #c9c1c1;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.300), 0 6px 12px rgba(0, 0, 0, 0.300);
     padding: 1rem;
 }
 
@@ -25,6 +27,11 @@
     flex-direction: column;
 }
 
+.ai-icon {
+    width: 30px;
+    height: 30px;
+}
+
 .toggle-ai button {
     max-width: 1rem;
 }
@@ -36,7 +43,7 @@
 .filter-button {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
 }
 
 .filter-tags {
