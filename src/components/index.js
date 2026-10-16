@@ -10,6 +10,7 @@ export { default as ProfileInput } from '../pages/Profile/components/ProfileInpu
 export { default as ProfileCover } from '../pages/Profile/components/ProfileCover/ProfileCover.jsx';
 export { default as Spinner } from '../components/Spinner/Spinner.jsx';
 export { default as ToggleAI } from '../components/Filter/ToggleAI.jsx';
+export { default as FilterPic } from '../components/Filter/FilterPic.jsx';
 export { default as TagSelect } from '../components/Filter/TagSelect.jsx';
 export { default as Date } from '../components/Filter/Date.jsx';
 export { default as Filter } from '../components/Filter/Filter.jsx';
