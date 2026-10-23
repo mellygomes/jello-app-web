@@ -1,6 +1,5 @@
-import { Route, Routes } from 'react-router-dom'
-import { Home, Login, MyProfile, UserProfile, Register } from '../pages';
-// import ProtectedRoute from '../components/ProtectedRoute.jsx';
+import { Route, Routes } from "react-router-dom";
+import { Home, Login, MyProfile, UserProfile, Register } from "../pages";
 
 const AppRouter = () => {
     return (

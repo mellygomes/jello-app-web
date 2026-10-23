@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { AuthContext } from './AuthContext';
+import { useEffect, useState } from "react";
+import { AuthContext } from "./AuthContext";
 import axios from "axios";
 
 export function AuthProvider({ children }) {

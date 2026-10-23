@@ -9,10 +9,19 @@
     position: absolute;
     right: 0;
     z-index: 999;
+    opacity: 0;
+    transform: scale(0.8);
+    transform-origin: top right;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
 }
 
-.report-hidden {
-    display: none;
+.report-open {
+   opacity: 1;
+    transform: scale(1);
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .options {

@@ -1,9 +1,13 @@
-import styles from './filter.module.css';
+import styles from "./filter.module.css";
 import aiIcon from "../../assets/icons/ai-icon.png";
-import { Button, Date, FilterPic, TagSelect, ToggleAI } from "../index.js";
 import { ClearOutlined, FilterFilled } from "@ant-design/icons";
-import { useState } from "react";
 import { Input } from "antd";
+import { useState } from "react";
+import ToggleAI from "./ToggleAi";
+import FilterPic from "./FilterPic.jsx";
+import Button from "../Button";
+import Date from "./Date";
+import TagSelect from "./TagSelect";
 
 export default function Filter({isIconDisplay, filter, onChange, onReset, onSearch}) {
 
@@ -45,7 +49,7 @@ export default function Filter({isIconDisplay, filter, onChange, onReset, onSear
                                 Filtrar
                             </Button>
                         }
-                        <ClearOutlined onClick={onReset} />
+                        <ClearOutlined onClick={onReset}/>
                     </div>
 
                 </div>

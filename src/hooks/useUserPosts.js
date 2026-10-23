@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllPostsByUser } from "../services/profile.js";
+import { getAllPostsByUser } from "../services";
 
 export function useUserPosts(userId, page, pageSize, filter) {
     const [posts, setPosts] = useState([]);

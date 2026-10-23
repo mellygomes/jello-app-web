@@ -1,6 +1,7 @@
 import { EllipsisOutlined, FlagFilled, InfoCircleOutlined, IssuesCloseOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import styles from "./report.module.css";
+import CreateReportModal from "./CreateReportModal";
 
 export default function Report() {
 
@@ -13,10 +14,11 @@ export default function Report() {
                 onClick={() => setShowReport(prev => !prev)}
              />
 
-            <div className={showReport ? styles.report : styles["report-hidden"]}>
+            <div className={`${styles.report} ${showReport ? styles["report-open"] : ""}`}>
                 <div className={styles.options}>
                     <FlagFilled />
                     <span>Denunciar postagem</span>
+                    <CreateReportModal />
                 </div>
                 <div className={styles.options}>
                     <IssuesCloseOutlined />
