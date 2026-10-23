@@ -1,7 +1,7 @@
+import { api } from "../lib/api";
 import dayjs from "dayjs";
 
 const API_URL = import.meta.env.VITE_API_URL;
-import { api } from '../lib/api'
 
 export function getAvatarUrl(avatarId) {
   if (!avatarId) return "";
@@ -18,7 +18,6 @@ export function getProfile() {
 }
 
 export function getUserProfile(userId) {
-    console.log("tome requisicao ", userId);
     return api.get(`/api/v1/users/${userId}`);
 }
 
@@ -37,5 +36,5 @@ export function getAllPostsByUser(userId, page, size, filter) {
 }
 
 export async function updateProfile(body) {
-    return api.put('/api/v1/users/update', body)
+    return api.put("/api/v1/users/update", body)
 }
