@@ -1,5 +1,5 @@
 import { Select, Tag } from "antd";
-import { useTags } from "../../hooks/useTags.js";
+import { useTags } from "../../../hooks";
 
 export default function TagSelect({ onChange, value }) {
 

@@ -1,7 +1,7 @@
 import styles from "./post-card.module.css";
 import { Carousel, Tag } from "antd";
 import { CommentOutlined, HeartOutlined } from "@ant-design/icons";
-import { Report } from "../index.js";
+import Report from "../Report";
 
 export default function PostCard({title, content, images = [], likes, comments, tags = []}) {
     return (

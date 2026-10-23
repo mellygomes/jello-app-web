@@ -1,8 +1,8 @@
-import styles from './profile-pic.module.css';
-import { Upload } from 'antd';
+import styles from "./profile-pic.module.css";
+import { Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
-export default function ProfilePic({ src, disabled, onChange, className = "" }) {
+export default function ProfileAvatar({ src, disabled, onChange, className = "" }) {
     const uploadButton = (
         <button style={{ border: 0, background: 'none', color: '#black', cursor: 'pointer', fontSize: '22px' }} type="button">
             <PlusOutlined />

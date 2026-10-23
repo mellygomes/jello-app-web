@@ -1,5 +1,5 @@
 import styles from "./profile-cover.module.css";
-import camIcon from "../../../../assets/icons/cam-icon.png";
+import camIcon from "../../../assets/icons/cam-icon.png";
 import { Upload } from "antd";
 
 export default function ProfileCover({ src, className = "", onChange, disabled }) {

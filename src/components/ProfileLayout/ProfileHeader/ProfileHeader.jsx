@@ -1,4 +1,4 @@
-import styles from './profile-header.module.css';
+import styles from "./profile-header.module.css";
 
 export default function ProfileHeader({ className , name, followers, following, posts }) {
     return (
