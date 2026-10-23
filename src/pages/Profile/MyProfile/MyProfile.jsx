@@ -1,8 +1,16 @@
 import styles from "./my-profile.module.css";
-import { useAuth } from "../../contexts/auth/useAuth.js";
-import { ProfilePic, ProfileCover, ProfileHeader, ProfileDescription, ProfileInput, Button, Spinner } from "../../components";
+import { useAuth } from "../../../hooks";
 import { useEffect, useState } from "react";
-import { getAvatarUrl, getCoverUrl, getProfile, updateProfile } from "../../services/profile.js";
+import { getAvatarUrl, getCoverUrl, getProfile, updateProfile } from "../../../services";
+import {
+    Button,
+    ProfileCover,
+    ProfileDescription,
+    ProfileHeader,
+    ProfileAvatar,
+    Spinner
+} from "../../../components";
+import ProfileInput from "./ProfileInput";
 
 const emptyForm = {
     firstName: "",
@@ -49,8 +57,6 @@ export default function MyProfile() {
 
     const [errorsValidate, setErrorsValidate] = useState({})
     const [submitAttempt, setSubmitAttempt] = useState(0)
-
-
 
     useEffect(() => {
 
@@ -218,7 +224,7 @@ export default function MyProfile() {
                     onChange={handleCoverChange}
                     disabled={!isEditing}
                 />
-                <ProfilePic
+                <ProfileAvatar
                     src={avatarUrl}
                     onChange={handleAvatarChange}
                     disabled={!isEditing}

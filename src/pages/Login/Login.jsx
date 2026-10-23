@@ -5,8 +5,8 @@ import lockIcon from '../../assets/icons/icon-lock-48.png';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button, Spinner } from '../../components';
-import { useAuth } from "../../contexts/auth/useAuth.js";
-import { getUserLogged, logIn } from "../../services/auth.js";
+import { useAuth } from "../../hooks";
+import { getUserLogged, logIn } from "../../services";
 
 export default function Login() {
     const { login } = useAuth();

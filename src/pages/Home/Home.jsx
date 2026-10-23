@@ -1,6 +1,6 @@
-import { Filter } from "../../components/index.js";
+import { Filter } from "../../components";
 import { useNavigate } from "react-router-dom";
-import { useFilter } from "../../hooks/useFilter.js";
+import { useFilter } from "../../hooks";
 
 export default function Home() {
 

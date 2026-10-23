@@ -2,19 +2,17 @@ import styles from "./user-profile.module.css";
 import {
     Button,
     Filter,
+    PostList,
     ProfileCover,
     ProfileDescription,
     ProfileHeader,
-    ProfilePic,
+    ProfileAvatar,
     Spinner
-} from "../../components/index.js";
+} from "../../../components";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import PostList from "../../components/PostCard/PostList.jsx";
-import { useUserPosts } from "../../hooks/useUserPosts.js";
+import { useFilter, useUserPosts, useUserProfile } from "../../../hooks";
 import { Pagination } from "antd";
-import { useFilter } from "../../hooks/useFilter.js";
-import { useUserProfile } from "../../hooks/useUserProfile.js";
 import { IdcardOutlined, LeftOutlined } from "@ant-design/icons";
 
 export default function UserProfile() {
@@ -44,7 +42,7 @@ export default function UserProfile() {
                         src={coverUrl}
                         disabled={true}
                     />
-                    <ProfilePic
+                    <ProfileAvatar
                         className={styles.avatar}
                         src={avatarUrl}
                         disabled={true}

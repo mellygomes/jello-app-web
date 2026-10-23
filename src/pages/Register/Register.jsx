@@ -1,71 +1,71 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import stylesRegister from './register.module.css'
-import styles from '../../components/AuthLayout/auth-layout.module.css'
-import signInIcon from '../../assets/icons/icon-sign-in-48.png'
-import userIcon from '../../assets/icons/icon-user-30.png'
-import emailIcon from '../../assets/icons/icon-email-48.png'
-import lockIcon from '../../assets/icons/icon-lock-48.png'
-import crachaIcon from '../../assets/icons/icon-cracha-48.png'
+import stylesRegister from "./register.module.css";
+import styles from "../../components/AuthLayout/auth-layout.module.css";
+import signInIcon from "../../assets/icons/icon-sign-in-48.png";
+import userIcon from "../../assets/icons/icon-user-30.png";
+import emailIcon from "../../assets/icons/icon-email-48.png";
+import lockIcon from "../../assets/icons/icon-lock-48.png";
+import crachaIcon from "../../assets/icons/icon-cracha-48.png";
 
-import { AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button, Spinner } from '../../components'
-import { register } from '../../services/auth'
+import { AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button, Spinner } from "../../components";
+import { register } from "../../services";
 
 export default function Register() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [password, setPassword] = useState('')
-  const [firstName, setFirstName] = useState('')
-  const [email, setEmail] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')       
-  const [username, setUserName] = useState('')
-  const [lastName, setLastName] = useState('')
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUserName] = useState("");
+  const [lastName, setLastName] = useState("");
  
-  const [erro, setErro] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [errorsValidate, setErrorsValidate] = useState({})
-  const [submitAttempt, setSubmitAttempt] = useState(0)
+  const [erro, setErro] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorsValidate, setErrorsValidate] = useState({});
+  const [submitAttempt, setSubmitAttempt] = useState(0);
 
   const handleChange = (field, setter) => (event) => {
-    setter(event.target.value)
+    setter(event.target.value);
     setErrorsValidate((prev) => {
       
       if (!prev[field]) return prev          
-        const { [field]: _, ...rest } = prev   
-        return rest
+        const { [field]: _, ...rest } = prev;
+        return rest;
       })
   }
 
   const handleRegister = async (e) => {
-    e.preventDefault()
-    setErro('')
+    e.preventDefault();
+    setErro("");
 
-    const novosErros = {}
+    const novosErros = {};
 
-    if (!firstName.trim()) novosErros.firstName = 'Campo obrigatório'
-    if (!lastName.trim())  novosErros.lastName = 'Campo obrigatório'
-    if (!email.trim())     novosErros.email = 'Campo obrigatório'
-    if (!username.trim())  novosErros.username = 'Campo obrigatório'
+    if (!firstName.trim()) novosErros.firstName = "Campo obrigatório";
+    if (!lastName.trim())  novosErros.lastName = "Campo obrigatório";
+    if (!email.trim())     novosErros.email = "Campo obrigatório";
+    if (!username.trim())  novosErros.username = "Campo obrigatório";
 
     if (!password) {
-      novosErros.password = 'Campo obrigatório'
+      novosErros.password = "Campo obrigatório";
     } else if (password.length < 4) {
-      novosErros.password = 'A senha deve ter pelo menos 4 caracteres'
+      novosErros.password = "A senha deve ter pelo menos 4 caracteres";
     }
 
     if (password !== confirmPassword) {
-      novosErros.confirmPassword = 'As senhas não coincidem'
+      novosErros.confirmPassword = "As senhas não coincidem";
     }
 
     if (Object.keys(novosErros).length > 0) {
-      setErrorsValidate(novosErros)
-      setSubmitAttempt((n) => n + 1)   // ← força o shake
-      return
+      setErrorsValidate(novosErros);
+      setSubmitAttempt((n) => n + 1);   // ← força o shake
+      return;
     }
 
-    setErrorsValidate({})
-    setLoading(true)
+    setErrorsValidate({});
+    setLoading(true);
 
     try {
         await register({
@@ -75,18 +75,18 @@ export default function Register() {
           email: email,
           password: password,
         })
-        navigate('/login')
+        navigate("/login");
     } catch (error) {                                              
-        setErro('Erro ao cadastrar usuário')
-        console.log(error)
+        setErro("Erro ao cadastrar usuário");
+        console.log(error);
     } finally {
-        setLoading(false)
+        setLoading(false);
     }
   }
 
   return (
-    <div className={styles['container']}>
-      <div className={styles['auth-container']}>
+    <div className={styles["container"]}>
+      <div className={styles["auth-container"]}>
 
         <AuthHeader
           icon={signInIcon}
@@ -103,7 +103,7 @@ export default function Register() {
             type="text"
             placeholder="Nome"
             value={firstName}
-            onChange={handleChange('firstName', setFirstName)}
+            onChange={handleChange("firstName", setFirstName)}
             maxLength={46}
             errorValidate={errorsValidate.firstName}
             shakeKey={submitAttempt}
@@ -115,7 +115,7 @@ export default function Register() {
               type="text"
               placeholder="Sobrenome"
               value={lastName}
-              onChange={handleChange('lastName', setLastName)}
+              onChange={handleChange("lastName", setLastName)}
               maxLength={46}
               errorValidate={errorsValidate.lastName}
               shakeKey={submitAttempt}
@@ -128,7 +128,7 @@ export default function Register() {
             placeholder="E-mail"
             value={email}
             maxLength={46}
-            onChange={handleChange('email', setEmail)}
+            onChange={handleChange("email", setEmail)}
             errorValidate={errorsValidate.email}
             shakeKey={submitAttempt} 
           />
@@ -140,7 +140,7 @@ export default function Register() {
               placeholder="Username"
               value={username}
               maxLength={46}
-              onChange={handleChange('username', setUserName)}
+              onChange={handleChange("username", setUserName)}
               errorValidate={errorsValidate.username}
               shakeKey={submitAttempt}
           />
@@ -154,7 +154,7 @@ export default function Register() {
             placeholder="Senha"
             value={password}
             maxLength={46}
-            onChange={handleChange('password', setPassword)}
+            onChange={handleChange("password", setPassword)}
             errorValidate={errorsValidate.password}
             shakeKey={submitAttempt}  
           />
@@ -166,20 +166,20 @@ export default function Register() {
             placeholder="Confirmar senha"
             value={confirmPassword}
             maxLength={46}
-            onChange={handleChange('confirmPassword', setConfirmPassword)}
+            onChange={handleChange("confirmPassword", setConfirmPassword)}
             errorValidate={errorsValidate.confirmPassword}
             shakeKey={submitAttempt}  
           />
 
-            {erro && <p className={stylesRegister['erro']}>{erro}</p>}
+            {erro && <p className={stylesRegister["erro"]}>{erro}</p>}
 
           <Button
             type="submit"
-            className={styles['auth-button-register']}
+            className={styles["auth-button-register"]}
             disabled={loading}
           >
             {loading  ? <><Spinner size={14} aria-hidden="true" /><span>Cadastrando...</span></> 
-                      : 'Cadastrar'}
+                      : "Cadastrar"}
           </Button>
 
         </AuthForm>
