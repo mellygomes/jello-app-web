@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAvatarUrl, getCoverUrl, getUserProfile } from "../services/profile.js";
+import { getAvatarUrl, getCoverUrl, getUserProfile } from "../services";
 
 const emptyForm = {
     firstName: "",
