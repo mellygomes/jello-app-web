@@ -1,13 +1,6 @@
 
 import { useState } from "react";
-import {
-  Search,
-  Ellipsis,
-  
-  Palette,
-  Image as ImageIcon,
-  X,
-} from "lucide-react";
+import { Search, Ellipsis, Image as ImageIcon, X } from "lucide-react";
 
 import "./portfolio.css";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -57,6 +50,14 @@ const paintings = [
   },
 ];
 
+function normalizeText(text) {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR")
+    .trim();
+}
+
 function PaintingCard({ painting, onOpen }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -66,9 +67,11 @@ function PaintingCard({ painting, onOpen }) {
         <span title={painting.title}>{painting.title}</span>
 
         <button
+          type="button"
           className="more-button"
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => setMenuOpen((previous) => !previous)}
           aria-label={`Opções de ${painting.title}`}
+          aria-expanded={menuOpen}
         >
           <Ellipsis size={17} />
         </button>
@@ -76,6 +79,7 @@ function PaintingCard({ painting, onOpen }) {
         {menuOpen && (
           <div className="card-menu">
             <button
+              type="button"
               onClick={() => {
                 onOpen(painting);
                 setMenuOpen(false);
@@ -85,8 +89,14 @@ function PaintingCard({ painting, onOpen }) {
             </button>
 
             <button
+              type="button"
               onClick={() => {
-                navigator.clipboard?.writeText(painting.title);
+                if (navigator.clipboard?.writeText) {
+                  navigator.clipboard
+                    .writeText(painting.title)
+                    .catch(() => {});
+                }
+
                 setMenuOpen(false);
               }}
             >
@@ -97,6 +107,7 @@ function PaintingCard({ painting, onOpen }) {
       </div>
 
       <button
+        type="button"
         className={`painting-image ${
           painting.banner ? "banner-image" : ""
         }`}
@@ -115,8 +126,14 @@ function PaintingCard({ painting, onOpen }) {
 
       <div className="card-footer">
         <span>{painting.date}</span>
-        <button className="post-button" onClick={() => onOpen(painting)}>
-          Postar <span>➤</span>
+
+        <button
+          type="button"
+          className="post-button"
+          onClick={() => onOpen(painting)}
+        >
+          <span>Postar</span>
+          <span aria-hidden="true">➤</span>
         </button>
       </div>
     </article>
@@ -129,7 +146,7 @@ export default function Portfolio() {
   const [selectedPainting, setSelectedPainting] = useState(null);
 
   const filteredPaintings = paintings.filter((painting) =>
-    painting.title.toLowerCase().includes(search.toLowerCase())
+    normalizeText(painting.title).includes(normalizeText(search))
   );
 
   return (
@@ -138,10 +155,15 @@ export default function Portfolio() {
 
       <main className="portfolio-content">
         <header className="topbar">
-          <div className="brand">
-            <Palette size={29} strokeWidth={1.9} />
+          <a className="brand" href="/" aria-label="JelloArt - Início">
+            <img
+              src="/jello-icon.svg"
+              alt=""
+              className="brand-icon"
+              aria-hidden="true"
+            />
             <span>JelloArt</span>
-          </div>
+          </a>
 
           <label className="search-box">
             <input
@@ -149,8 +171,14 @@ export default function Portfolio() {
               placeholder="Pesquise no seu portfólio..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
+              aria-label="Pesquisar pinturas no portfólio"
             />
-            <Search size={19} />
+
+            <Search
+              className="search-icon"
+              size={19}
+              aria-hidden="true"
+            />
           </label>
         </header>
 
@@ -193,6 +221,12 @@ export default function Portfolio() {
               <div className="empty-state">
                 <ImageIcon size={32} />
                 <p>Nenhuma pintura encontrada.</p>
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                >
+                  Limpar pesquisa
+                </button>
               </div>
             )}
           </div>
@@ -207,8 +241,12 @@ export default function Portfolio() {
           <section
             className="painting-modal"
             onClick={(event) => event.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="painting-modal-title"
           >
             <button
+              type="button"
               className="modal-close"
               onClick={() => setSelectedPainting(null)}
               aria-label="Fechar"
@@ -216,7 +254,9 @@ export default function Portfolio() {
               <X size={20} />
             </button>
 
-            <h2>{selectedPainting.title}</h2>
+            <h2 id="painting-modal-title">
+              {selectedPainting.title}
+            </h2>
 
             {selectedPainting.image ? (
               <img
@@ -225,6 +265,7 @@ export default function Portfolio() {
               />
             ) : (
               <div className="banner-art modal-banner">
+                <span className="banner-bulb">♧</span>
                 <span>constante evolução</span>
               </div>
             )}
@@ -232,9 +273,12 @@ export default function Portfolio() {
             <p>{selectedPainting.date}</p>
 
             <button
+              type="button"
               className="modal-post"
               onClick={() => {
-                alert(`Preparando postagem: ${selectedPainting.title}`);
+                alert(
+                  `Preparando postagem: ${selectedPainting.title}`
+                );
                 setSelectedPainting(null);
               }}
             >
