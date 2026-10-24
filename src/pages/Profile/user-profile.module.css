@@ -1,0 +1,112 @@
+body {
+    background-color: #F6F6F6;
+}
+
+.container {
+    display: flex;
+    gap: 3rem;
+    padding: 3rem;
+    height: 100vh;
+}
+
+.user {
+    border-radius: 10px;
+    width: 50%;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.300), 0 6px 12px rgba(0, 0, 0, 0.300);
+    overflow: hidden;
+}
+
+.portfolio {
+    margin: auto;
+
+    button {
+        padding: 1rem;
+        font-size: 16px;
+    }
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    padding: 2rem;
+}
+
+.posts {
+    width: 50%;
+    overflow: hidden;
+    overflow-y: scroll;
+
+    border-radius: 10px;
+    background-color: #F6F6F6;
+}
+
+.postsScroll {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    scrollbar-width: thin;
+    scrollbar-color: #e5e2e2 #ffffff;
+
+    padding: 1rem;
+}
+
+.posts::-webkit-scrollbar {
+    width: 8px;
+}
+
+.posts::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 10px 0;
+}
+
+.posts::-webkit-scrollbar-thumb {
+    background: #d0cdcd;
+    border-radius: 10px;
+}
+
+.images {
+    position: relative;
+}
+
+.header {
+    margin-top: 7rem;
+    text-align: center;
+}
+
+.cover {
+    display: none;
+}
+
+.avatar {
+    cursor: default;
+}
+
+@media (max-width: 1400px) {
+    .container {
+        gap: 1rem;
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        height: unset;
+        padding: 3rem;
+    }
+
+    .user, .posts {
+        width: 100%;
+    }
+
+    .posts {
+        overflow: unset;
+        overflow-y: unset;
+    }
+
+    .postsScroll {
+        padding: unset;
+    }
+}

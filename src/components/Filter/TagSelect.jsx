@@ -1,29 +1,15 @@
 import { Select, Tag } from "antd";
-import { getTags } from "../../services/filter.js";
-import { useEffect, useState } from "react";
+import { useTags } from "../../hooks/useTags.js";
 
-export default function TagSelect({onChange}) {
+export default function TagSelect({ onChange, value }) {
 
-    const [tags, setTags] = useState([]);
+    const {tags} = useTags();
 
     const selectOptions = tags.map((tag) => ({
         label: tag.name,
         value: tag.id,
         color: tag.color,
     }));
-
-    useEffect(() => {
-        async function loadTags() {
-            try {
-                const response = await getTags();
-                setTags(response.data.data);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
-        loadTags();
-    }, []);
 
     const tagRender = (props) => {
         const {label, value, closable, onClose} = props;
@@ -51,6 +37,7 @@ export default function TagSelect({onChange}) {
             style={{width: '100%'}}
             options={selectOptions}
             onChange={onChange}
+            value={value}
         />
     );
 }

@@ -1,0 +1,16 @@
+.post {
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.300), 0 6px 12px rgba(0, 0, 0, 0.300);
+}
+
+.carousel {
+    display: flex !important;
+    justify-content: center;
+}
+
+.imgs {
+    padding: 2rem;
+    max-width: 550px;
+}
