@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAvatarUrl, getCoverUrl, getUserProfile } from "../services";
+import { useUserPosts } from "./useUserPosts.js";
+import { useFilter } from "./useFilter.js";
 
 const emptyForm = {
     firstName: "",
@@ -30,6 +32,13 @@ function profileToForm(profile) {
 }
 
 export function useUserProfile(userId) {
+
+    const pageSize = 5;
+    const [page, setPage] = useState(1);
+
+    const {setField, reset, draft, applied, apply} = useFilter();
+    const {posts, total, loading: loadingPosts, error} = useUserPosts(userId, page, pageSize, applied);
+
     const [profile, setProfile] = useState(null);
     const [formData, setFormData] = useState(emptyForm);
     const [avatarUrl, setAvatarUrl] = useState("");
@@ -49,7 +58,6 @@ export function useUserProfile(userId) {
                 setAvatarUrl(getAvatarUrl(userData.avatar?.id));
                 setCoverUrl(getCoverUrl(userData.cover?.id));
 
-
             } catch (error) {
                 console.log("Erro ao carregar perfil: ", error);
             }
@@ -58,5 +66,22 @@ export function useUserProfile(userId) {
         fetchUser();
     }, [userId]);
 
-    return {profile, formData, avatarUrl, coverUrl}
+    return {
+        pageSize,
+        page,
+        setPage,
+        setField,
+        reset,
+        draft,
+        apply,
+        app,
+        posts,
+        total,
+        loadingPosts,
+        error,
+        profile,
+        formData,
+        avatarUrl,
+        coverUrl
+    }
 }

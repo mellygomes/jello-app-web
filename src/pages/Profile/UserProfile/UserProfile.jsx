@@ -1,4 +1,6 @@
 import styles from "./user-profile.module.css";
+import { Pagination } from "antd";
+import { IdcardOutlined, LeftOutlined } from "@ant-design/icons";
 import {
     Button,
     Filter,
@@ -9,23 +11,30 @@ import {
     ProfileAvatar,
     Spinner
 } from "../../../components";
-import { useState } from "react";
+import { useUserProfile } from "../../../hooks";
 import { useNavigate, useParams } from "react-router-dom";
-import { useFilter, useUserPosts, useUserProfile } from "../../../hooks";
-import { Pagination } from "antd";
-import { IdcardOutlined, LeftOutlined } from "@ant-design/icons";
 
 export default function UserProfile() {
-
     const navigate = useNavigate();
     const {userId} = useParams();
 
-    const pageSize = 5;
-    const [page, setPage] = useState(1);
-
-    const {setField, reset, draft, applied, apply} = useFilter();
-    const {posts, total, loading: loadingPosts, error} = useUserPosts(userId, page, pageSize, applied);
-    const {profile, formData, avatarUrl, coverUrl} = useUserProfile(userId);
+    const {
+        pageSize,
+        page,
+        setPage,
+        setField,
+        reset,
+        apply,
+        draft,
+        posts,
+        total,
+        loadingPosts,
+        error,
+        profile,
+        formData,
+        avatarUrl,
+        coverUrl
+    } = useUserProfile(userId);
 
     if (error) return <p>Erro dog</p>;
 
