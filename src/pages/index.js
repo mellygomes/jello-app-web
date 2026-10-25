@@ -1,4 +1,5 @@
-export { default as Home } from "./Home";
-export { default as Login } from "./Login";
-export { default as Register } from "./Register/Register.jsx";
+export { default as Home } from './Home';
+export { default as Login } from './Login';
+export { default as Register } from './Register';
+export { default as Portfolio } from './Portfolio/Portfolio';
 export * from "./Profile";

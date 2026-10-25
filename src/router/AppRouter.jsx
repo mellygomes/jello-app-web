@@ -1,5 +1,5 @@
-import { Route, Routes } from "react-router-dom";
-import { Home, Login, MyProfile, UserProfile, Register } from "../pages";
+import { Route, Routes } from 'react-router-dom'
+import { Home, Login, Portfolio, MyProfile, UserProfile, Register } from '../pages';
 
 const AppRouter = () => {
     return (
@@ -22,6 +22,7 @@ const AppRouter = () => {
                     <UserProfile />
                 }
             />
+            <Route path='/portfolio' element={<Portfolio />} />
         </Routes>
     )
 }
