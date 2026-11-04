@@ -9,22 +9,48 @@ export function useUserPosts(userId, page, pageSize, filter) {
 
     useEffect(() => {
 
-        if (!userId) return;
+        if (!userId) {
+            setPosts([]);
+            setTotal(0);
+            setLoading(false)
+            setError(null)
+            return;
+        }
 
-        const load = async () => {
+        const controller = new AbortController();
+
+        async function loadPosts()  {
+            setLoading(true);
+            setError(null);
+
             try {
-                setLoading(true);
-                const response = await getAllPostsByUser(userId, page - 1, pageSize, filter);
-                setPosts(response.data.content);
-                setTotal(response.data.totalElements);
-            } catch (error) {
-                setError(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+                const response = await getAllPostsByUser(
+                    userId,
+                    page - 1,
+                    pageSize,
+                    filter,
+                    { signal: controller.signal }
+                );
 
-        load();
+                setPosts(response.data.content ?? []);
+                setTotal(response.data.totalElements ?? 0);
+                console.log(response.data.content);
+            } catch (error) {
+                if (!controller.signal.aborted) {
+                    setError(error);
+                    setPosts([]);
+                    setTotal(0);
+                }
+            } finally {
+                if (!controller.signal.aborted) {
+                    setLoading(false);
+                }
+            }
+        }
+
+        loadPosts();
+
+        return () => controller.abort();
     }, [userId, page, pageSize, filter]);
 
     return { posts, total, loading, error };

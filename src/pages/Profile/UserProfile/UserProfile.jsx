@@ -5,45 +5,35 @@ import {
     Button,
     Filter,
     PostList,
+    ProfileAvatar,
     ProfileCover,
     ProfileDescription,
     ProfileHeader,
-    ProfileAvatar,
     Spinner
 } from "../../../components";
-import { useUserProfile } from "../../../hooks";
+import { useFilter, useUserPosts, useUserProfile } from "../../../hooks";
 import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
 
 export default function UserProfile() {
+
     const navigate = useNavigate();
     const {userId} = useParams();
+    const pageSize = 5;
+    const [page, setPage] = useState(1);
 
-    const {
-        pageSize,
-        page,
-        setPage,
-        setField,
-        reset,
-        apply,
-        draft,
-        posts,
-        total,
-        loadingPosts,
-        error,
-        profile,
-        formData,
-        avatarUrl,
-        coverUrl
-    } = useUserProfile(userId);
+    const {setField, reset, draft, applied, apply} = useFilter();
+    const {posts, total, loading: loadingPosts, error: postsError} = useUserPosts(userId, page, pageSize, applied);
+    const {profile, avatarUrl, coverUrl, /* profileLoading, profileError */} = useUserProfile(userId);
 
-    if (error) return <p>Erro dog</p>;
+    // if (error) return <p>Erro dog</p>;
 
     return (
         <div className={styles.container}>
             <div className={styles.user}>
                 <div className={styles.images}>
                     <LeftOutlined
-                        style={{ fontSize: "36px", cursor: "pointer", position: "absolute", left: "14px", top: "14px" }}
+                        style={{fontSize: "36px", cursor: "pointer", position: "absolute", left: "14px", top: "14px"}}
                         onClick={() => navigate("/")}
                     />
                     <ProfileCover
@@ -61,22 +51,22 @@ export default function UserProfile() {
                 <div className={styles.info}>
                     <ProfileHeader
                         className={styles.header}
-                        name={`${formData.firstName} ${formData.lastName}`}
+                        name={`${profile?.firstName ?? ""} ${profile?.lastName ?? ""}`.trim()}
                         followers={`${profile?.followers ?? 0} seguidores`}
                         following={`${profile?.following ?? 0} seguindo`}
                         posts={`${profile?.posts ?? 0} posts`}
                     />
 
                     <Button className={styles.portfolio}>
-                        <IdcardOutlined style={{ fontSize: "24px" }} />
+                        <IdcardOutlined style={{fontSize: "24px"}}/>
                         <span>Acessar Portfólio</span>
                     </Button>
 
                     <ProfileDescription
                         title="SOBRE"
-                        value={formData.bio}
+                        value={profile?.bio ?? ""}
                         maxLength={255}
-                        disabled={true}
+                        disabled
                     />
                 </div>
             </div>
@@ -94,7 +84,17 @@ export default function UserProfile() {
                         }}
                     />
 
-                    { loadingPosts ? <Spinner /> : <PostList posts={posts}/> }
+                    {loadingPosts ? (
+                        <Spinner/>
+                    ) : postsError ? (
+                        <p>Não foi possível carregar os posts.</p>
+                    ) : posts.length === 0 ? (
+                        <p>Este usuário ainda não tem posts.</p>
+                    ) : (
+                        <PostList posts={posts}/>
+                    )}
+
+                    {/*<PostList posts={posts}/>*/}
 
                     <Pagination
                         current={page}

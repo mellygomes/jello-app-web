@@ -17,12 +17,13 @@ export function getProfile() {
     return api.get("/api/v1/users/profile");
 }
 
-export function getUserProfile(userId) {
-    return api.get(`/api/v1/users/${userId}`);
+export function getUserProfile(userId, { signal } = {}) {
+    return api.get(`/api/v1/users/${userId}`, { signal });
 }
 
-export function getAllPostsByUser(userId, page, size, filter) {
+export function getAllPostsByUser(userId, page, size, filter, { signal } = {}) {
     return api.get(`/api/v1/users/${userId}/posts`, {
+        signal,
         params: {
             page,
             size,
@@ -31,7 +32,10 @@ export function getAllPostsByUser(userId, page, size, filter) {
             tags: filter.tags,
             initialDate: filter.date?.[0] ? dayjs(filter.date[0]).format("YYYY-MM-DD") : undefined,
             finalDate: filter.date?.[1] ? dayjs(filter.date[1]).format("YYYY-MM-DD") : undefined,
-        }
+        },
+        paramsSerializer: {
+            indexes: null,
+        },
     });
 }
 

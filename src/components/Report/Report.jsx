@@ -16,8 +16,6 @@ export default function Report() {
 
             <div className={`${styles.report} ${showReport ? styles["report-open"] : ""}`}>
                 <div className={styles.options}>
-                    <FlagFilled />
-                    <span>Denunciar postagem</span>
                     <CreateReportModal />
                 </div>
                 <div className={styles.options}>

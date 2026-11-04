@@ -16,7 +16,7 @@ export default function PostCard({title, content, images = [], likes, comments, 
             <Carousel arrows>
                 {images.map((image) => (
                     <div className={styles.carousel}>
-                        <img className={styles.imgs} src={`http://localhost:8080` + image.url} alt=""/>
+                        <img className={styles.imgs} src={`${import.meta.env.VITE_API_URL}${image.url}`} alt=""/>
                     </div>
                 ))}
             </Carousel>
