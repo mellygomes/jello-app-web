@@ -1,56 +1,10 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Search, Ellipsis, Image as ImageIcon, X } from "lucide-react";
-
 import "./portfolio.css";
 import Sidebar from "./components/Sidebar/Sidebar";
+import { getMyPortfolioPosts } from "../../services/post";
 
-const paintings = [
-  {
-    id: 1,
-    title: "Minha pintura: Parque Iluminado",
-    image:
-      "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=700&q=85",
-    date: "Há 14 minutos",
-  },
-  {
-    id: 2,
-    title: "Aquarela, Sol da meia-noite",
-    image:
-      "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=700&q=85",
-    date: "18 de maio de 2026",
-  },
-  {
-    id: 3,
-    title: "Pinceladas de lavanda",
-    image:
-      "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=700&q=85",
-    date: "24 de março de 2026",
-  },
-  {
-    id: 4,
-    title: "Pop Art - Tigre",
-    image:
-      "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=700&q=85",
-    date: "12 de fevereiro de 2026",
-  },
-  {
-    id: 5,
-    title: "Ideia de Banner pro Perfil",
-    image: null,
-    date: "03 de janeiro de 2026",
-    banner: true,
-  },
-  {
-    id: 6,
-    title: "Mesma pintura só que antes",
-    image:
-      "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=700&q=85",
-    date: "30 de novembro de 2025",
-  },
-];
-
-function normalizeText(text) {
+function normalizeText(text = "") {
   return text
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -68,12 +22,10 @@ function PaintingCard({ painting, onOpen }) {
 
         <button
           type="button"
-          className="more-button"
-          onClick={() => setMenuOpen((previous) => !previous)}
-          aria-label={`Opções de ${painting.title}`}
-          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Abrir opções"
         >
-          <Ellipsis size={17} />
+          <Ellipsis size={20} />
         </button>
 
         {menuOpen && (
@@ -92,9 +44,7 @@ function PaintingCard({ painting, onOpen }) {
               type="button"
               onClick={() => {
                 if (navigator.clipboard?.writeText) {
-                  navigator.clipboard
-                    .writeText(painting.title)
-                    .catch(() => {});
+                  navigator.clipboard.writeText(painting.title).catch(() => {});
                 }
 
                 setMenuOpen(false);
@@ -108,33 +58,31 @@ function PaintingCard({ painting, onOpen }) {
 
       <button
         type="button"
-        className={`painting-image ${
-          painting.banner ? "banner-image" : ""
-        }`}
+        className="painting-image"
         onClick={() => onOpen(painting)}
-        aria-label={`Abrir ${painting.title}`}
       >
-        {painting.banner ? (
-          <div className="banner-art">
-            <span className="banner-bulb">♧</span>
-            <span>constante evolução</span>
-          </div>
-        ) : (
+        {painting.image ? (
           <img src={painting.image} alt={painting.title} />
+        ) : (
+          <div className="painting-no-image">
+            <ImageIcon size={32} />
+            <span>Sem imagem</span>
+          </div>
         )}
       </button>
 
       <div className="card-footer">
-        <span>{painting.date}</span>
+        <span>
+          {painting.createdAt
+            ? new Date(painting.createdAt).toLocaleDateString("pt-BR")
+            : ""}
+        </span>
 
-        <button
-          type="button"
-          className="post-button"
-          onClick={() => onOpen(painting)}
+        <span
+          className={`post-status ${painting.visible ? "published" : "draft"}`}
         >
-          <span>Postar</span>
-          <span aria-hidden="true">➤</span>
-        </button>
+          {painting.visible ? "Publicado" : "Rascunho"}
+        </span>
       </div>
     </article>
   );
@@ -145,8 +93,52 @@ export default function Portfolio() {
   const [active, setActive] = useState("Início");
   const [selectedPainting, setSelectedPainting] = useState(null);
 
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function loadPosts() {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await getMyPortfolioPosts(page, 12);
+
+        setPosts(
+          Array.isArray(response.data.content) ? response.data.content : [],
+        );
+
+        setTotalPages(response.data.totalPages ?? 0);
+      } catch (err) {
+        console.error("Erro ao carregar portfólio:", err);
+        setError("Não foi possível carregar seu portfólio.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadPosts();
+  }, [page]);
+
+  const paintings = posts.map((post) => ({
+    id: post.id,
+    title: post.title,
+    content: post.content,
+    image: post.images?.[0]?.url ?? null,
+    images: post.images ?? [],
+    tags: post.tags ?? [],
+    likes: post.likes ?? 0,
+    comments: post.comments ?? 0,
+    createdAt: post.createdAt,
+    visible: post.visible,
+  }));
+
   const filteredPaintings = paintings.filter((painting) =>
-    normalizeText(painting.title).includes(normalizeText(search))
+    normalizeText(painting.title).includes(normalizeText(search)),
   );
 
   return (
@@ -156,12 +148,7 @@ export default function Portfolio() {
       <main className="portfolio-content">
         <header className="topbar">
           <a className="brand" href="/" aria-label="JelloArt - Início">
-            <img
-              src="/jello-icon.svg"
-              alt=""
-              className="brand-icon"
-              aria-hidden="true"
-            />
+            <img src="/jello-icon.svg" alt="" className="brand-icon" />
             <span>JelloArt</span>
           </a>
 
@@ -170,15 +157,11 @@ export default function Portfolio() {
               type="search"
               placeholder="Pesquise no seu portfólio..."
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
               aria-label="Pesquisar pinturas no portfólio"
             />
 
-            <Search
-              className="search-icon"
-              size={19}
-              aria-hidden="true"
-            />
+            <Search className="search-icon" size={19} />
           </label>
         </header>
 
@@ -208,28 +191,77 @@ export default function Portfolio() {
             </span>
           </div>
 
-          <div className="paintings-grid">
-            {filteredPaintings.map((painting) => (
-              <PaintingCard
-                key={painting.id}
-                painting={painting}
-                onOpen={setSelectedPainting}
-              />
-            ))}
+          {loading && (
+            <div className="empty-state">
+              <p>Carregando seu portfólio...</p>
+            </div>
+          )}
 
-            {filteredPaintings.length === 0 && (
-              <div className="empty-state">
-                <ImageIcon size={32} />
-                <p>Nenhuma pintura encontrada.</p>
-                <button
-                  type="button"
-                  onClick={() => setSearch("")}
-                >
-                  Limpar pesquisa
-                </button>
+          {!loading && error && (
+            <div className="empty-state">
+              <p>{error}</p>
+
+              <button type="button" onClick={() => setPage(0)}>
+                Tentar novamente
+              </button>
+            </div>
+          )}
+
+          {!loading && !error && (
+            <>
+              <div className="paintings-grid">
+                {filteredPaintings.map((painting) => (
+                  <PaintingCard
+                    key={painting.id}
+                    painting={painting}
+                    onOpen={setSelectedPainting}
+                  />
+                ))}
+
+                {filteredPaintings.length === 0 && (
+                  <div className="empty-state">
+                    <ImageIcon size={32} />
+
+                    <p>
+                      {search
+                        ? "Nenhuma pintura encontrada."
+                        : "Seu portfólio está vazio."}
+                    </p>
+
+                    {search && (
+                      <button type="button" onClick={() => setSearch("")}>
+                        Limpar pesquisa
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+
+              {!search && totalPages > 1 && (
+                <div className="portfolio-pagination">
+                  <button
+                    type="button"
+                    disabled={page === 0}
+                    onClick={() => setPage((current) => current - 1)}
+                  >
+                    Anterior
+                  </button>
+
+                  <span>
+                    Página {page + 1} de {totalPages}
+                  </span>
+
+                  <button
+                    type="button"
+                    disabled={page + 1 >= totalPages}
+                    onClick={() => setPage((current) => current + 1)}
+                  >
+                    Próxima
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </section>
       </main>
 
@@ -240,13 +272,12 @@ export default function Portfolio() {
         >
           <section
             className="painting-modal"
-            onClick={(event) => event.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
             aria-labelledby="painting-modal-title"
           >
             <button
-              type="button"
               className="modal-close"
               onClick={() => setSelectedPainting(null)}
               aria-label="Fechar"
@@ -254,35 +285,29 @@ export default function Portfolio() {
               <X size={20} />
             </button>
 
-            <h2 id="painting-modal-title">
-              {selectedPainting.title}
-            </h2>
+            <h2 id="painting-modal-title">{selectedPainting.title}</h2>
 
             {selectedPainting.image ? (
-              <img
-                src={selectedPainting.image}
-                alt={selectedPainting.title}
-              />
+              <img src={selectedPainting.image} alt={selectedPainting.title} />
             ) : (
-              <div className="banner-art modal-banner">
-                <span className="banner-bulb">♧</span>
-                <span>constante evolução</span>
+              <div className="painting-no-image">
+                <ImageIcon size={32} />
+                <span>Sem imagem</span>
               </div>
             )}
 
-            <p>{selectedPainting.date}</p>
+            {selectedPainting.content && <p>{selectedPainting.content}</p>}
+
+            <p>
+              {selectedPainting.likes} curtidas · {selectedPainting.comments}{" "}
+              comentários
+            </p>
 
             <button
-              type="button"
               className="modal-post"
-              onClick={() => {
-                alert(
-                  `Preparando postagem: ${selectedPainting.title}`
-                );
-                setSelectedPainting(null);
-              }}
+              onClick={() => setSelectedPainting(null)}
             >
-              Postar pintura
+              Fechar
             </button>
           </section>
         </div>

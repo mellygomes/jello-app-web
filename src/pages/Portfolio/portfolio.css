@@ -640,3 +640,23 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+.portfolio-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.portfolio-pagination button {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.portfolio-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
