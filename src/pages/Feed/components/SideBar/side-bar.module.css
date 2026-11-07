@@ -1,0 +1,128 @@
+.sideBarOpen {
+    width: 50%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 4px;
+    box-shadow: 0px 0px 4px rgb(158, 158, 158);
+    padding: 20px 30px;
+    position: relative;
+    overflow: auto;
+}
+
+.sideBarClosed {
+    width: 100px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 4px;
+    box-shadow: 0px 0px 4px rgb(158, 158, 158);
+    padding: 20px 30px;
+    position: relative;
+    overflow: auto;
+}
+
+p {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    font-weight: 600;
+}
+
+.profile {
+    min-height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 0px;
+
+    > p {
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+}
+
+.menu-icon {
+    display: flex;
+    background: none;
+    border: none;
+    align-items: end;
+    position: absolute;
+    width: 35px;
+    height:35px;
+    top: 10;
+    right: 30px;
+    
+    > img {
+        width: 35px;
+        height:35px;
+    }
+}
+
+.profile-pic {
+    object-fit: cover;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.explore-icon Button {
+    height: 50px;
+    width: 300px !important;
+    margin-bottom: 10px;
+}
+
+.pages-links {
+    min-height: fit-content;
+    background-color: rgb(221, 233, 235);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: baseline;
+    border-radius: 5px;
+    margin: 15px 0px;
+    padding: 25px 0px;
+    padding-left: 25px;
+    gap: 16px;
+    box-sizing: border-box;
+}
+
+.pages-buttons {
+    display: flex;
+    background: none;
+    border: 0px;
+    max-height: 28px;
+    gap: 20px;
+
+
+    > img {
+        height: auto;
+        max-width: 30px;
+    }
+
+    > p {
+        font-size: 18px;
+    }
+}
+
+.suggestions {
+    margin: 15px 0px;
+    font-size: 18px;
+    gap: 25px;
+}
+
+.profiles-suggestion {
+    display: inline-flex;
+    gap: 16px;
+    font-size: 18px;
+    margin-bottom: 16px;
+
+    > img {
+        border-radius: 999px;
+        height: 40px;
+        width: 40px;
+        object-fit: cover;
+    }
+
+    > Button {
+        height: 10px;
+        width: 10px !important;
+    }
+}
