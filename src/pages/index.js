@@ -4,3 +4,4 @@ export { default as Register } from './Register';
 export { default as Portfolio } from './Portfolio/Portfolio';
 export { default as MyProfile } from './Profile/MyProfile.jsx';
 export { default as UserProfile } from './Profile/UserProfile.jsx'
+export { default as Feed } from './Feed';
