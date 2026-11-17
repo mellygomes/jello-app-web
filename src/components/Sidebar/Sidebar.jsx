@@ -13,8 +13,6 @@ import {
 
 import "./sidebar.css";
 
-// TODO: MOVER ISSO PRA COMPONENTES GLOBAIS PQ É USADO EM MAIS DE UMA PAGINA
-
 const navigation = [
   { name: "Início", icon: House },
   { name: "Comunidade", icon: Users },

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllPostsByUser } from "../services";
+import { getAllPostsByUser } from "../services/profile.js";
 
 export function useUserPosts(userId, page, pageSize, filter) {
     const [posts, setPosts] = useState([]);
@@ -9,48 +9,22 @@ export function useUserPosts(userId, page, pageSize, filter) {
 
     useEffect(() => {
 
-        if (!userId) {
-            setPosts([]);
-            setTotal(0);
-            setLoading(false)
-            setError(null)
-            return;
-        }
+        if (!userId) return;
 
-        const controller = new AbortController();
-
-        async function loadPosts()  {
-            setLoading(true);
-            setError(null);
-
+        const load = async () => {
             try {
-                const response = await getAllPostsByUser(
-                    userId,
-                    page - 1,
-                    pageSize,
-                    filter,
-                    { signal: controller.signal }
-                );
-
-                setPosts(response.data.content ?? []);
-                setTotal(response.data.totalElements ?? 0);
-                console.log(response.data.content);
+                setLoading(true);
+                const response = await getAllPostsByUser(userId, page - 1, pageSize, filter);
+                setPosts(response.data.content);
+                setTotal(response.data.totalElements);
             } catch (error) {
-                if (!controller.signal.aborted) {
-                    setError(error);
-                    setPosts([]);
-                    setTotal(0);
-                }
+                setError(error);
             } finally {
-                if (!controller.signal.aborted) {
-                    setLoading(false);
-                }
+                setLoading(false);
             }
-        }
+        };
 
-        loadPosts();
-
-        return () => controller.abort();
+        load();
     }, [userId, page, pageSize, filter]);
 
     return { posts, total, loading, error };

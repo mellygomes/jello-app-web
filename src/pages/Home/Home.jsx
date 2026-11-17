@@ -24,7 +24,7 @@ export default function Home() {
                 // }}
             ></Filter>
             <button
-                onClick={() => goToUser(33)}
+                onClick={() => goToUser(25)}
             >Teste</button>
         </div>
     );

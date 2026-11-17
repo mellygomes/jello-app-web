@@ -19,6 +19,7 @@ export default function UserProfile() {
 
     const navigate = useNavigate();
     const {userId} = useParams();
+
     const pageSize = 5;
     const [page, setPage] = useState(1);
 
@@ -33,7 +34,7 @@ export default function UserProfile() {
             <div className={styles.user}>
                 <div className={styles.images}>
                     <LeftOutlined
-                        style={{fontSize: "36px", cursor: "pointer", position: "absolute", left: "14px", top: "14px"}}
+                        style={{ fontSize: "36px", cursor: "pointer", position: "absolute", left: "14px", top: "14px" }}
                         onClick={() => navigate("/")}
                     />
                     <ProfileCover
@@ -58,7 +59,7 @@ export default function UserProfile() {
                     />
 
                     <Button className={styles.portfolio}>
-                        <IdcardOutlined style={{fontSize: "24px"}}/>
+                        <IdcardOutlined style={{ fontSize: "24px" }} />
                         <span>Acessar Portfólio</span>
                     </Button>
 

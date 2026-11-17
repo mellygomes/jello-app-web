@@ -1,29 +1,28 @@
-import { api } from "../lib/api";
 import dayjs from "dayjs";
 
 const API_URL = import.meta.env.VITE_API_URL;
+import { api } from '../lib/api'
 
 export function getAvatarUrl(avatarId) {
-  if (!avatarId) return "";
-  return `${API_URL}/api/v1/images/avatars/${avatarId}`;
+    if (!avatarId) return "";
+    return `${API_URL}/api/v1/images/avatars/${avatarId}`;
 }
 
 export function getCoverUrl(coverId) {
-  if (!coverId) return "";
-  return `${API_URL}/api/v1/images/covers/${coverId}`;
+    if (!coverId) return "";
+    return `${API_URL}/api/v1/images/covers/${coverId}`;
 }
 
 export function getProfile() {
     return api.get("/api/v1/users/profile");
 }
 
-export function getUserProfile(userId, { signal } = {}) {
-    return api.get(`/api/v1/users/${userId}`, { signal });
+export function getUserProfile(userId) {
+    return api.get(`/api/v1/users/${userId}`);
 }
 
-export function getAllPostsByUser(userId, page, size, filter, { signal } = {}) {
+export function getAllPostsByUser(userId, page, size, filter) {
     return api.get(`/api/v1/users/${userId}/posts`, {
-        signal,
         params: {
             page,
             size,
@@ -32,10 +31,7 @@ export function getAllPostsByUser(userId, page, size, filter, { signal } = {}) {
             tags: filter.tags,
             initialDate: filter.date?.[0] ? dayjs(filter.date[0]).format("YYYY-MM-DD") : undefined,
             finalDate: filter.date?.[1] ? dayjs(filter.date[1]).format("YYYY-MM-DD") : undefined,
-        },
-        paramsSerializer: {
-            indexes: null,
-        },
+        }
     });
 }
 
