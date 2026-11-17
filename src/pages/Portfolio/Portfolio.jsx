@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Search, Ellipsis, Image as ImageIcon, X } from "lucide-react";
 import styles from "./portfolio.module.css";
-import Sidebar from "./components/Sidebar";
+import { Sidebar } from "../../components";
 
 const paintings = [
   {
@@ -155,7 +155,7 @@ export default function Portfolio() {
         <header className={styles["topbar"]}>
           <a className={styles["brand"]} href="/" aria-label="JelloArt - Início">
             <img
-              src="/jello-icon.svg"
+              src="/jellyfish.png"
               alt=""
               className={styles["brand-icon"]}
               aria-hidden="true"

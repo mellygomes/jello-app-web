@@ -1,9 +1,9 @@
-import { EllipsisOutlined, FlagFilled, InfoCircleOutlined, IssuesCloseOutlined } from "@ant-design/icons";
+import { EllipsisOutlined, InfoCircleOutlined, IssuesCloseOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import styles from "./report.module.css";
+import styles from "./report-options.module.css";
 import CreateReportModal from "./CreateReportModal";
 
-export default function Report() {
+export default function ReportOptions({ postId }) {
 
     const [showReport, setShowReport] = useState(false);
 
@@ -16,7 +16,7 @@ export default function Report() {
 
             <div className={`${styles.report} ${showReport ? styles["report-open"] : ""}`}>
                 <div className={styles.options}>
-                    <CreateReportModal />
+                    <CreateReportModal postId={postId} />
                 </div>
                 <div className={styles.options}>
                     <IssuesCloseOutlined />

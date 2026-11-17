@@ -1,14 +1,14 @@
 import styles from "./post-card.module.css";
 import { Carousel, Tag } from "antd";
 import { CommentOutlined, HeartOutlined } from "@ant-design/icons";
-import Report from "../Report";
+import ReportOptions from "../ReportOptions";
 
-export default function PostCard({title, content, images = [], likes, comments, tags = []}) {
+export default function PostCard({id, title, content, images = [], likes, comments, tags = []}) {
     return (
         <div className={styles.post}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative"}}>
                 <p>{title}</p>
-                <Report />
+                <ReportOptions postId={id} />
             </div>
             <span>{content}</span>
 
