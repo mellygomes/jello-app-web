@@ -1,6 +1,5 @@
-import { Route, Routes } from 'react-router-dom'
-import { Home, Login, Portfolio, MyProfile, UserProfile, Register } from '../pages';
-// import ProtectedRoute from '../components/ProtectedRoute.jsx';
+import { Route, Routes } from "react-router-dom";
+import { Home, Login, Portfolio, MyProfile, UserProfile, Register, PostReport, UserReport } from "../pages";
 
 const AppRouter = () => {
     return (
@@ -23,7 +22,9 @@ const AppRouter = () => {
                     <UserProfile />
                 }
             />
-            <Route path='/portfolio' element={<Portfolio />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/posts-reports" element={<PostReport />} />
+            <Route path="/users-reports" element={<UserReport />} />
         </Routes>
     )
 }
