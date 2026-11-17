@@ -5,17 +5,29 @@ export function submitPostReport(body) {
 }
 
 export function getAllPostReports() {
+    return api.get("/api/v1/posts/reports");
+}
+
+export function getPostsReports() {
     return api.get("/api/v1/posts/reports/list");
 }
 
-export function getInfo() {
-    return api.get("/api/v1/posts/reports/teste");
-}
-
-export function approveReport(reportId) {
+export function approvePostReport(reportId) {
     return api.put(`/api/v1/posts/reports/approve/${reportId}`);
 }
 
-export function unapproveReport(reportId) {
+export function unapprovePostReport(reportId) {
     return api.put(`/api/v1/posts/reports/unapprove/${reportId}`);
+}
+
+export function getUsersReports() {
+    return api.get("/api/v1/users/reports/list");
+}
+
+export function approveUserReport(reportId) {
+    return api.put(`/api/v1/users/reports/approve/${reportId}`);
+}
+
+export function unapproveUserReport(reportId) {
+    return api.put(`/api/v1/users/reports/unapprove/${reportId}`);
 }

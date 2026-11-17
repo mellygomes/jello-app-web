@@ -3,7 +3,7 @@ import { Table, Space, Tooltip, Tag, Modal } from 'antd';
 import { useEffect, useState } from "react";
 import { Sidebar } from "../../../components/index.js";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { approveReport, getInfo, unapproveReport } from "../../../services/index.js";
+import { approvePostReport, getPostsReports, unapprovePostReport } from "../../../services/index.js";
 import PostReportInfo from "./components/PostReportInfo";
 
 export default function PostReport() {
@@ -11,9 +11,9 @@ export default function PostReport() {
     const changeReportStatus = async (reportId, approved) => {
         try {
             if (approved) {
-                await approveReport(reportId);
+                await approvePostReport(reportId);
             } else {
-                await unapproveReport(reportId);
+                await unapprovePostReport(reportId);
             }
 
             setReports((currentReports) =>
@@ -38,6 +38,7 @@ export default function PostReport() {
             title: 'Conteúdo',
             dataIndex: 'reportContent',
             key: 'reportContent',
+            width: 1000,
             render: content => <a>{ content }</a>
         },
         {
@@ -88,7 +89,7 @@ export default function PostReport() {
     useEffect(() => {
         let cancelado = false;
 
-        getInfo()
+        getPostsReports()
             .then((response) => {
                 if (!cancelado) setReports(response.data);
             })
@@ -109,7 +110,12 @@ export default function PostReport() {
         <div className={styles["container"]}>
             <Sidebar active={active} setActive={setActive}/>
             <div className={styles["report-content"]}>
-                <Table columns={columns} dataSource={reports}/>
+                <Table
+                    rowKey="id"
+                    columns={columns}
+                    dataSource={reports}
+                    tableLayout={"auto"}
+                />
                 <Modal
                     title="Informações da Postagem"
                     open={selectedReport !== null}
