@@ -4,6 +4,10 @@ export function submitPostReport(body) {
     return api.post("/api/v1/posts/reports/create", body);
 }
 
+export function submitUserReport(body) {
+    return api.post("/api/v1/users/reports/create", body);
+}
+
 export function getAllPostReports() {
     return api.get("/api/v1/posts/reports");
 }

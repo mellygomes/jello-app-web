@@ -95,8 +95,6 @@ export default function UserProfile() {
                         <PostList posts={posts}/>
                     )}
 
-                    {/*<PostList posts={posts}/>*/}
-
                     <Pagination
                         current={page}
                         pageSize={pageSize}

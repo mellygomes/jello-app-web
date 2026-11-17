@@ -7,3 +7,4 @@ export * from "./useLogin.js";
 export * from "./useRegister.js";
 export * from "./useLoggedProfile.js";
 export * from "./usePostReport.js";
+export * from "./useUserReport.js";
