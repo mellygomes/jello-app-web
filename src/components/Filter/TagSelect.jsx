@@ -1,43 +1,45 @@
-import { Select, Tag } from "antd";
-import { useTags } from "../../hooks/useTags.js";
+// Movi este componente para os componentes globais para ser reutilizado
 
-export default function TagSelect({ onChange, value }) {
+// import { Select, Tag } from "antd";
+// import { useTags } from "../../hooks/useTags.js";
 
-    const {tags} = useTags();
+// export default function TagSelect({ onChange, value }) {
 
-    const selectOptions = tags.map((tag) => ({
-        label: tag.name,
-        value: tag.id,
-        color: tag.color,
-    }));
+//     const {tags} = useTags();
 
-    const tagRender = (props) => {
-        const {label, value, closable, onClose} = props;
-        const tagData = selectOptions.find((opt) => opt.value === value);
-        const color = tagData ? tagData.color : undefined;
+//     const selectOptions = tags.map((tag) => ({
+//         label: tag.name,
+//         value: tag.id,
+//         color: tag.color,
+//     }));
 
-        return (
-            <Tag
-                key={value}
-                color={color}
-                closable={closable}
-                onClose={onClose}
-                style={{marginInlineEnd: 4}}
-            >
-                {label}
-            </Tag>
-        );
-    };
+//     const tagRender = (props) => {
+//         const {label, value, closable, onClose} = props;
+//         const tagData = selectOptions.find((opt) => opt.value === value);
+//         const color = tagData ? tagData.color : undefined;
 
-    return (
-        <Select
-            mode="multiple"
-            tagRender={tagRender}
-            placeholder="Selecione as tags"
-            style={{width: '100%'}}
-            options={selectOptions}
-            onChange={onChange}
-            value={value}
-        />
-    );
-}
+//         return (
+//             <Tag
+//                 key={value}
+//                 color={color}
+//                 closable={closable}
+//                 onClose={onClose}
+//                 style={{marginInlineEnd: 4}}
+//             >
+//                 {label}
+//             </Tag>
+//         );
+//     };
+
+//     return (
+//         <Select
+//             mode="multiple"
+//             tagRender={tagRender}
+//             placeholder="Selecione as tags"
+//             style={{width: '100%'}}
+//             options={selectOptions}
+//             onChange={onChange}
+//             value={value}
+//         />
+//     );
+// }

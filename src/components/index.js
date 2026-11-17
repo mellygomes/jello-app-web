@@ -11,7 +11,9 @@ export { default as ProfileCover } from '../pages/Profile/components/ProfileCove
 export { default as Spinner } from '../components/Spinner/Spinner.jsx';
 export { default as ToggleAI } from '../components/Filter/ToggleAI.jsx';
 export { default as FilterPic } from '../components/Filter/FilterPic.jsx';
-export { default as TagSelect } from '../components/Filter/TagSelect.jsx';
 export { default as Date } from '../components/Filter/Date.jsx';
 export { default as Filter } from '../components/Filter/Filter.jsx';
 export { default as Report } from './Report/Report.jsx';
+export {default as NewPostModal} from './NewPostModal/NewPostModal.jsx'
+export {default as NewPostButton} from './NewPostButton/NewPostButton.jsx'
+export {default as TagSelector} from './TagSelector/TagSelector.jsx'

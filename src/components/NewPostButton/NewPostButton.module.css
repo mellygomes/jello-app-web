@@ -1,0 +1,33 @@
+.newPostButton {
+    background-color: #2b2b2b; /* Cor escura igual ao print */
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: inherit;
+    
+    /* O segredo para o formato de pílula */
+    border-radius: 50px; 
+    
+    /* Espaçamento interno */
+    padding: 12px 32px;
+    
+    /* Removendo a borda padrão e adicionando transição */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    
+    /* Centralizando o texto, caso precise */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Efeito ao passar o mouse */
+.newPostButton:hover {
+    background-color: #1a1a1a;
+}
+
+/* Efeito ao clicar (afundar levemente) */
+.newPostButton:active {
+    transform: scale(0.98);
+}
