@@ -3,6 +3,7 @@ import { Search, Ellipsis, Image as ImageIcon, X } from "lucide-react";
 import "./portfolio.css";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { getMyPortfolioPosts } from "../../services/post";
+import { getUserStorage } from "../../services/profile";
 
 function normalizeText(text = "") {
   return text
@@ -88,6 +89,11 @@ function PaintingCard({ painting, onOpen }) {
   );
 }
 
+function formatBytes(bytes) {
+  const gb = bytes / 1024 ** 3;
+  return `${gb.toFixed(2)} GB`;
+}
+
 export default function Portfolio() {
   const [search, setSearch] = useState("");
   const [active, setActive] = useState("Início");
@@ -99,6 +105,25 @@ export default function Portfolio() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [storage, setStorage] = useState({
+    usedBytes: 0,
+    totalBytes: 500 * 1024 ** 3,
+    usedPercentage: 0,
+  });
+
+  useEffect(() => {
+    async function loadStorage() {
+      try {
+        const response = await getUserStorage();
+        setStorage(response.data);
+      } catch (err) {
+        console.error("Erro ao carregar armazenamento:", err);
+      }
+    }
+
+    loadStorage();
+  }, []);
 
   useEffect(() => {
     async function loadPosts() {
@@ -148,7 +173,7 @@ export default function Portfolio() {
       <main className="portfolio-content">
         <header className="topbar">
           <a className="brand" href="/" aria-label="JelloArt - Início">
-            <img src="/jello-icon.svg" alt="" className="brand-icon" />
+            <img src="/jellyfish.png" alt="" className="brand-icon" />
             <span>JelloArt</span>
           </a>
 
@@ -176,18 +201,26 @@ export default function Portfolio() {
                 className="storage-track"
                 role="progressbar"
                 aria-label="Espaço utilizado"
-                aria-valuenow={50}
+                aria-valuenow={storage.usedPercentage}
                 aria-valuemin={0}
                 aria-valuemax={100}
               >
-                <div className="storage-fill" />
+                <div
+                  className="storage-fill"
+                  style={{
+                    width: `${storage.usedPercentage}%`,
+                  }}
+                />
               </div>
 
-              <span className="storage-percent">50%</span>
+              <span className="storage-percent">
+                {storage.usedPercentage.toFixed(2)}%
+              </span>
             </div>
 
             <span className="storage-caption">
-              250 Gigas de 500 Gigabytes usados
+              {formatBytes(storage.usedBytes)} de{" "}
+              {formatBytes(storage.totalBytes)} usados
             </span>
           </div>
 

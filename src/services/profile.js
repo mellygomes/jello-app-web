@@ -39,3 +39,7 @@ export function getAllPostsByUser(userId, page, size, filter) {
 export async function updateProfile(body) {
     return api.put('/api/v1/users/update', body)
 }
+
+export function getUserStorage() {
+  return api.get("/api/v1/users/storage");
+}
