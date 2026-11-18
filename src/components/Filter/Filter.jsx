@@ -1,7 +1,7 @@
 import styles from "./filter.module.css";
 import aiIcon from "../../assets/icons/ai-icon.png";
 import { ClearOutlined, FilterFilled } from "@ant-design/icons";
-import { Input } from "antd";
+import { Input, Tooltip } from "antd";
 import { useState } from "react";
 import ToggleAI from "./ToggleAi";
 import FilterPic from "./FilterPic.jsx";
@@ -19,7 +19,9 @@ export default function Filter({isIconDisplay, filter, onChange, onReset, onSear
                 <div className={styles["filter-wrapper"]}>
 
                     <div className={styles["toggle-ai"]}>
-                        <img className={styles["ai-icon"]} src={aiIcon} alt="ícone de IA."/>
+                        <Tooltip placement="top" title="Ativar filtragem de postagens sem IA.">
+                            <img className={styles["ai-icon"]} src={aiIcon} alt="ícone de IA."/>
+                        </Tooltip>
                         <ToggleAI
                             value={filter.filterAi}
                             onChange={(e) => onChange("filterAi", e)}
