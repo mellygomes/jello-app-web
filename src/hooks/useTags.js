@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTags } from "../services/filter.js";
+import { getTags } from "../services";
 
 export function useTags() {
 
