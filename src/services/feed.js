@@ -17,6 +17,14 @@ export function getCurrentProfile() {
     return api.get('/api/v1/users/profile');
 }
 
+export function followUser(userId) {
+    return api.post(`/api/v1/follows/${userId}`);
+}
+
+export function unfollowUser(userId) {
+    return api.delete(`/api/v1/follows/${userId}`);
+}
+
 export function likePost(postId) {
     return api.post(`/api/v1/posts/${postId}/likes`);
 }

@@ -3,7 +3,14 @@ import { CommentOutlined, HeartFilled, HeartOutlined } from '@ant-design/icons';
 import styles from './posts.module.css';
 import iconUser from '../../../../assets/icons/icon-user-30.png';
 import Button from '../../../../components/Button/Button';
-import { getAvatarUrl, likePost, unlikePost } from '../../../../services/feed.js';
+import { useAuth } from '../../../../hooks/useAuth.js';
+import {
+    followUser,
+    getAvatarUrl,
+    likePost,
+    unlikePost,
+    unfollowUser,
+} from '../../../../services/feed.js';
 
 function getImageUrl(url) {
     if (url.startsWith('http')) return url;
@@ -11,25 +18,49 @@ function getImageUrl(url) {
 }
 
 export default function Posts({ post }) {
+    const { user: loggedUser } = useAuth();
     const user = post.user;
     const authorName = user
-        ? [user.firstName, user.lastName]
+        ? [user.firstName, user.lastName].filter(Boolean).join(' ')
         : 'Usuário';
-    const avatarUrl = user?.avatar?.url
-        || getAvatarUrl(user?.avatar?.id)
+    const avatarUrl = getAvatarUrl(user?.avatarId)
         || iconUser;
     const images = post.images || [];
 
+    const [following, setFollowing] = useState(user?.isFollowing || false);
+    const [followPending, setFollowPending] = useState(false);
+    const [followError] = useState('');
     const [liked, setLiked] = useState(post.isLiked ?? false);
     const [likes, setLikes] = useState(post.likes || 0);
     const [likePending, setLikePending] = useState(false);
-    const [likeError, setLikeError] = useState('');
+    const [likeError] = useState('');
+
+    const isOwnPost = user?.id != null
+        && loggedUser?.id != null
+        && String(user.id) === String(loggedUser.id);
+
+    async function handleFollow() {
+        if (user?.id == null || followPending) return;
+
+        setFollowPending(true);
+        try {
+            if (following) {
+                await unfollowUser(user.id);
+            } else {
+                await followUser(user.id);
+            }
+            setFollowing(!following);
+        } catch (error) {
+            console.error('Erro ao atualizar', error);
+        } finally {
+            setFollowPending(false);
+        }
+    }
 
     async function handleLike() {
         if (likePending) return;
 
         setLikePending(true);
-        setLikeError('');
         try {
             if (liked) {
                 await unlikePost(post.id);
@@ -41,7 +72,6 @@ export default function Posts({ post }) {
             setLiked(!liked);
         } catch (error) {
             console.error('Erro ao atualizar curtida:', error);
-            setLikeError('Não foi possível atualizar a curtida.');
         } finally {
             setLikePending(false);
         }
@@ -58,10 +88,20 @@ export default function Posts({ post }) {
                 <div className={styles['post-info']}>
                     <p className={styles.username}>{authorName}</p>
                 </div>
-                <Button className={styles['follow-button']}>Seguir</Button>
+                {!isOwnPost && user?.id != null && (
+                    <Button
+                        className={styles['follow-button']}
+                        variant={following ? 'ghost' : ''}
+                        onClick={handleFollow}
+                        disabled={followPending}
+                    >
+                        {followPending ? '...' : following ? 'Seguindo' : 'Seguir'}
+                    </Button>
+                )}
             </header>
+            {followError && <p className={styles['follow-error']} role="alert">{followError}</p>}
 
-            {post.title && <h2 className={styles.title}>{post.title}</h2>}
+            {/* {post.title && <h2 className={styles.title}>{post.title}</h2>} */}
             {post.content && <p className={styles.content}>{post.content}</p>}
 
             {images.length > 0 && (
