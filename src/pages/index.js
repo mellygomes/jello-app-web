@@ -1,6 +1,7 @@
-export { default as Home } from "./Home";
-export { default as Login } from "./Login";
-export { default as Register } from "./Register";
-export { default as Portfolio } from "./Portfolio";
+export { default as Home } from './Home';
+export { default as Login } from './Login';
+export { default as Register } from './Register';
+export { default as Portfolio } from './Portfolio/Portfolio';
 export * from "./Report";
 export * from "./Profile";
+export { default as Feed } from './Feed';
