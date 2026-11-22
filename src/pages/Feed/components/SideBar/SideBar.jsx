@@ -10,7 +10,7 @@ import iconUser from '../../../../assets/icons/icon-user-30.png';
 import iconCat from '../../../../assets/icons/gatinho.jpeg';
 import iconFollow from '../../../../assets/icons/icon-follow.png';
 import Button from '../../../../components/Button/Button';
-import { useAuth } from '../../../../contexts/auth/useAuth.js';
+import { useAuth } from '../../../../hooks/useAuth.js';
 import { getAvatarUrl, getCurrentProfile } from '../../../../services/feed.js';
 
 export default function SideBar() {
@@ -71,7 +71,7 @@ export default function SideBar() {
             </button>
 
             {isOpen && (
-                <div>
+                <div className={styles['sidebar-content']}>
                     <div className={styles.profile}>
                         <img
                             src={avatarUrl}
@@ -84,10 +84,10 @@ export default function SideBar() {
                                 {profileError}
                             </p>
                         )}
-                        <Button className={styles['explore-icon']}>
+                        {/* <Button className={styles['explore-icon']}>
                             <img src={iconExplore} alt="" />
                             Explorar
-                        </Button>
+                        </Button> */}
                     </div>
 
                     <div className={styles['pages-links']}>
@@ -109,12 +109,12 @@ export default function SideBar() {
                         </button>
                     </div>
 
-                    <div className={styles.suggestions}>
+                    {/* <div className={styles.suggestions}>
                         <p>Sugestões</p>
                         <div className={styles['profiles-suggestion']}>
                             <img src={iconCat} alt="" />
                             <p>Gatinha linda demais</p>
-                            <Button>
+                            <Button className={styles['suggestion-button']}>
                                 Seguir
                                 <img src={iconFollow} alt="" />
                             </Button>
@@ -122,8 +122,11 @@ export default function SideBar() {
                         <div className={styles['profiles-suggestion']}>
                             <img src={iconCat} alt="" />
                             <p>Gatinho 2</p>
-                            <Button variant="ghost">Seguindo</Button>
+                            <Button className={styles['suggestion-button']} variant="ghost">Seguindo</Button>
                         </div>
+                    </div> */}
+                    <div className={styles.logout}>
+                        <p>Fazer logout</p>
                     </div>
                 </div>
             )}

@@ -1,24 +1,37 @@
 .sideBarOpen {
-    width: 50%;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 280px;
+    width: 280px;
     background-color: rgb(255, 255, 255);
-    border-radius: 4px;
-    box-shadow: 0px 0px 4px rgb(158, 158, 158);
-    padding: 20px 30px;
-    position: relative;
+    border: 1px solid #e6e9e8;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 20px 22px;
+    position: sticky;
+    top: 80px;
     overflow: auto;
+    height: calc(100vh - 170px);
 }
 
 .sideBarClosed {
-    width: 100px;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 100px;
+    width: 90px;
     background-color: rgb(255, 255, 255);
-    border-radius: 4px;
-    box-shadow: 0px 0px 4px rgb(158, 158, 158);
-    padding: 20px 30px;
-    position: relative;
+    border: 1px solid #e6e9e8;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 20px 16px;
+    position: sticky;
+    top: 80px;
     overflow: auto;
+    height: calc(100vh - 170px);
 }
 
-p {
+.sideBarOpen p,
+.sideBarClosed p {
     font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
     font-weight: 600;
 }
@@ -45,7 +58,7 @@ p {
     position: absolute;
     width: 35px;
     height:35px;
-    top: 10;
+    top: 10px;
     right: 30px;
     
     > img {
@@ -56,27 +69,33 @@ p {
 
 .profile-pic {
     object-fit: cover;
-    height: 150px;
-    width: 150px;
+    height: 110px;
+    width: 110px;
     border-radius: 50%;
     margin-bottom: 10px;
     box-sizing: border-box;
 }
 
-.explore-icon Button {
-    height: 50px;
-    width: 300px !important;
+.sidebar-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.explore-icon {
+    width: 100%;
+    min-height: 46px;
     margin-bottom: 10px;
 }
 
 .pages-links {
     min-height: fit-content;
-    background-color: rgb(221, 233, 235);
+    background-color: rgb(243, 243, 243);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: baseline;
-    border-radius: 5px;
+    border-radius: 8px;
     margin: 15px 0px;
     padding: 25px 0px;
     padding-left: 25px;
@@ -88,9 +107,15 @@ p {
     display: flex;
     background: none;
     border: 0px;
-    max-height: 28px;
-    gap: 20px;
+    min-height: 36px;
+    align-items: center;
+    gap: 16px;
+    border-radius: 6px;
+    cursor: pointer;
 
+    &:hover {
+        background-color: rgba(207, 207, 207, 0.65);
+    }
 
     > img {
         height: auto;
@@ -102,27 +127,64 @@ p {
     }
 }
 
-.suggestions {
-    margin: 15px 0px;
+.logout {
+    margin-top: auto;
     font-size: 18px;
-    gap: 25px;
 }
 
-.profiles-suggestion {
-    display: inline-flex;
-    gap: 16px;
+/* .profiles-suggestion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 18px;
     margin-bottom: 16px;
 
     > img {
         border-radius: 999px;
-        height: 40px;
-        width: 40px;
+        height: 38px;
+        width: 38px;
         object-fit: cover;
     }
 
-    > Button {
-        height: 10px;
-        width: 10px !important;
+    > p {
+        flex: 1;
+        min-width: 0;
+        margin: 0;
+        font-size: 14px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    :global(button) {
+        min-width: 0;
+        padding: 0.4rem 0.75rem;
+        box-shadow: none;
+    }
+} */
+
+@media (max-width: 700px) {
+    .sideBarOpen,
+    .sideBarClosed {
+        position: relative;
+        top: auto;
+        width: 100%;
+        max-height: none;
+        flex-basis: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .sideBarOpen {
+        padding: 16px;
+    }
+
+    .profile-pic {
+        width: 90px;
+        height: 90px;
+    }
+
+    .pages-links {
+        padding: 16px 0 16px 16px;
     }
 }
