@@ -12,6 +12,7 @@ import iconFollow from '../../../../assets/icons/icon-follow.png';
 import Button from '../../../../components/Button/Button';
 import { useAuth } from '../../../../hooks/useAuth.js';
 import { getAvatarUrl, getCurrentProfile } from '../../../../services/feed.js';
+import { NewPostButton } from '../../../../components/index.js';
 
 export default function SideBar() {
     const { user, loading: authLoading } = useAuth();
@@ -107,6 +108,9 @@ export default function SideBar() {
                             <img src={iconSettings} alt="" />
                             <span>Configurações</span>
                         </button>
+
+                        <NewPostButton>
+                        </NewPostButton>
                     </div>
 
                     {/* <div className={styles.suggestions}>

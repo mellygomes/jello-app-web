@@ -1,4 +1,4 @@
-import { Filter } from "../../components";
+import { Filter, NewPostButton } from "../../components/index";
 import { useNavigate } from "react-router-dom";
 import { useFilter } from "../../hooks";
 
@@ -26,6 +26,9 @@ export default function Home() {
             <button
                 onClick={() => goToUser(25)}
             >Teste</button>
+
+        <NewPostButton></NewPostButton>
+
         </div>
     );
 }

@@ -1,0 +1,20 @@
+import { useNavigate, useLocation } from 'react-router-dom';
+import styles from './NewPostButton.module.css'; 
+
+export default function NewPostButton() {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    return (
+        <button
+            className={styles.newPostButton}
+            onClick={() =>
+                navigate('/new-post', {
+                    state: { backgroundLocation: location },
+                })
+            }
+        >
+            Novo Post
+        </button>
+    );
+};

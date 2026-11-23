@@ -6,3 +6,7 @@ export { default as PostList } from "./PostList";
 export { default as ReportOptions } from "./ReportOptions";
 export { default as Sidebar } from "./Sidebar";
 export { default as Spinner } from "./Spinner";
+export { default as NewPostModal } from "./NewPostModal/"
+export { default as NewPostButton } from "./NewPostButton"
+export { default as TagSelector } from "./TagSelector"
+export { default as GlobalToast } from "./GlobalToast"

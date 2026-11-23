@@ -7,7 +7,7 @@ import ToggleAI from "./ToggleAi";
 import FilterPic from "./FilterPic.jsx";
 import Button from "../Button";
 import Date from "./Date";
-import TagSelect from "./TagSelect";
+import TagSelector from "../TagSelector";
 
 export default function Filter({isIconDisplay, filter, onChange, onReset, onSearch}) {
 
@@ -59,7 +59,7 @@ export default function Filter({isIconDisplay, filter, onChange, onReset, onSear
                 <div className={showFilter ? styles["filter-wrapper"] : styles["filter-wrapper-hidden"]}>
                     <div className={styles["filter-tags"]}>
                         <span>Tags</span>
-                        <TagSelect
+                        <TagSelector
                             value={filter.tags}
                             onChange={(value) => onChange("tags", value)}
                         />
