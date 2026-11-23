@@ -1,0 +1,43 @@
+.follow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 34px;
+    padding: 0 16px;
+    border: 2px solid var(--jello-text);
+    border-radius: 999px;
+    background: var(--jello-surface);
+    color: var(--jello-text);
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+
+.follow:hover:not(:disabled) {
+    background: var(--jello-hover);
+}
+
+.follow:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.follow:focus-visible {
+    outline: 3px solid var(--jello-link);
+    outline-offset: 2px;
+}
+
+/* Seguindo: fundo escuro com texto branco; no hover continua escuro (contraste) */
+.follow.following {
+    background: var(--jello-text);
+    border-color: var(--jello-text);
+    color: var(--jello-bg);
+}
+
+.follow.following:hover:not(:disabled) {
+    background: #4a4a4a;
+    color: #fff;
+}

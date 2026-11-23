@@ -1,31 +1,44 @@
+import { useRef } from "react";
 import styles from "./profile-cover.module.css";
-import camIcon from "../../../assets/icons/cam-icon.png";
-import { Upload } from "antd";
+import camIcon from "../../../assets/figma/camera.png";
 
-export default function ProfileCover({ src, className = "", onChange, disabled }) {
+// Capa do perfil. Quando editável mostra o botão de câmera no canto
+export default function ProfileCover({ src, className = "", onChange, disabled, height }) {
+    const inputRef = useRef(null);
+
     return (
-        <div className={styles["cover-container"]}>
-            <img
-                className={styles["cover-image"]}
-                src={ src }
-                alt="Imagem de capa de usuário"
-            />
+        <div className={`${styles["cover-container"]} ${className}`} style={height ? { height } : undefined}>
+            {src && (
+                <img
+                    className={styles["cover-image"]}
+                    src={ src }
+                    alt="Imagem de capa de usuário"
+                />
+            )}
 
-            <Upload
-                name="cover"
-                showUploadList={false}
-                beforeUpload={() => false}
-                onChange={ onChange }
-                disabled={ disabled }
-            >
-                <button
-                    type="button"
-                    disabled={ disabled }
-                    className={`${className} ${styles["cover-button"]} ${disabled ? styles["disabled"] : ""}`}
-                >
-                    <img src={ camIcon } className={styles["button-img"]} alt="Alterar imagem de capa"/>
-                </button>
-            </Upload>
+            {!disabled && (
+                <>
+                    <button
+                        type="button"
+                        className={styles["cover-button"]}
+                        onClick={() => inputRef.current?.click()}
+                        aria-label="Alterar imagem de capa"
+                    >
+                        <img src={ camIcon } width={24} height={24} alt="" />
+                    </button>
+                    <input
+                        ref={inputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        hidden
+                        onChange={(event) => {
+                            const file = event.target.files?.[0];
+                            if (file) onChange?.({ file });
+                            event.target.value = "";
+                        }}
+                    />
+                </>
+            )}
         </div>
     );
 }

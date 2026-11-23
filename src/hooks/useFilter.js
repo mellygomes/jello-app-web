@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-const INITIAL = {filterAi: false, tags: [], date: "", search: ""};
+const INITIAL = {filterAi: false, showAi: false, sort: "RECENT", tags: [], date: "", search: ""};
 
 export function useFilter(initial = INITIAL) {
 
@@ -11,7 +11,8 @@ export function useFilter(initial = INITIAL) {
         setDraft((prev) => ({...prev, [name]: value}));
     }, [])
 
-    const apply = useCallback(() => setApplied(draft), [draft]);
+    // aplica o rascunho (ou um valor já pronto, quando precisa aplicar na hora)
+    const apply = useCallback((next) => setApplied(next && "sort" in next ? next : draft), [draft]);
 
     const reset = useCallback(() => {
         setDraft(initial);

@@ -1,6 +1,17 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "./useAuth.js";
-import { getAvatarUrl, getCoverUrl, getProfile, updateProfile } from "../services";
+import { bumpImageVersion, getAvatarUrl, getCoverUrl, getProfile, updateProfile } from "../services";
+import { getErrorMessage } from "../lib/api";
+
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const USERNAME_REGEX = /^[A-Za-z0-9._-]{3,46}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// confere tipo e tamanho antes de aceitar a imagem escolhida
+function validImage(file) {
+    return file && IMAGE_TYPES.includes(file.type) && file.size <= MAX_IMAGE_SIZE;
+}
 
 const emptyForm = {
     firstName: "",
@@ -31,7 +42,7 @@ function profileToForm(profile) {
 }
 
 export function useLoggedProfile() {
-    const {user, loading} = useAuth();
+    const {user, loading, refreshUser} = useAuth();
 
     const [profile, setProfile] = useState(null);
     const [formData, setFormData] = useState(emptyForm);
@@ -40,7 +51,7 @@ export function useLoggedProfile() {
     const [avatarFile, setAvatarFile] = useState(null);
     const [coverFile, setCoverFile] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [loadingProfile, setLoadingProfile] = useState(true);
+    const [profileLoading, setLoadingProfile] = useState(true);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
 
@@ -51,17 +62,11 @@ export function useLoggedProfile() {
 
         if (loading) return;
 
-        if (!user) {
-            setLoadingProfile(false);
-            return;
-        }
+        if (!user) return;
 
         let cancelled = false;
 
         async function loadProfile() {
-            setLoadingProfile(true);
-            setError("");
-
             try {
                 const response = await getProfile()
                 const loadedProfile = response.data;
@@ -80,7 +85,7 @@ export function useLoggedProfile() {
             } catch (error) {
                 if (!cancelled) {
                     setError("Não foi possível carregar seu perfil.")
-                    console.log("Erro ao carregar perfil: ", error);
+                    console.error("Erro ao carregar perfil: ", error);
                 }
             } finally {
                 if (!cancelled) setLoadingProfile(false);
@@ -105,7 +110,8 @@ export function useLoggedProfile() {
         // Isso aqui limpa o erro assim que o usuário começa a digitar de novo
         setErrorsValidate((prev) => {
             if (!prev[name]) return prev;
-            const { [name]: _, ...rest } = prev;
+            const rest = { ...prev };
+            delete rest[name];
             return rest;
         });
     };
@@ -113,6 +119,11 @@ export function useLoggedProfile() {
     function handleAvatarChange(info) {
         const file = info.file.originFileObj || info.file;
         if (!file) return;
+        if (!validImage(file)) {
+            setError("A foto precisa ser JPG, PNG, WEBP ou GIF de até 5 MB.");
+            return;
+        }
+        setError("");
 
         setAvatarFile(file);
         const previewUrl = URL.createObjectURL(file);
@@ -122,6 +133,11 @@ export function useLoggedProfile() {
     function handleCoverChange(info) {
         const file = info.file.originFileObj || info.file;
         if (!file) return;
+        if (!validImage(file)) {
+            setError("A capa precisa ser JPG, PNG, WEBP ou GIF de até 5 MB.");
+            return;
+        }
+        setError("");
 
         setCoverFile(file);
         const previewUrl = URL.createObjectURL(file);
@@ -134,6 +150,13 @@ export function useLoggedProfile() {
         setError("");
         setAvatarFile(null);
         setCoverFile(null);
+
+        // volta pro que está salvo
+        if (profile) {
+            setFormData(profileToForm(profile));
+            setAvatarUrl(getAvatarUrl(profile.avatar?.id));
+            setCoverUrl(getCoverUrl(profile.cover?.id));
+        }
     }
 
     async function handleSave() {
@@ -146,7 +169,9 @@ export function useLoggedProfile() {
         if (!formData.firstName.trim()) novosErros.firstName = 'Campo obrigatório'
         if (!formData.email.trim())     novosErros.email = 'Campo obrigatório'
         if (!formData.username.trim())  novosErros.username = 'Campo obrigatório'
+        else if (!USERNAME_REGEX.test(formData.username.trim())) novosErros.username = 'Use de 3 a 46 letras, números, ponto, hífen ou _'
         if (!formData.lastName.trim())  novosErros.lastName = 'Campo obrigatório'
+        if (formData.email.trim() && !EMAIL_REGEX.test(formData.email.trim())) novosErros.email = 'Digite um e-mail válido'
 
         if (Object.keys(novosErros).length > 0) {
             setErrorsValidate(novosErros)
@@ -175,11 +200,12 @@ export function useLoggedProfile() {
 
             const response = await updateProfile(body);
 
-            if (!response?.data?.data) {
+            const savedUser = response.data;
+            if (avatarFile || coverFile) bumpImageVersion();
+
+            if (!savedUser) {
                 throw new Error("Resposta inesperada do servidor");
             }
-
-            const savedUser = response.data;
 
             setProfile(savedUser);
             setFormData(profileToForm(savedUser));
@@ -188,14 +214,20 @@ export function useLoggedProfile() {
             setAvatarFile(null);
             setCoverFile(null);
             setIsEditing(false);
+
+            // atualiza nome e foto do menu lateral
+            refreshUser();
         } catch (error) {
-            setError("Não foi possivel salvar as alterações.");
+            setError(getErrorMessage(error, "Não foi possivel salvar as alterações."));
             console.error("Erro ao atualizar perfil:", error);
         } finally {
             setSaving(false);
         }
 
     }
+
+    // sem usuário não tem o que carregar
+    const loadingProfile = loading || (Boolean(user) && profileLoading);
 
     return {
         profile,

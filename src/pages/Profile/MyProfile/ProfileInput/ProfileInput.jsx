@@ -2,23 +2,23 @@ import styles from "./profile-input.module.css";
 
 export default function ProfileInput({
         id,
-        name, 
+        name,
         label,
-        value, 
-        type = "text", 
-        onChange, 
-        disabled, 
-        errorValidate, 
-        shakeKey, 
+        value = "",
+        type = "text",
+        onChange,
+        disabled,
+        errorValidate,
+        shakeKey,
         maxLength
     }) {
 
-        const length = value.length;
+        const length = (value ?? "").length;
         const isAtLimit = maxLength && length >= maxLength;
         const isNearLimit = maxLength && length >= maxLength * 0.8;
 
     return (
-        <div className={`d-flex flex-column ${styles["profile-wrapper"]}`}>
+        <div className={styles["profile-wrapper"]}>
             <div key={shakeKey} className={styles["profile-wrapper-group"]}>
 
                 <div className={styles["label-row"]}>
@@ -26,7 +26,7 @@ export default function ProfileInput({
                         {label}
                     </label>
 
-                    {maxLength && (
+                    {maxLength && !disabled && (
                         <span
                             className={`${styles["char-counter"]} ${
                                 isAtLimit ? styles["at-limit"]
@@ -48,10 +48,11 @@ export default function ProfileInput({
                     className={`${styles["profile-input"]} ${disabled ? styles["disabled"] : ""} ${errorValidate ? styles["error"] : ""}`}
                     onChange={onChange}
                     disabled={disabled}
+                    aria-invalid={Boolean(errorValidate)}
                 />
 
             </div>
-            {errorValidate && (<p className={styles["error-message"]}>{errorValidate}</p>)}
+            {errorValidate && (<p className={styles["error-message"]} role="alert">{errorValidate}</p>)}
         </div>
     );
 }

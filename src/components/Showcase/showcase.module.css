@@ -1,0 +1,396 @@
+/* Vitrine do Explorar: faixas horizontais + mural em colunas */
+.section {
+    margin-top: 28px;
+}
+
+.section-head h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.section-head p {
+    margin: 2px 0 12px;
+    color: var(--jello-text-soft);
+    font-size: 15px;
+}
+
+.strip {
+    display: flex;
+    gap: 14px;
+    margin: 0;
+    padding: 4px 4px 14px;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+}
+
+/* barra de rolagem um pouco mais grossa e cinza, fácil de enxergar */
+.strip::-webkit-scrollbar {
+    height: 10px;
+}
+
+.strip::-webkit-scrollbar-track {
+    margin: 0 4px;
+    border-radius: 999px;
+    background: var(--jello-scroll-track);
+}
+
+.strip::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background-color: var(--jello-scroll-thumb);
+    background-clip: padding-box;
+}
+
+.strip::-webkit-scrollbar-thumb:hover {
+    background-color: var(--jello-scroll-thumb-hover);
+}
+
+/* Firefox não aceita a espessura acima, então só ganha a cor */
+@supports (-moz-appearance: none) {
+    .strip {
+        scrollbar-width: auto;
+        scrollbar-color: var(--jello-scroll-thumb) var(--jello-scroll-track);
+    }
+}
+
+.strip > li {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+}
+
+.strip button {
+    cursor: pointer;
+}
+
+/* em alta */
+.trend {
+    position: relative;
+    display: block;
+    width: 220px;
+    height: 290px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--jello-radius);
+    overflow: hidden;
+    background: var(--jello-hover);
+    box-shadow: var(--jello-shadow-card);
+}
+
+.trend img,
+.style img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.25s ease;
+}
+
+.trend:hover img,
+.style:hover img {
+    transform: scale(1.05);
+}
+
+.rank {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: grid;
+    place-items: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: var(--jello-text);
+    color: var(--jello-on-text);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.trend-info {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 28px 12px 10px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
+    color: #fff;
+    text-align: left;
+}
+
+.trend-info strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 15px;
+}
+
+.trend-info small,
+.caption small {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+/* estilos (tags) */
+.style {
+    position: relative;
+    display: grid;
+    place-items: end start;
+    width: 190px;
+    height: 120px;
+    padding: 12px;
+    border: 3px solid var(--tag-color);
+    border-radius: var(--jello-radius);
+    overflow: hidden;
+    background: var(--tag-color);
+    box-shadow: var(--jello-shadow-card);
+}
+
+.style::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent 70%);
+}
+
+.style span {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* artistas */
+.artist {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 260px;
+    padding: 14px;
+    border-radius: var(--jello-radius);
+    background: var(--jello-surface);
+    box-shadow: var(--jello-shadow-card);
+}
+
+.artist-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.artist-name {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.artist-name:hover {
+    color: var(--jello-text);
+}
+
+.artist-name strong {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 17px;
+}
+
+.artist-name span {
+    color: var(--jello-muted);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.works {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.works button {
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--jello-hover);
+    aspect-ratio: 1;
+}
+
+.works img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.artist > div:last-child,
+.artist > button {
+    align-self: flex-start;
+}
+
+/* ajude a comunidade */
+.help {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 280px;
+    padding: 12px;
+    border-radius: var(--jello-radius);
+    background: var(--jello-surface);
+    box-shadow: var(--jello-shadow-card);
+}
+
+.help > button {
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--jello-hover);
+}
+
+.help img {
+    display: block;
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+}
+
+.help strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 16px;
+}
+
+/* mural */
+.masonry {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    column-width: 250px;
+    column-gap: 16px;
+}
+
+.masonry > li {
+    break-inside: avoid;
+    margin-bottom: 16px;
+}
+
+.tile {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--jello-radius);
+    overflow: hidden;
+    background: var(--jello-hover);
+    box-shadow: var(--jello-shadow-card);
+    cursor: pointer;
+}
+
+.tile img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.caption {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 34px 12px 10px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.78), transparent);
+    color: #fff;
+    text-align: left;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.tile:hover .caption,
+.tile:focus-visible .caption {
+    opacity: 1;
+}
+
+.caption strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 15px;
+}
+
+.badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 3px 12px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.ai { background: var(--jello-ai); }
+.human { background: var(--jello-human); }
+
+.trend:focus-visible,
+.style:focus-visible,
+.tile:focus-visible,
+.works button:focus-visible,
+.help > button:focus-visible {
+    outline: 3px solid var(--jello-link);
+    outline-offset: 2px;
+}
+
+/* janela do post */
+.viewer-body {
+    margin-top: 38px;
+}
+
+.pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+}
+
+.pager span {
+    color: var(--jello-text-soft);
+    font-weight: 600;
+}
+
+.pager button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 18px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--jello-btn);
+    color: var(--jello-btn-text);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pager button:disabled {
+    opacity: 0.35;
+    cursor: default;
+}

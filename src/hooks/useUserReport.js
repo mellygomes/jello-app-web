@@ -1,27 +1,15 @@
-import { useState } from "react";
 import { submitUserReport } from "../services";
 
 export function useUserReport() {
 
-    const [error, setError] = useState("");
-
     async function submitReport(userId, report) {
-        console.log("submitReport", userId, report);
-        if (!userId) {
-            console.warn("userId ausente meu dog, ja avisei que vai dar merda isso aqui");
-            return;
-        }
+        if (!userId) throw new Error("Usuário não informado");
 
-        try {
-            await submitUserReport({
-                userReportedId: userId,
-                content: report
-            });
-        } catch (error) {
-            setError(error);
-            throw error;
-        }
+        await submitUserReport({
+            userReportedId: userId,
+            content: report
+        });
     }
 
-    return { submitReport, error }
+    return { submitReport }
 }

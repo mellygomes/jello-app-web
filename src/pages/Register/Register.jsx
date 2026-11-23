@@ -1,12 +1,12 @@
 import stylesRegister from "./register.module.css";
 import styles from "../../components/AuthLayout/auth-layout.module.css";
-import signInIcon from "../../assets/icons/icon-sign-in-48.png";
-import userIcon from "../../assets/icons/icon-user-30.png";
-import emailIcon from "../../assets/icons/icon-email-48.png";
-import lockIcon from "../../assets/icons/icon-lock-48.png";
+import signInIcon from "../../assets/figma/sign-in.svg";
+import userIcon from "../../assets/figma/user.svg";
+import emailIcon from "../../assets/figma/email.svg";
+import lockIcon from "../../assets/figma/lock.svg";
 import crachaIcon from "../../assets/icons/icon-cracha-48.png";
 
-import { AuthHeader, AuthForm, AuthInputGroup, AuthLink, Button, Spinner } from "../../components";
+import { AuthHeader, AuthForm, AuthInputGroup, AuthLink, AuthPage, Button, Spinner } from "../../components";
 import { useRegister } from "../../hooks";
 
 export default function Register() {
@@ -33,22 +33,23 @@ export default function Register() {
     } = useRegister();
 
     return (
-        <div className={styles["container"]}>
-            <div className={styles["auth-container"]}>
+        <AuthPage variant="register">
+            <AuthHeader
+                icon={signInIcon}
+                alt="Entrar"
+                title="Registre-se!"
+                description="Crie sua conta para publicar suas ilustrações, seguir outros artistas e ajudar a comunidade a identificar o que é arte feita por gente."
+            />
 
-                <AuthHeader
-                    icon={signInIcon}
-                    alt="Entrar"
-                    title="Registre-se!"
-                    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
-                />
+            <AuthForm onSubmit={handleRegister}>
 
-                <AuthForm onSubmit={handleRegister}>
-
+                <div className={stylesRegister["name-row"]}>
                     <AuthInputGroup
                         icon={userIcon}
                         alt="Ícone de usuário"
                         type="text"
+                        name="firstName"
+                        autoComplete="given-name"
                         placeholder="Nome"
                         value={firstName}
                         onChange={handleChange("firstName", setFirstName)}
@@ -61,6 +62,8 @@ export default function Register() {
                         icon={userIcon}
                         alt="Ícone de usuário"
                         type="text"
+                        name="lastName"
+                        autoComplete="family-name"
                         placeholder="Sobrenome"
                         value={lastName}
                         onChange={handleChange("lastName", setLastName)}
@@ -68,77 +71,85 @@ export default function Register() {
                         errorValidate={errorsValidate.lastName}
                         shakeKey={submitAttempt}
                     />
+                </div>
 
-                    <AuthInputGroup
-                        icon={emailIcon}
-                        alt="Ícone de envelope"
-                        type="email"
-                        placeholder="E-mail"
-                        value={email}
-                        maxLength={46}
-                        onChange={handleChange("email", setEmail)}
-                        errorValidate={errorsValidate.email}
-                        shakeKey={submitAttempt}
-                    />
-
-                    <AuthInputGroup
-                        icon={crachaIcon}
-                        alt="Ícone de nome de usuário"
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        maxLength={46}
-                        onChange={handleChange("username", setUserName)}
-                        errorValidate={errorsValidate.username}
-                        shakeKey={submitAttempt}
-                    />
-
-                    <div className="p-1"></div>
-
-                    <AuthInputGroup
-                        icon={lockIcon}
-                        alt="Ícone de cadeado"
-                        type="password"
-                        placeholder="Senha"
-                        value={password}
-                        maxLength={46}
-                        onChange={handleChange("password", setPassword)}
-                        errorValidate={errorsValidate.password}
-                        shakeKey={submitAttempt}
-                    />
-
-                    <AuthInputGroup
-                        icon={lockIcon}
-                        alt="Ícone de cadeado"
-                        type="password"
-                        placeholder="Confirmar senha"
-                        value={confirmPassword}
-                        maxLength={46}
-                        onChange={handleChange("confirmPassword", setConfirmPassword)}
-                        errorValidate={errorsValidate.confirmPassword}
-                        shakeKey={submitAttempt}
-                    />
-
-                    {error && <p className={stylesRegister["erro"]}>{error}</p>}
-
-                    <Button
-                        type="submit"
-                        className={styles["auth-button-register"]}
-                        disabled={loading}
-                    >
-                        {loading ? <><Spinner size={14} aria-hidden="true"/><span>Cadastrando...</span></>
-                            : "Cadastrar"}
-                    </Button>
-
-                </AuthForm>
-
-                <AuthLink
-                    content="Já possui uma conta?"
-                    link="/login"
-                    anchor="Entrar"
+                <AuthInputGroup
+                    icon={emailIcon}
+                    alt="Ícone de envelope"
+                    type="email"
+                    name="email"
+                    autoComplete="email"
+                    placeholder="E-mail"
+                    value={email}
+                    maxLength={80}
+                    onChange={handleChange("email", setEmail)}
+                    errorValidate={errorsValidate.email}
+                    shakeKey={submitAttempt}
                 />
 
-            </div>
-        </div>
+                <AuthInputGroup
+                    icon={crachaIcon}
+                    alt="Ícone de nome de usuário"
+                    type="text"
+                    name="username"
+                    autoComplete="username"
+                    placeholder="Nome de usuário"
+                    value={username}
+                    maxLength={30}
+                    onChange={handleChange("username", setUserName)}
+                    errorValidate={errorsValidate.username}
+                    shakeKey={submitAttempt}
+                />
+
+                <div className={stylesRegister["gap"]}></div>
+
+                <AuthInputGroup
+                    icon={lockIcon}
+                    alt="Ícone de cadeado"
+                    type="password"
+                    name="password"
+                    autoComplete="new-password"
+                    placeholder="Senha (mínimo 8 caracteres)"
+                    value={password}
+                    maxLength={72}
+                    onChange={handleChange("password", setPassword)}
+                    errorValidate={errorsValidate.password}
+                    shakeKey={submitAttempt}
+                />
+
+                <AuthInputGroup
+                    icon={lockIcon}
+                    alt="Ícone de cadeado"
+                    type="password"
+                    name="confirmPassword"
+                    autoComplete="new-password"
+                    placeholder="Confirmar senha"
+                    value={confirmPassword}
+                    maxLength={72}
+                    onChange={handleChange("confirmPassword", setConfirmPassword)}
+                    errorValidate={errorsValidate.confirmPassword}
+                    shakeKey={submitAttempt}
+                />
+
+                {error && <p className={stylesRegister["erro"]} role="alert">{error}</p>}
+
+                <Button
+                    type="submit"
+                    variant="block"
+                    className={styles["auth-button-register"]}
+                    disabled={loading}
+                >
+                    {loading ? <><Spinner size={18} aria-hidden="true"/><span>Cadastrando...</span></>
+                        : "Cadastrar"}
+                </Button>
+
+            </AuthForm>
+
+            <AuthLink
+                content="Já possui uma conta?"
+                link="/login"
+                anchor="Entrar"
+            />
+        </AuthPage>
     )
 }

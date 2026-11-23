@@ -1,0 +1,120 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.input, .textarea {
+    width: 100%;
+    padding: 0 18px;
+    border: 1px solid var(--jello-border);
+    border-radius: 10px;
+    background: var(--jello-surface);
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.08);
+    color: var(--jello-text);
+    font-size: 16px;
+    font-weight: 500;
+    outline: none;
+}
+
+.input {
+    height: 56px;
+}
+
+.textarea {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    resize: none;
+}
+
+.input::placeholder, .textarea::placeholder {
+    color: var(--jello-muted);
+}
+
+.input:focus, .textarea:focus {
+    border-color: #78d9ff;
+    box-shadow: 0 0 0 3px rgba(120, 217, 255, 0.35);
+}
+
+.area-wrap {
+    position: relative;
+}
+
+.counter {
+    position: absolute;
+    right: 14px;
+    bottom: 8px;
+    color: var(--jello-muted);
+    font-size: 12px;
+}
+
+.drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 20px;
+    border: 2px dashed var(--jello-border);
+    border-radius: 10px;
+    color: var(--jello-text-soft);
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+}
+
+.drop small {
+    font-size: 12px;
+}
+
+.drop:hover, .dragging {
+    border-color: #78d9ff;
+    background: var(--jello-sky-soft);
+}
+
+.drop:focus-visible {
+    outline: 3px solid var(--jello-link);
+}
+
+.previews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.previews li {
+    position: relative;
+    width: 96px;
+    height: 96px;
+}
+
+.previews img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.previews button {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--jello-text);
+    color: var(--jello-on-text);
+    cursor: pointer;
+}
+
+.error {
+    margin: 0;
+    color: var(--jello-danger);
+    font-size: 14px;
+}

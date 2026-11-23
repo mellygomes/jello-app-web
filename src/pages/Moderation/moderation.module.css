@@ -1,0 +1,76 @@
+.tabs {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 22px;
+    padding: 5px;
+    border-radius: 999px;
+    background: var(--jello-surface);
+    box-shadow: var(--jello-shadow-card);
+}
+
+.tabs button {
+    padding: 8px 20px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--jello-text);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.tabs button:not(.active):hover {
+    background: var(--jello-hover);
+}
+
+.tabs .active {
+    background: var(--jello-text);
+    color: var(--jello-on-text);
+}
+
+.panel {
+    min-width: 0;
+}
+
+.intro {
+    margin: 0 0 18px;
+    color: var(--jello-text-soft);
+    font-size: 15px;
+}
+
+.sub {
+    margin: 8px 0 14px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
+    gap: 24px;
+    align-items: stretch;
+    margin-bottom: 28px;
+}
+
+.users {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+    gap: 14px;
+    margin: 0 0 28px;
+    padding: 0;
+}
+
+.state {
+    display: grid;
+    place-items: center;
+    margin: 28px 0;
+    color: var(--jello-text-soft);
+    text-align: center;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0 16px;
+}

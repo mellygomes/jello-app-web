@@ -1,0 +1,50 @@
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border: 2px solid var(--jello-border);
+    border-radius: 12px;
+    background: var(--jello-surface);
+    color: var(--jello-text);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.option:hover {
+    background: var(--jello-sky-soft);
+}
+
+.option:focus-visible {
+    outline: 3px solid var(--jello-link);
+}
+
+.selected {
+    border-color: var(--jello-text);
+    background: var(--jello-sky-soft);
+}
+
+.option strong {
+    display: block;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.option small {
+    display: block;
+    color: var(--jello-text-soft);
+    font-size: 14px;
+}
+
+.error {
+    margin: 12px 0 0;
+    color: var(--jello-danger);
+    font-size: 14px;
+}

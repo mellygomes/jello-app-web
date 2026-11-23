@@ -1,7 +1,7 @@
 import { Select, Tag } from "antd";
 import { useTags } from "../../../hooks";
 
-export default function TagSelect({ onChange, value }) {
+export default function TagSelect({ onChange, value, placeholder = "Selecione as tags" }) {
 
     const {tags} = useTags();
 
@@ -33,9 +33,10 @@ export default function TagSelect({ onChange, value }) {
         <Select
             mode="multiple"
             tagRender={tagRender}
-            placeholder="Selecione as tags"
+            placeholder={placeholder}
             style={{width: '100%'}}
             options={selectOptions}
+            optionFilterProp="label"
             onChange={onChange}
             value={value}
         />

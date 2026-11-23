@@ -1,9 +1,19 @@
+.name {
+    margin: 0 0 6px;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
 .header-stats {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 14px;
     color: #ADADAD;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .dot {
@@ -11,14 +21,11 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 @media (max-width: 390px) {
     .header-stats {
-        gap: .5rem;
+        gap: 8px;
         font-size: 14px;
     }
 }

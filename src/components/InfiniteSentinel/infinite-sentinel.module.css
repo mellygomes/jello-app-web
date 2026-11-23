@@ -1,0 +1,10 @@
+.sentinel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    margin: 16px 0;
+    color: var(--jello-muted);
+    font-size: 14px;
+    font-weight: 500;
+}

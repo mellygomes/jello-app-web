@@ -1,0 +1,60 @@
+.carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--jello-radius);
+    background: #ececec;
+}
+
+.image {
+    display: block;
+    width: 100%;
+    height: clamp(220px, 28vw, 400px);
+    object-fit: cover;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(40, 40, 40, 0.55);
+    color: #fff;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.arrow:hover {
+    background: rgba(40, 40, 40, 0.8);
+}
+
+.left { left: 10px; }
+.right { right: 10px; }
+
+.dots {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.dot, .dotActive {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+}
+
+.dotActive {
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+}

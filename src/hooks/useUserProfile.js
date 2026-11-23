@@ -3,47 +3,43 @@ import { getAvatarUrl, getCoverUrl, getUserProfile } from "../services";
 
 export function useUserProfile(userId) {
 
-    const [profile, setProfile] = useState(null);
-    const [profileLoading, setProfileLoading] = useState(true);
-    const [profileError, setProfileError] = useState(null);
+    // guarda de qual usuário é o resultado, assim "carregando" vira uma conta e não um setState no efeito
+    const [result, setResult] = useState({ userId: null, profile: null, error: null });
 
     useEffect(() => {
+        if (!userId) return;
 
-        if (!userId) {
-            setProfile(null);
-            setProfileLoading(false);
-            setProfileError(new Error("Identificador de usuário ausente."));
-            return;
-        }
+        let cancelled = false;
 
-        async function loadProfile() {
-            setProfileLoading(true);
-            setProfileError(null);
+        getUserProfile(userId)
+            .then((response) => !cancelled && setResult({ userId, profile: response.data, error: null }))
+            .catch((err) => !cancelled && setResult({ userId, profile: null, error: err }));
 
-            try {
-                const response = await getUserProfile(userId);
-                const userData = response.data;
-                setProfile(userData);
-            } catch (err) {
-                setProfile(null);
-                setProfileError(err);
-            } finally {
-                setProfileLoading(false);
-            }
-        }
-
-        // fetchUser();
-        loadProfile();
+        return () => {
+            cancelled = true;
+        };
     }, [userId]);
 
-    const avatarUrl = getAvatarUrl(profile?.avatar?.id);
-    const coverUrl = getCoverUrl(profile?.cover?.id);
+    const ready = !userId || String(result.userId) === String(userId);
+    const profile = userId && ready ? result.profile : null;
+    const profileError = !userId
+        ? new Error("Identificador de usuário ausente.")
+        : ready ? result.error : null;
+
+    // usado pra atualizar o perfil na tela depois de seguir/banir
+    const setProfile = (update) => {
+        setResult((current) => ({
+            ...current,
+            profile: typeof update === "function" ? update(current.profile) : update,
+        }));
+    };
 
     return {
         profile,
-        profileLoading,
+        setProfile,
+        profileLoading: Boolean(userId) && !ready,
         profileError,
-        avatarUrl,
-        coverUrl,
+        avatarUrl: getAvatarUrl(profile?.avatar?.id),
+        coverUrl: getCoverUrl(profile?.cover?.id),
     }
 }

@@ -7,40 +7,11 @@
 .wrapper {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
-
-    .title {
-        font-size: 1rem;
-        font-weight: 500;
-    }
+    gap: .35rem;
 }
 
-.meu-dots {
-    width: 20px;
-}
-
-.img {
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Carousel.module.css */
-
-/* setas */
-.carousel :global(.slick-prev),
-.carousel :global(.slick-next) {
-    color: #1e1e1e;
-}
-.carousel :global(.slick-prev:hover),
-.carousel :global(.slick-next:hover) {
-    color: #000000;
-}
-
-/* indicadores (bolinhas) */
-.carousel :global(.slick-dots li button) {
-    background: #000000;
-}
-.carousel :global(.slick-dots li.slick-active button) {
-    background: #1e1e1e;
+.title {
+    color: var(--jello-text-soft);
+    font-size: 14px;
+    font-weight: 600;
 }

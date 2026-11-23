@@ -1,7 +1,9 @@
 .cover-container {
+    position: relative;
     width: 100%;
-    height: 250px;
+    height: 282px;
     overflow: hidden;
+    background: var(--jello-sky);
 }
 
 .cover-image {
@@ -13,19 +15,24 @@
 
 .cover-button {
     position: absolute;
-    color: black;
-    left: 90%;
-    padding: 12px;
+    right: 32px;
+    bottom: 22px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 0;
     border-radius: 50%;
-    background: white;
-    border: white;
-    bottom: 1rem;
+    background: var(--jello-surface);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
 }
 
-.cover-button.disabled {
-    cursor: not-allowed;
+.cover-button:hover {
+    background: var(--jello-hover);
 }
 
-.button-img {
-    /*cursor: not-allowed;*/
+.cover-button:focus-visible {
+    outline: 3px solid var(--jello-link);
 }

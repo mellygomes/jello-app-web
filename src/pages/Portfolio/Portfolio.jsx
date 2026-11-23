@@ -1,290 +1,206 @@
-import { useState } from "react";
-import { Search, Ellipsis, Image as ImageIcon, X } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { ChevronLeft, ChevronRight, Image as ImageIcon, Plus, Trash2 } from "lucide-react";
 import styles from "./portfolio.module.css";
-import { Sidebar } from "../../components";
+import { AppLayout } from "../../components/Layout";
+import SearchBar from "../../components/SearchBar";
+import Dialog from "../../components/Dialog";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import CreatePostDialog from "../../components/CreatePost";
+import ImageCarousel from "../../components/PostList/ImageCarousel.jsx";
+import Button from "../../components/Button";
+import Spinner from "../../components/Spinner";
+import InfiniteSentinel from "../../components/InfiniteSentinel";
+import { useAuth, useFilter, useUserProfile } from "../../hooks";
+import { useInfinitePosts } from "../../hooks/useInfinitePosts.js";
+import { deletePost, getAllPostsByUser, getImageUrl } from "../../services";
+import { getErrorMessage } from "../../lib/api.js";
+import { formatDate } from "../../utils/time.js";
 
-const paintings = [
-  {
-    id: 1,
-    title: "Minha pintura: Parque Iluminado",
-    image:
-      "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=700&q=85",
-    date: "Há 14 minutos",
-  },
-  {
-    id: 2,
-    title: "Aquarela, Sol da meia-noite",
-    image:
-      "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=700&q=85",
-    date: "18 de maio de 2026",
-  },
-  {
-    id: 3,
-    title: "Pinceladas de lavanda",
-    image:
-      "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=700&q=85",
-    date: "24 de março de 2026",
-  },
-  {
-    id: 4,
-    title: "Pop Art - Tigre",
-    image:
-      "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=700&q=85",
-    date: "12 de fevereiro de 2026",
-  },
-  {
-    id: 5,
-    title: "Ideia de Banner pro Perfil",
-    image: null,
-    date: "03 de janeiro de 2026",
-    banner: true,
-  },
-  {
-    id: 6,
-    title: "Mesma pintura só que antes",
-    image:
-      "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=700&q=85",
-    date: "30 de novembro de 2025",
-  },
-];
+const PAGE_SIZE = 12;
 
-function normalizeText(text) {
-  return text
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLocaleLowerCase("pt-BR")
-    .trim();
-}
-
-function PaintingCard({ painting, onOpen }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  return (
-    <article className={styles["painting-card"]}>
-      <div className={styles["card-heading"]}>
-        <span title={painting.title}>{painting.title}</span>
-
-        <button
-          type="button"
-          className={styles["more-button"]}
-          onClick={() => setMenuOpen((previous) => !previous)}
-          aria-label={`Opções de ${painting.title}`}
-          aria-expanded={menuOpen}
-        >
-          <Ellipsis size={17} />
-        </button>
-
-        {menuOpen && (
-          <div className={styles["card-menu"]}>
-            <button
-              type="button"
-              onClick={() => {
-                onOpen(painting);
-                setMenuOpen(false);
-              }}
-            >
-              Visualizar pintura
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                if (navigator.clipboard?.writeText) {
-                  navigator.clipboard
-                    .writeText(painting.title)
-                    .catch(() => {});
-                }
-
-                setMenuOpen(false);
-              }}
-            >
-              Copiar título
-            </button>
-          </div>
-        )}
-      </div>
-
-      <button
-        type="button"
-        className={`${styles["painting-image"]} ${
-          painting.banner ? styles["banner-image"] : ""
-        }`}
-        onClick={() => onOpen(painting)}
-        aria-label={`Abrir ${painting.title}`}
-      >
-        {painting.banner ? (
-          <div className={styles["banner-art"]}>
-            <span className={styles["banner-bulb"]}>♧</span>
-            <span>constante evolução</span>
-          </div>
-        ) : (
-          <img src={painting.image} alt={painting.title} />
-        )}
-      </button>
-
-      <div className={styles["card-footer"]}>
-        <span>{painting.date}</span>
-
-        <button
-          type="button"
-          className={styles["post-button"]}
-          onClick={() => onOpen(painting)}
-        >
-          <span>Postar</span>
-          <span aria-hidden="true">➤</span>
-        </button>
-      </div>
-    </article>
-  );
-}
-
+// Portfólio: grade com as obras de um artista (as suas ou de quem você abriu)
 export default function Portfolio() {
-  const [search, setSearch] = useState("");
-  const [active, setActive] = useState("Início");
-  const [selectedPainting, setSelectedPainting] = useState(null);
+  const { userId: paramId } = useParams();
+  const { user } = useAuth();
 
-  const filteredPaintings = paintings.filter((painting) =>
-    normalizeText(painting.title).includes(normalizeText(search))
+  const ownerId = paramId ?? user?.id;
+  const isOwn = !paramId || String(paramId) === String(user?.id);
+
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [toDelete, setToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
+  const [creating, setCreating] = useState(false);
+
+  const { draft, applied, setField, apply, reset } = useFilter();
+  const fetchPosts = useCallback(
+    (pageIndex, size, currentFilter) => getAllPostsByUser(ownerId, pageIndex, size, currentFilter),
+    [ownerId]
   );
+  const { posts, loading, loadingMore, hasMore, error, loadMore, removePost, reload } =
+    useInfinitePosts(fetchPosts, PAGE_SIZE, applied, Boolean(ownerId), String(ownerId));
+
+  const selected = selectedIndex !== null ? posts[selectedIndex] ?? null : null;
+
+  // navegação entre obras: setas do teclado e botões; no fim da lista carrega mais
+  const go = useCallback((step) => {
+    if (selectedIndex === null) return;
+
+    const next = selectedIndex + step;
+    if (next < 0 || next >= posts.length) return;
+
+    // perto do fim da lista já pede mais obras
+    if (next >= posts.length - 2 && hasMore) loadMore();
+    setSelectedIndex(next);
+  }, [selectedIndex, posts.length, hasMore, loadMore]);
+
+  useEffect(() => {
+    if (selectedIndex === null) return;
+    const onKey = (event) => {
+      if (event.key === "ArrowRight") go(1);
+      if (event.key === "ArrowLeft") go(-1);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [selectedIndex, go]);
+  const { profile } = useUserProfile(isOwn ? undefined : ownerId);
+
+  const ownerName = isOwn ? "Meu portfólio" : `Portfólio de ${profile?.firstName ?? "artista"}`;
+
+  const handleSearch = () => apply();
+
+  const confirmDelete = async () => {
+    setDeleting(true);
+    setDeleteError("");
+    try {
+      await deletePost(toDelete.id);
+      removePost(toDelete.id);
+      setToDelete(null);
+      setSelectedIndex(null);
+    } catch (err) {
+      setDeleteError(getErrorMessage(err, "Não foi possível excluir."));
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   return (
-    <div className={styles["portfolio-page"]}>
-      <Sidebar active={active} setActive={setActive} />
+    <AppLayout
+      headerExtra={
+        <SearchBar
+          value={draft.search}
+          onChange={(value) => setField("search", value)}
+          onSubmit={handleSearch}
+          placeholder="Pesquise no portfólio..."
+        />
+      }
+    >
+      <div className={styles["title-row"]}>
+        <h1>{ownerName}</h1>
+        {isOwn && (
+          <Button onClick={() => setCreating(true)}>
+            <Plus size={18} aria-hidden="true" /> Novo post
+          </Button>
+        )}
+      </div>
 
-      <main className={styles["portfolio-content"]}>
-        <header className={styles["topbar"]}>
-          <a className={styles["brand"]} href="/" aria-label="JelloArt - Início">
-            <img
-              src="/jellyfish.png"
-              alt=""
-              className={styles["brand-icon"]}
-              aria-hidden="true"
-            />
-            <span>JelloArt</span>
-          </a>
-
-          <label className={styles["search-box"]}>
-            <input
-              type="search"
-              placeholder="Pesquise no seu portfólio..."
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              aria-label="Pesquisar pinturas no portfólio"
-            />
-
-            <Search
-              className={styles["search-icon"]}
-              size={19}
-              aria-hidden="true"
-            />
-          </label>
-        </header>
-
-        <section className={styles["portfolio-section"]}>
-          <h1>{active === "Início" ? "Portfólio" : active}</h1>
-
-          <div className={styles["storage"]}>
-            <span className={styles["storage-label"]}>Espaço Utilizado:</span>
-
-            <div className={styles["storage-row"]}>
-              <div
-                className={styles["storage-track"]}
-                role="progressbar"
-                aria-label="Espaço utilizado"
-                aria-valuenow={50}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              >
-                <div className={styles["storage-fill"]} />
-              </div>
-
-              <span className={styles["storage-percent"]}>50%</span>
-            </div>
-
-            <span className={styles["storage-caption"]}>
-              250 Gigas de 500 Gigabytes usados
-            </span>
-          </div>
-
-          <div className={styles["paintings-grid"]}>
-            {filteredPaintings.map((painting) => (
-              <PaintingCard
-                key={painting.id}
-                painting={painting}
-                onOpen={setSelectedPainting}
-              />
-            ))}
-
-            {filteredPaintings.length === 0 && (
-              <div className={styles["empty-state"]}>
-                <ImageIcon size={32} />
-                <p>Nenhuma pintura encontrada.</p>
-                <button
-                  type="button"
-                  onClick={() => setSearch("")}
-                >
-                  Limpar pesquisa
-                </button>
-              </div>
-            )}
-          </div>
-        </section>
-      </main>
-
-      {selectedPainting && (
-        <div
-          className={styles["modal-backdrop"]}
-          onClick={() => setSelectedPainting(null)}
-        >
-          <section
-            className={styles["painting-modal"]}
-            onClick={(event) => event.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="painting-modal-title"
-          >
-            <button
-              type="button"
-              className={styles["modal-close"]}
-              onClick={() => setSelectedPainting(null)}
-              aria-label="Fechar"
-            >
-              <X size={20} />
+      {loading ? (
+        <div className={styles.state}><Spinner size={28} color="#282828" /></div>
+      ) : error ? (
+        <p className={styles.state}>{error}</p>
+      ) : posts.length === 0 ? (
+        <div className={styles.state}>
+          <ImageIcon size={36} aria-hidden="true" />
+          <p>{applied.search ? "Nenhuma obra encontrada." : "Nenhuma obra publicada ainda."}</p>
+          {applied.search && (
+            <button type="button" className={styles.clear} onClick={reset}>
+              Limpar pesquisa
             </button>
-
-            <h2 id="painting-modal-title">
-              {selectedPainting.title}
-            </h2>
-
-            {selectedPainting.image ? (
-              <img
-                src={selectedPainting.image}
-                alt={selectedPainting.title}
-              />
-            ) : (
-              <div className={styles["banner-art modal-banner"]}>
-                <span className={styles["banner-bulb"]}>♧</span>
-                <span>constante evolução</span>
-              </div>
-            )}
-
-            <p>{selectedPainting.date}</p>
-
-            <button
-              type="button"
-              className={styles["modal-post"]}
-              onClick={() => {
-                alert(
-                  `Preparando postagem: ${selectedPainting.title}`
-                );
-                setSelectedPainting(null);
-              }}
-            >
-              Postar pintura
-            </button>
-          </section>
+          )}
         </div>
+      ) : (
+        <ul className={styles.grid}>
+          {posts.map((post, index) => (
+            <li key={post.id} className={styles.card}>
+              <div className={styles.heading}>
+                <span title={post.title}>{post.title}</span>
+                {isOwn && (
+                  <button
+                    type="button"
+                    className={styles.trash}
+                    onClick={() => { setDeleteError(""); setToDelete(post); }}
+                    aria-label={`Excluir ${post.title}`}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                )}
+              </div>
+
+              <button type="button" className={styles.thumb} onClick={() => setSelectedIndex(index)} aria-label={`Abrir ${post.title}`}>
+                {post.images?.[0] ? (
+                  <img src={getImageUrl(post.images[0].url)} alt={post.title} loading="lazy" />
+                ) : (
+                  <span className={styles.noimg}><ImageIcon size={28} /></span>
+                )}
+                {post.classification === "AI" && <span className={`${styles.badge} ${styles.ai}`}>I.A</span>}
+                {post.classification === "HUMAN" && <span className={`${styles.badge} ${styles.human}`}>Arte Humana</span>}
+              </button>
+
+              <div className={styles.footer}>
+                <span>{formatDate(post.createdAt)}</span>
+                <button type="button" className={styles.view} onClick={() => setSelectedIndex(index)}>Visualizar</button>
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
-    </div>
+
+      {posts.length > 0 && (
+        <InfiniteSentinel
+          onVisible={loadMore}
+          hasMore={hasMore}
+          loading={loadingMore}
+          endMessage="Essas são todas as obras."
+        />
+      )}
+
+      <Dialog open={Boolean(selected)} onClose={() => setSelectedIndex(null)} title={selected?.title} width={860}>
+        {selected && (
+          <div className={styles.detail}>
+            <ImageCarousel key={selected.id} images={selected.images} alt={selected.title} />
+            {selected.content && <p>{selected.content}</p>}
+            <small>{formatDate(selected.createdAt)}</small>
+
+            <div className={styles.pager}>
+              <button type="button" onClick={() => go(-1)} disabled={selectedIndex === 0} aria-label="Obra anterior">
+                <ChevronLeft size={20} /> Anterior
+              </button>
+              <span>{selectedIndex + 1} de {posts.length}{hasMore ? "+" : ""}</span>
+              <button type="button" onClick={() => go(1)} disabled={selectedIndex >= posts.length - 1} aria-label="Próxima obra">
+                Próxima <ChevronRight size={20} />
+              </button>
+            </div>
+          </div>
+        )}
+      </Dialog>
+
+      <ConfirmDialog
+        open={Boolean(toDelete)}
+        onClose={() => setToDelete(null)}
+        title="Excluir esta obra?"
+        message={deleteError || "A obra, as imagens e os comentários são apagados de vez."}
+        confirmLabel="Excluir"
+        danger
+        loading={deleting}
+        onConfirm={confirmDelete}
+      />
+
+      <CreatePostDialog
+        open={creating}
+        onClose={() => setCreating(false)}
+        onCreated={reload}
+      />
+    </AppLayout>
   );
 }
