@@ -7,7 +7,7 @@ import ToggleAI from "./ToggleAi";
 import FilterPic from "./FilterPic.jsx";
 import Button from "../Button";
 import Date from "./Date";
-import TagSelector from "./index.js";
+import TagSelector from "../TagSelector";
 
 export default function Filter({isIconDisplay, filter, onChange, onReset, onSearch}) {
 
