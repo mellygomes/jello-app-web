@@ -1,5 +1,6 @@
-
 import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+
 import {
   Menu,
   Compass,
@@ -9,24 +10,74 @@ import {
   Settings,
   LogOut,
   ChevronLeft,
+  Images,
 } from "lucide-react";
+
+import { useAuth } from "../../../../contexts/auth/useAuth";
+import { logOut } from "../../../../services/auth";
 
 import "./sidebar.css";
 
 const navigation = [
-  { name: "Início", icon: House },
-  { name: "Comunidade", icon: Users },
-  { name: "Perfil", icon: CircleUserRound },
-  { name: "Configurações", icon: Settings },
+  {
+    name: "Início",
+    icon: House,
+    path: "/",
+  },
+  {
+    name: "Explorar",
+    icon: Compass,
+    path: null,
+  },
+  {
+    name: "Comunidade",
+    icon: Users,
+    path: null,
+  },
+  {
+    name: "Perfil",
+    icon: CircleUserRound,
+    path: "/my-profile",
+  },
+  {
+    name: "Portfólio",
+    icon: Images,
+    path: "/portfolio",
+  },
+  {
+    name: "Configurações",
+    icon: Settings,
+    path: null,
+  },
 ];
 
 export default function Sidebar({ active, setActive }) {
   const [expanded, setExpanded] = useState(false);
 
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  function handleNavigation(name, path) {
+    setActive(name);
+
+    if (path) {
+      navigate(path);
+    }
+  }
+
+  async function handleLogout() {
+    try {
+      await logOut();
+    } catch (error) {
+      // Continua encerrando a sessão local.
+    } finally {
+      logout();
+      navigate("/login", { replace: true });
+    }
+  }
+
   return (
-    <aside
-      className={`sidebar ${expanded ? "sidebar-expanded" : ""}`}
-    >
+    <aside className={`sidebar ${expanded ? "sidebar-expanded" : ""}`}>
       <button
         type="button"
         className="sidebar-menu"
@@ -43,7 +94,7 @@ export default function Sidebar({ active, setActive }) {
       <button
         type="button"
         className="avatar-button"
-        onClick={() => setActive("Perfil")}
+        onClick={() => handleNavigation("Perfil", "/my-profile")}
         aria-label="Meu perfil"
         title="Meu perfil"
       >
@@ -57,10 +108,8 @@ export default function Sidebar({ active, setActive }) {
 
       <button
         type="button"
-        className={`explore-button ${
-          active === "Explorar" ? "selected" : ""
-        }`}
-        onClick={() => setActive("Explorar")}
+        className={`explore-button ${active === "Explorar" ? "selected" : ""}`}
+        onClick={() => handleNavigation("Explorar", null)}
         title="Explorar"
         aria-label="Explorar"
       >
@@ -70,14 +119,12 @@ export default function Sidebar({ active, setActive }) {
       </button>
 
       <nav className="side-navigation" aria-label="Menu principal">
-        {navigation.map(({ name, icon: Icon }) => (
+        {navigation.map(({ name, icon: Icon, path }) => (
           <button
             type="button"
             key={name}
-            className={`nav-button ${
-              active === name ? "selected" : ""
-            }`}
-            onClick={() => setActive(name)}
+            className={`nav-button ${active === name ? "selected" : ""}`}
+            onClick={() => handleNavigation(name, path)}
             title={name}
             aria-label={name}
             aria-current={active === name ? "page" : undefined}
@@ -93,6 +140,7 @@ export default function Sidebar({ active, setActive }) {
         <button
           type="button"
           className="nav-button"
+          onClick={handleLogout}
           title="Sair"
           aria-label="Sair"
         >

@@ -9,8 +9,6 @@ export function AuthProvider({ children }) {
 
     const isAuthenticated = user !== null;
 
-    // Valida o usuario logado ao entrar em uma pagina,
-    // se o usuário nao estiver autenticado isAuthenticated é falso e ele volta para a pagina de login
     useEffect(() => {
         axios.get(
             "http://localhost:8080/api/v1/auth/me",
@@ -19,7 +17,7 @@ export function AuthProvider({ children }) {
             }
         )
             .then(response => {
-                setUser(response.data || null);
+                setUser(response.data?.id ? response.data : null);
             })
             .catch(() => {
                 setUser(null);

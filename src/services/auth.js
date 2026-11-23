@@ -11,3 +11,7 @@ export async function logIn(data) {
 export async function getUserLogged() {
     return await api.get('/api/v1/auth/me');
 }
+
+export async function logOut() {
+    return await api.post('/api/v1/auth/logout');
+}
