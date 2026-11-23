@@ -1,0 +1,4 @@
+.report-wrapper {
+    display: flex;
+    gap: .5rem;
+}

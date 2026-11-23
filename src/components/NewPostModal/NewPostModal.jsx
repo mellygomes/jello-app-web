@@ -4,7 +4,7 @@ import { Upload } from 'antd';
 import { TagSelector } from '../../components'; 
 import styles from './NewPostModal.module.css';
 
-const CreatePostModal = () => {
+export default function NewPostModal() {
     const navigate = useNavigate();
     const close = () => navigate(-1);
 
@@ -138,5 +138,3 @@ const CreatePostModal = () => {
         </div>
     );
 };
-
-export default CreatePostModal;

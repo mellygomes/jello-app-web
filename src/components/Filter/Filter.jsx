@@ -1,10 +1,13 @@
-import styles from './filter.module.css';
+import styles from "./filter.module.css";
 import aiIcon from "../../assets/icons/ai-icon.png";
-import { Button, Date, FilterPic, ToggleAI} from "../index.js";
-import { TagSelector } from "../../components"
 import { ClearOutlined, FilterFilled } from "@ant-design/icons";
+import { Input, Tooltip } from "antd";
 import { useState } from "react";
-import { Input } from "antd";
+import ToggleAI from "./ToggleAi";
+import FilterPic from "./FilterPic.jsx";
+import Button from "../Button";
+import Date from "./Date";
+import TagSelector from "./index.js";
 
 export default function Filter({isIconDisplay, filter, onChange, onReset, onSearch}) {
 
@@ -16,7 +19,9 @@ export default function Filter({isIconDisplay, filter, onChange, onReset, onSear
                 <div className={styles["filter-wrapper"]}>
 
                     <div className={styles["toggle-ai"]}>
-                        <img className={styles["ai-icon"]} src={aiIcon} alt="ícone de IA."/>
+                        <Tooltip placement="top" title="Ativar filtragem de postagens sem IA.">
+                            <img className={styles["ai-icon"]} src={aiIcon} alt="ícone de IA."/>
+                        </Tooltip>
                         <ToggleAI
                             value={filter.filterAi}
                             onChange={(e) => onChange("filterAi", e)}
@@ -46,7 +51,7 @@ export default function Filter({isIconDisplay, filter, onChange, onReset, onSear
                                 Filtrar
                             </Button>
                         }
-                        <ClearOutlined onClick={onReset} />
+                        <ClearOutlined onClick={onReset}/>
                     </div>
 
                 </div>

@@ -1,62 +1,49 @@
 import { useEffect, useState } from "react";
-import { getAvatarUrl, getCoverUrl, getUserProfile } from "../services/profile.js";
-
-const emptyForm = {
-    firstName: "",
-    lastName: "",
-    username: "",
-    bio: "",
-    email: "",
-    avatar: "",
-    cover: "",
-    posts: 0,
-    followers: 0,
-    following: 0,
-};
-
-function profileToForm(profile) {
-    return {
-        firstName: profile.firstName ?? "",
-        lastName: profile.lastName ?? "",
-        username: profile.username ?? "",
-        bio: profile.bio ?? "",
-        email: profile.email ?? "",
-        avatar: profile.avatar ?? "",
-        cover: profile.cover ?? "",
-        posts: profile.posts ?? 0,
-        followers: profile.followers ?? 0,
-        following: profile.following ?? 0,
-    }
-}
+import { getAvatarUrl, getCoverUrl, getUserProfile } from "../services";
 
 export function useUserProfile(userId) {
+
     const [profile, setProfile] = useState(null);
-    const [formData, setFormData] = useState(emptyForm);
-    const [avatarUrl, setAvatarUrl] = useState("");
-    const [coverUrl, setCoverUrl] = useState("");
+    const [profileLoading, setProfileLoading] = useState(true);
+    const [profileError, setProfileError] = useState(null);
 
     useEffect(() => {
 
-        if (!userId) return;
+        if (!userId) {
+            setProfile(null);
+            setProfileLoading(false);
+            setProfileError(new Error("Identificador de usuário ausente."));
+            return;
+        }
 
-        const fetchUser = async () => {
+        async function loadProfile() {
+            setProfileLoading(true);
+            setProfileError(null);
+
             try {
                 const response = await getUserProfile(userId);
                 const userData = response.data;
-
                 setProfile(userData);
-                setFormData(profileToForm(userData));
-                setAvatarUrl(getAvatarUrl(userData.avatar?.id));
-                setCoverUrl(getCoverUrl(userData.cover?.id));
-
-
-            } catch (error) {
-                console.log("Erro ao carregar perfil: ", error);
+            } catch (err) {
+                setProfile(null);
+                setProfileError(err);
+            } finally {
+                setProfileLoading(false);
             }
         }
 
-        fetchUser();
+        // fetchUser();
+        loadProfile();
     }, [userId]);
 
-    return {profile, formData, avatarUrl, coverUrl}
+    const avatarUrl = getAvatarUrl(profile?.avatar?.id);
+    const coverUrl = getCoverUrl(profile?.cover?.id);
+
+    return {
+        profile,
+        profileLoading,
+        profileError,
+        avatarUrl,
+        coverUrl,
+    }
 }

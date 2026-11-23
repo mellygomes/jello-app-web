@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './NewPostButton.module.css'; 
 
-const NewPostButton = () => {
+export default function NewPostButton() {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -14,9 +14,7 @@ const NewPostButton = () => {
                 })
             }
         >
-            Criar Post
+            Novo Post
         </button>
     );
 };
-
-export default NewPostButton;

@@ -9,7 +9,7 @@
     border-radius: 50px; 
     
     /* Espaçamento interno */
-    padding: 12px 32px;
+    padding: 12px 24px;
     
     /* Removendo a borda padrão e adicionando transição */
     border: none;
@@ -20,6 +20,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    min-width: 100%;
 }
 
 /* Efeito ao passar o mouse */

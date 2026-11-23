@@ -1,9 +1,7 @@
-
 import { useState } from "react";
 import { Search, Ellipsis, Image as ImageIcon, X } from "lucide-react";
-
-import "./portfolio.css";
-import Sidebar from "./components/Sidebar/Sidebar";
+import styles from "./portfolio.module.css";
+import { Sidebar } from "../../components";
 
 const paintings = [
   {
@@ -62,13 +60,13 @@ function PaintingCard({ painting, onOpen }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <article className="painting-card">
-      <div className="card-heading">
+    <article className={styles["painting-card"]}>
+      <div className={styles["card-heading"]}>
         <span title={painting.title}>{painting.title}</span>
 
         <button
           type="button"
-          className="more-button"
+          className={styles["more-button"]}
           onClick={() => setMenuOpen((previous) => !previous)}
           aria-label={`Opções de ${painting.title}`}
           aria-expanded={menuOpen}
@@ -77,7 +75,7 @@ function PaintingCard({ painting, onOpen }) {
         </button>
 
         {menuOpen && (
-          <div className="card-menu">
+          <div className={styles["card-menu"]}>
             <button
               type="button"
               onClick={() => {
@@ -108,15 +106,15 @@ function PaintingCard({ painting, onOpen }) {
 
       <button
         type="button"
-        className={`painting-image ${
-          painting.banner ? "banner-image" : ""
+        className={`${styles["painting-image"]} ${
+          painting.banner ? styles["banner-image"] : ""
         }`}
         onClick={() => onOpen(painting)}
         aria-label={`Abrir ${painting.title}`}
       >
         {painting.banner ? (
-          <div className="banner-art">
-            <span className="banner-bulb">♧</span>
+          <div className={styles["banner-art"]}>
+            <span className={styles["banner-bulb"]}>♧</span>
             <span>constante evolução</span>
           </div>
         ) : (
@@ -124,12 +122,12 @@ function PaintingCard({ painting, onOpen }) {
         )}
       </button>
 
-      <div className="card-footer">
+      <div className={styles["card-footer"]}>
         <span>{painting.date}</span>
 
         <button
           type="button"
-          className="post-button"
+          className={styles["post-button"]}
           onClick={() => onOpen(painting)}
         >
           <span>Postar</span>
@@ -150,22 +148,22 @@ export default function Portfolio() {
   );
 
   return (
-    <div className="portfolio-page">
+    <div className={styles["portfolio-page"]}>
       <Sidebar active={active} setActive={setActive} />
 
-      <main className="portfolio-content">
-        <header className="topbar">
-          <a className="brand" href="/" aria-label="JelloArt - Início">
+      <main className={styles["portfolio-content"]}>
+        <header className={styles["topbar"]}>
+          <a className={styles["brand"]} href="/" aria-label="JelloArt - Início">
             <img
-              src="/jello-icon.svg"
+              src="/jellyfish.png"
               alt=""
-              className="brand-icon"
+              className={styles["brand-icon"]}
               aria-hidden="true"
             />
             <span>JelloArt</span>
           </a>
 
-          <label className="search-box">
+          <label className={styles["search-box"]}>
             <input
               type="search"
               placeholder="Pesquise no seu portfólio..."
@@ -175,40 +173,40 @@ export default function Portfolio() {
             />
 
             <Search
-              className="search-icon"
+              className={styles["search-icon"]}
               size={19}
               aria-hidden="true"
             />
           </label>
         </header>
 
-        <section className="portfolio-section">
+        <section className={styles["portfolio-section"]}>
           <h1>{active === "Início" ? "Portfólio" : active}</h1>
 
-          <div className="storage">
-            <span className="storage-label">Espaço Utilizado:</span>
+          <div className={styles["storage"]}>
+            <span className={styles["storage-label"]}>Espaço Utilizado:</span>
 
-            <div className="storage-row">
+            <div className={styles["storage-row"]}>
               <div
-                className="storage-track"
+                className={styles["storage-track"]}
                 role="progressbar"
                 aria-label="Espaço utilizado"
                 aria-valuenow={50}
                 aria-valuemin={0}
                 aria-valuemax={100}
               >
-                <div className="storage-fill" />
+                <div className={styles["storage-fill"]} />
               </div>
 
-              <span className="storage-percent">50%</span>
+              <span className={styles["storage-percent"]}>50%</span>
             </div>
 
-            <span className="storage-caption">
+            <span className={styles["storage-caption"]}>
               250 Gigas de 500 Gigabytes usados
             </span>
           </div>
 
-          <div className="paintings-grid">
+          <div className={styles["paintings-grid"]}>
             {filteredPaintings.map((painting) => (
               <PaintingCard
                 key={painting.id}
@@ -218,7 +216,7 @@ export default function Portfolio() {
             ))}
 
             {filteredPaintings.length === 0 && (
-              <div className="empty-state">
+              <div className={styles["empty-state"]}>
                 <ImageIcon size={32} />
                 <p>Nenhuma pintura encontrada.</p>
                 <button
@@ -235,11 +233,11 @@ export default function Portfolio() {
 
       {selectedPainting && (
         <div
-          className="modal-backdrop"
+          className={styles["modal-backdrop"]}
           onClick={() => setSelectedPainting(null)}
         >
           <section
-            className="painting-modal"
+            className={styles["painting-modal"]}
             onClick={(event) => event.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -247,7 +245,7 @@ export default function Portfolio() {
           >
             <button
               type="button"
-              className="modal-close"
+              className={styles["modal-close"]}
               onClick={() => setSelectedPainting(null)}
               aria-label="Fechar"
             >
@@ -264,8 +262,8 @@ export default function Portfolio() {
                 alt={selectedPainting.title}
               />
             ) : (
-              <div className="banner-art modal-banner">
-                <span className="banner-bulb">♧</span>
+              <div className={styles["banner-art modal-banner"]}>
+                <span className={styles["banner-bulb"]}>♧</span>
                 <span>constante evolução</span>
               </div>
             )}
@@ -274,7 +272,7 @@ export default function Portfolio() {
 
             <button
               type="button"
-              className="modal-post"
+              className={styles["modal-post"]}
               onClick={() => {
                 alert(
                   `Preparando postagem: ${selectedPainting.title}`
