@@ -25,11 +25,6 @@ const navigation = [
     path: "/",
   },
   {
-    name: "Explorar",
-    icon: Compass,
-    path: null,
-  },
-  {
     name: "Comunidade",
     icon: Users,
     path: null,
