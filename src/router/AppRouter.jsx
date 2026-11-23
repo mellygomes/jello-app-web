@@ -1,6 +1,6 @@
 import { useLocation, Route, Routes } from 'react-router-dom'
 import { Home, Login, Portfolio, MyProfile, UserProfile, Register, PostReport, UserReport, Feed } from '../pages';
-import { NewPostModal } from '../components';
+import { NewPostModal, GlobalToast  } from '../components';
 
 // import ProtectedRoute from '../components/ProtectedRoute.jsx';
 
@@ -10,6 +10,8 @@ const AppRouter = () => {
 
     return (
         <>
+            <GlobalToast /> 
+
             <Routes location={backgroundLocation || location}>
             <Route path="/" element={<Home/>}/>
             <Route path="/register" element={<Register/>}/>

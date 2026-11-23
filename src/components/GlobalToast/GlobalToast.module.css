@@ -1,0 +1,72 @@
+/* src/components/GlobalToast/GlobalToast.module.css */
+
+/* 1. O fundo que cobre a tela (o "flash" de ação) */
+.screenFlash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.15); /* Branco translúcido */
+    backdrop-filter: blur(2px); /* Leve desfoque para destacar a ação */
+    z-index: 99998; /* Fica logo abaixo do toast */
+    pointer-events: none; /* Permite clicar através dele se precisar */
+    animation: flashFadeOut 1s ease forwards; /* Some em 1 segundo */
+}
+
+/* 2. O Toast em si (Glassmorphism) */
+.toastContainer {
+    position: fixed;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    /* Fundo escuro translúcido */
+    background-color: rgba(20, 20, 20, 0.85); 
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    padding: 16px 28px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 99999;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Espaço entre o ícone e o texto */
+    
+    /* Animação de entrada */
+    animation: slideDownFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Ícone verde de check (apenas decorativo) */
+.toastIcon {
+    background-color: #1DB954; /* Verde estilo Spotify */
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+/* --- Keyframes das animações --- */
+
+@keyframes slideDownFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+    }
+}
+
+@keyframes flashFadeOut {
+    0% { opacity: 1; }
+    40% { opacity: 1; }
+    100% { opacity: 0; }
+}

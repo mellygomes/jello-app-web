@@ -1,19 +1,31 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Upload } from 'antd';
 import { TagSelector } from '../../components'; 
+import { useNewPost } from '../../hooks'
 import styles from './NewPostModal.module.css';
 
 export default function NewPostModal() {
     const navigate = useNavigate();
-    const close = () => navigate(-1);
+    const location = useLocation();
+    const backgroundLocation = location.state?.backgroundLocation;
+
+    const close = () => {
+        if (backgroundLocation) {
+            navigate(backgroundLocation.pathname, { replace: true });
+        } else {
+            navigate(-1);
+        }
+    };
 
     // 1. Estados
     const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+    const [content, setContent] = useState(''); // Antes era 'description'
     const [selectedTags, setSelectedTags] = useState([]);
     const [coverFile, setCoverFile] = useState(null); // Arquivo real
     const [previewUrl, setPreviewUrl] = useState(null); // URL para exibir
+
+    const { mutate, isLoading, error } = useNewPost();
 
     // 2. useEffect para gerar e limpar a URL do preview
     useEffect(() => {
@@ -42,10 +54,29 @@ export default function NewPostModal() {
         setCoverFile(file);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Aqui você envia title, description, selectedTags e coverFile
-        console.log({ title, description, tags: selectedTags, file: coverFile });
+
+        // Monta o objeto exatamente como o service espera
+        const postData = {
+            title: title,
+            content: content,
+            tags: selectedTags,
+            file: coverFile,
+        };
+
+        // Chama a função do hook
+        const result = await mutate(postData);
+
+        if (result.success) {
+            // 1. Dispara o evento global para mostrar o Toast
+            window.dispatchEvent(new CustomEvent('show-toast', { 
+                detail: { message: 'Post criado com sucesso! 🎉' } 
+            }));
+
+            // 2. Fecha a modal voltando para a página de trás
+            close(); 
+        }
     };
 
     // 4. Renderização
@@ -61,6 +92,8 @@ export default function NewPostModal() {
                 </div>
 
                 <form className={styles['modal-form']} onSubmit={handleSubmit}>
+
+                    {error && <span style={{ color: 'red' }}>{error}</span>}
                     
                     <input 
                         type="text" 
@@ -74,8 +107,8 @@ export default function NewPostModal() {
                         placeholder="Descrição..." 
                         className={`${styles['input-field']} ${styles['textarea-field']}`} 
                         rows="4"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
                     ></textarea>
 
                     <div className={styles['tags-section']}>
@@ -129,8 +162,8 @@ export default function NewPostModal() {
                         <button type="button" className={styles['btn-cancel']} onClick={close}>
                             Cancelar
                         </button>
-                        <button type="submit" className={styles['btn-submit']}>
-                            Criar
+                        <button className={styles['btn-submit']} type="submit" disabled={isLoading}>
+                            {isLoading ? 'Criando...' : 'Criar Post'}
                         </button>
                     </div>
                 </form>
