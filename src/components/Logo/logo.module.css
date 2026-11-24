@@ -1,7 +1,7 @@
 .logo {
     display: inline-flex;
     align-items: center;
-    gap: 2px;
+    gap: 1rem;
     color: var(--jello-text);
     font-weight: 400;
     line-height: 1;
