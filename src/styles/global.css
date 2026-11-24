@@ -1,1 +1,167 @@
-/* Estilos globais mesmo */
+/* Estilos globais do JelloArt (tokens tirados do Figma) */
+:root {
+    --jello-bg: #f6f6f6;
+    --jello-surface: #ffffff;
+    --jello-glass: rgba(255, 255, 255, 0.92);
+    --jello-text: #282828;
+    --jello-on-text: #ffffff;
+    --jello-text-soft: #6f6f6f;
+    --jello-muted: #adadad;
+    --jello-border: #e3e3e3;
+    --jello-hover: #f0f0f0;
+    --jello-sky: #dff6ff;
+    --jello-sky-soft: #effaff;
+    --jello-sky-hover: #c9efff;
+    --jello-pink: #ffdbf2;
+    --jello-grad-top: #dff6ff;
+    --jello-grad-bottom: #ffdbf2;
+    --jello-auth-1: #fef3fe;
+    --jello-auth-2: #f1f4ff;
+    --jello-auth-3: #e3f9ff;
+    --jello-login-bg: linear-gradient(135deg, #fff1fb 0%, #eef1ff 55%, #dff7ff 100%);
+    --jello-card-login: linear-gradient(to bottom, #d3f1ff 0%, #ffd0ee 90%);
+    --jello-card-register: linear-gradient(to bottom, #d3f1ff 0%, #ffd0ee 90%);
+    --jello-title-color: #282828;
+    --jello-page-bg: linear-gradient(to bottom, #dff6ff, #ffdbf2);
+    --jello-scroll-track: rgba(40, 40, 40, 0.1);
+    --jello-scroll-thumb: #7d838c;
+    --jello-scroll-thumb-hover: #5c626b;
+    --jello-link: #78d9ff;
+    --jello-ai: #2991c4;
+    --jello-human: #921d74;
+    --jello-like: #f78ca6;
+    --jello-danger: #d32f2f;
+    --jello-danger-bg: #ffebee;
+    --jello-btn: #282828;
+    --jello-btn-hover: #3a3a3a;
+    --jello-btn-text: #ffffff;
+    --jello-radius: 10px;
+    --jello-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.25);
+    --jello-shadow-modal: 0 4px 13px rgba(0, 0, 0, 0.25);
+    --jello-font: "Roboto", "Segoe UI", Arial, sans-serif;
+    color-scheme: light;
+}
+
+/* Modo escuro: mesmas variáveis, valores novos */
+:root[data-theme="dark"] {
+    --jello-bg: #15161a;
+    --jello-surface: #212329;
+    --jello-glass: rgba(33, 35, 41, 0.92);
+    --jello-text: #ececec;
+    --jello-on-text: #15161a;
+    --jello-text-soft: #a4a8b1;
+    --jello-muted: #7f838c;
+    --jello-border: #3a3d46;
+    --jello-hover: #2d3038;
+    --jello-sky: #1f3260;
+    --jello-sky-soft: #1a2850;
+    --jello-sky-hover: #2c4682;
+    --jello-pink: #4b2754;
+    --jello-grad-top: #0f1c3f;
+    --jello-grad-bottom: #2c1846;
+    --jello-auth-1: #0d0e16;
+    --jello-auth-2: #15121f;
+    --jello-auth-3: #0e131d;
+    --jello-login-bg: linear-gradient(135deg, #0d0e16 0%, #15121f 55%, #0e131d 100%);
+    --jello-card-login: linear-gradient(to bottom, #263d85 0%, #4a2b83 45%, #86307a 85%, #3d1b49 100%);
+    --jello-card-register: linear-gradient(to bottom, #263d85 0%, #4a2b83 45%, #86307a 85%, #3d1b49 100%);
+    --jello-title-color: #2fb4ff;
+    --jello-page-bg: linear-gradient(to bottom, #0f1c3f, #2c1846);
+    --jello-scroll-track: rgba(255, 255, 255, 0.12);
+    --jello-scroll-thumb: #9aa0aa;
+    --jello-scroll-thumb-hover: #c3c8d0;
+    --jello-danger: #ef6a6a;
+    --jello-danger-bg: #3d2024;
+    --jello-btn: #ececec;
+    --jello-btn-hover: #ffffff;
+    --jello-btn-text: #15161a;
+    --jello-shadow-card: 0 2px 10px rgba(0, 0, 0, 0.6);
+    --jello-shadow-modal: 0 4px 16px rgba(0, 0, 0, 0.7);
+    color-scheme: dark;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body, #root {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--jello-bg);
+    color: var(--jello-text);
+    font-family: var(--jello-font);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+}
+
+input, textarea, select {
+    font-family: inherit;
+    color: var(--jello-text);
+}
+
+/* ícones do Figma são pretos: no escuro eles ficam claros */
+:root[data-theme="dark"] img[src$=".svg"],
+:root[data-theme="dark"] img[src*="arrow-left"],
+:root[data-theme="dark"] img[src*="camera"] {
+    filter: invert(0.9);
+}
+
+/* ícones cinza já têm contraste bom no escuro */
+:root[data-theme="dark"] img[src*="comment"],
+:root[data-theme="dark"] img[src*="search"],
+:root[data-theme="dark"] img[src*="like"] {
+    filter: none;
+}
+
+/* mas não nos selos coloridos nem nas fotos */
+:root[data-theme="dark"] [data-keep-color] img {
+    filter: none;
+}
+
+.page-loading {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    color: var(--jello-muted);
+    font-weight: 500;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* sugestão do navegador (autofill) segue a cor do tema em vez de ficar branca */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--jello-surface) inset;
+    -webkit-text-fill-color: var(--jello-text);
+    caret-color: var(--jello-text);
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* o "x" das tags do filtro precisa aparecer no escuro */
+:root[data-theme="dark"] .ant-tag .ant-tag-close-icon {
+    color: currentColor;
+    opacity: 0.9;
+}
+
+:root[data-theme="dark"] .ant-tag .ant-tag-close-icon:hover {
+    opacity: 0.6;
+}

@@ -1,31 +1,12 @@
-import { useEffect, useState } from "react";
+import { useCallback } from "react";
 import { getAllPostsByUser } from "../services/profile.js";
+import { usePagedPosts } from "./usePagedPosts.js";
 
 export function useUserPosts(userId, page, pageSize, filter) {
-    const [posts, setPosts] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const fetcher = useCallback(
+        (pageIndex, size, currentFilter) => getAllPostsByUser(userId, pageIndex, size, currentFilter),
+        [userId]
+    );
 
-    useEffect(() => {
-
-        if (!userId) return;
-
-        const load = async () => {
-            try {
-                setLoading(true);
-                const response = await getAllPostsByUser(userId, page - 1, pageSize, filter);
-                setPosts(response.data.content);
-                setTotal(response.data.totalElements);
-            } catch (error) {
-                setError(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        load();
-    }, [userId, page, pageSize, filter]);
-
-    return { posts, total, loading, error };
+    return usePagedPosts(fetcher, page, pageSize, filter, Boolean(userId), String(userId));
 }

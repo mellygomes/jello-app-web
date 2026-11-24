@@ -1,9 +1,10 @@
 import styles from "./profile-header.module.css";
 
-export default function ProfileHeader({ className , name, followers, following, posts }) {
+// Nome + linha de números (seguidores • seguindo • posts)
+export default function ProfileHeader({ className = "", name, followers, following, posts }) {
     return (
         <div className={ className }>
-            <h1>{ name }</h1>
+            <h1 className={styles.name}>{ name }</h1>
             <div className={styles["header-stats"]}>
                 <span>{ followers }</span>
                 <span className={styles["dot"]}></span>

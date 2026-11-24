@@ -1,0 +1,41 @@
+.title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.title-row h1 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
+    gap: 24px;
+    align-items: stretch;
+    margin-top: 22px;
+}
+
+.state {
+    display: grid;
+    place-items: center;
+    margin: 60px 0;
+    color: var(--jello-text-soft);
+    font-size: 17px;
+    text-align: center;
+}
+
+.link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--jello-text);
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+}

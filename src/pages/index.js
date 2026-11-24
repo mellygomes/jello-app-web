@@ -1,7 +1,12 @@
-export { default as Home } from './Home';
-export { default as Login } from './Login';
-export { default as Register } from './Register';
-export { default as Portfolio } from './Portfolio/Portfolio';
+export { default as Home } from "./Home";
+export { default as Feed } from "./Feed";
+export { default as Login } from "./Login";
+export { default as Register } from "./Register";
+export { default as Portfolio } from "./Portfolio";
+export { default as Explore } from "./Explore";
+export { default as Friends } from "./Friends";
+export { default as Settings } from "./Settings";
+export { default as Moderation } from "./Moderation";
+export { default as NotFound } from "./NotFound";
 export * from "./Report";
 export * from "./Profile";
-export { default as Feed } from './Feed';

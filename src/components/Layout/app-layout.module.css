@@ -1,0 +1,49 @@
+.shell {
+    display: flex;
+    align-items: flex-start;
+    gap: 48px;
+    min-height: 100vh;
+    padding: 24px 32px 24px 32px;
+    background: var(--jello-page-bg);
+    background-attachment: fixed;
+}
+
+.content {
+    flex: 1;
+    min-width: 0;
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    min-height: 64px;
+    margin-bottom: 20px;
+}
+
+.extra {
+    flex: 1;
+    min-width: 0;
+}
+
+.title {
+    margin: 0 0 20px;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+@media (max-width: 1100px) {
+    .shell {
+        gap: 24px;
+        padding: 16px;
+    }
+}
+
+@media (max-width: 860px) {
+    .shell {
+        padding-left: 12px;
+    }
+}

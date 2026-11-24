@@ -1,0 +1,52 @@
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--jello-border);
+    border-radius: 8px;
+    background: var(--jello-surface);
+    color: var(--jello-text);
+    cursor: pointer;
+}
+
+.action:hover {
+    background: var(--jello-sky-soft);
+}
+
+.action.danger {
+    border-color: #f2b8b5;
+    color: #b71c1c;
+}
+
+.action.danger:hover {
+    background: var(--jello-danger-bg);
+}
+
+.link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #1f86c7;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.error {
+    margin: 0 0 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--jello-danger-bg);
+    color: #b71c1c;
+}

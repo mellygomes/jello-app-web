@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { register } from "../services";
+import { getErrorMessage } from "../lib/api";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const USERNAME_REGEX = /^[A-Za-z0-9._-]{3,46}$/;
 
 export function useRegister() {
     const navigate = useNavigate();
@@ -20,10 +24,10 @@ export function useRegister() {
     const handleChange = (field, setter) => (event) => {
         setter(event.target.value);
         setErrorsValidate((prev) => {
-
             if (!prev[field]) return prev
-            const {[field]: _, ...rest} = prev;
-            return rest;
+            const rest = { ...prev }
+            delete rest[field]
+            return rest
         })
     }
 
@@ -35,13 +39,22 @@ export function useRegister() {
 
         if (!firstName.trim()) novosErros.firstName = "Campo obrigatório";
         if (!lastName.trim()) novosErros.lastName = "Campo obrigatório";
-        if (!email.trim()) novosErros.email = "Campo obrigatório";
-        if (!username.trim()) novosErros.username = "Campo obrigatório";
+        if (!username.trim()) {
+            novosErros.username = "Campo obrigatório";
+        } else if (!USERNAME_REGEX.test(username.trim())) {
+            novosErros.username = "Use de 3 a 46 letras, números, ponto, hífen ou _";
+        }
+
+        if (!email.trim()) {
+            novosErros.email = "Campo obrigatório";
+        } else if (!EMAIL_REGEX.test(email.trim())) {
+            novosErros.email = "Digite um e-mail válido";
+        }
 
         if (!password) {
             novosErros.password = "Campo obrigatório";
-        } else if (password.length < 4) {
-            novosErros.password = "A senha deve ter pelo menos 4 caracteres";
+        } else if (password.length < 8) {
+            novosErros.password = "A senha deve ter pelo menos 8 caracteres";
         }
 
         if (password !== confirmPassword) {
@@ -59,16 +72,16 @@ export function useRegister() {
 
         try {
             await register({
-                firstName: firstName,
-                lastName: lastName,
-                username: username,
-                email: email,
+                firstName: firstName.trim(),
+                lastName: lastName.trim(),
+                username: username.trim(),
+                email: email.trim(),
                 password: password,
             })
             navigate("/login");
         } catch (error) {
-            setError("Erro ao cadastrar usuário");
-            console.log(error);
+            setError(getErrorMessage(error, "Erro ao cadastrar usuário"));
+            setSubmitAttempt((n) => n + 1);
         } finally {
             setLoading(false);
         }

@@ -1,0 +1,152 @@
+.bar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    min-height: 68px;
+    padding: 10px 40px;
+    background: var(--jello-glass);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(8px);
+}
+
+.transparent {
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+.nav {
+    display: flex;
+    gap: 6px;
+    margin-right: auto;
+}
+
+.link {
+    padding: 8px 16px;
+    border-radius: 999px;
+    color: var(--jello-text);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.link:hover {
+    color: var(--jello-text);
+    background: var(--jello-sky-soft);
+}
+
+.active {
+    background: var(--jello-sky);
+    font-weight: 700;
+}
+
+.account {
+    position: relative;
+}
+
+.trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 10px 4px 4px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--jello-text);
+    cursor: pointer;
+}
+
+.trigger:hover {
+    background: var(--jello-sky-soft);
+}
+
+.trigger:focus-visible {
+    outline: 3px solid var(--jello-link);
+}
+
+.name {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.menu {
+    position: absolute;
+    top: 52px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 250px;
+    padding: 6px;
+    border: 1px solid #78d9ff;
+    border-radius: 12px;
+    background: var(--jello-surface);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.who {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 14px 12px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 4px;
+}
+
+.who span {
+    color: var(--jello-muted);
+    font-size: 14px;
+}
+
+.menu a,
+.menu button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--jello-text);
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+.menu a:hover,
+.menu button:hover {
+    color: var(--jello-text);
+    background: var(--jello-sky-soft);
+}
+
+.enter {
+    padding: 8px 22px;
+    border-radius: 999px;
+    background: var(--jello-text);
+    color: var(--jello-on-text);
+    font-weight: 700;
+}
+
+.enter:hover {
+    color: #fff;
+    background: #444;
+}
+
+@media (max-width: 760px) {
+    .bar {
+        gap: 12px;
+        padding-inline: 16px;
+    }
+    .name {
+        display: none;
+    }
+    .link {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+}

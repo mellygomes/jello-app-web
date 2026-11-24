@@ -16,6 +16,7 @@ export function useLogin() {
 
     const handleLogin = async (e) => {
         e.preventDefault()
+        setError("")
 
         const novosErros = {}
 
@@ -33,7 +34,7 @@ export function useLogin() {
 
         try {
             // Envia os dados de login
-            await logIn({ username, password });
+            await logIn({ username: username.trim(), password });
 
             // Valida o login e retorna com os dados caso estejam corretos
             const response = await getUserLogged()
@@ -42,24 +43,16 @@ export function useLogin() {
 
         } catch (error) {
             const status = error.response?.status;
-            const message = error.response?.data?.message;
-
-            // Traduzir pro usuário
-            const mensagens = {
-                "Bad credentials": "Usuário ou senha inválidos",
-                "User not found": "Usuário não encontrado",
-            };
-
-            const mensagemTraduzida = mensagens[message] ?? "Erro ao fazer login";
-            setError(mensagemTraduzida);
 
             if (status === 401) {
                 setError("Usuário ou senha inválidos");
+            } else if (status === 403) {
+                setError("Essa conta foi suspensa por um moderador.");
+            } else if (status === 429) {
+                setError("Muitas tentativas. Espere alguns minutos e tente de novo.");
             } else {
                 setError("Erro ao fazer login. Tente novamente.");
             }
-
-            console.error("Erro ao fazer login:", error);
 
             setSubmitAttempt((n) => n + 1);   // pra ter animação de novo
         } finally {
@@ -70,9 +63,9 @@ export function useLogin() {
     const handleChange = (field, setter) => (event) => {
         setter(event.target.value)
         setErrorsValidate((prev) => {
-
             if (!prev[field]) return prev
-            const { [field]: _, ...rest } = prev
+            const rest = { ...prev }
+            delete rest[field]
             return rest
         })
     }

@@ -1,0 +1,43 @@
+.title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.title-row h1 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.wall-title {
+    margin: 34px 0 12px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.wall {
+    margin-top: 18px;
+}
+
+.state {
+    display: grid;
+    place-items: center;
+    margin: 50px 0;
+    color: var(--jello-text-soft);
+    font-size: 17px;
+    text-align: center;
+}
+
+.link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--jello-text);
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+}

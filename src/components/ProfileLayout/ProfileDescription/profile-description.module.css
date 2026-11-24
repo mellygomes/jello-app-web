@@ -1,63 +1,63 @@
 .description-container {
-    padding: 0;
-}
-
-.description-textarea {
-    background: transparent;
-    border: 2px solid #D9D5D5FF;
-    padding: .5rem 1rem;
-    border-radius: 10px;
-    outline: none;
-    color: #333333;
     width: 100%;
-    resize: unset;
-}
-
-.description-textarea:focus-within {
-    border-color: #169EF92A;
-}
-
-.description-textarea.disabled {
-    background-color: #f3f3f3;
-    color: #afa9a9;
-    cursor: not-allowed;
-    border: 2px solid #D9D5D5FF;
-    padding: .5rem 1rem;
-    border-radius: 10px;
 }
 
 .label-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+}
+
+.label-row h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.description-textarea {
+    width: 100%;
+    padding: 6px 0;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    color: var(--jello-text);
+    font-size: 20px;
+    line-height: 1.15;
+    resize: none;
+    outline: none;
+}
+
+.description-textarea:not(.disabled) {
+    padding: 10px 14px;
+    border: 1px solid var(--jello-border);
+    border-radius: 10px;
+    background: var(--jello-surface);
+    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.25);
+    color: var(--jello-text-soft);
+}
+
+.description-textarea:not(.disabled):focus {
+    border-color: #78d9ff;
+    box-shadow: 0 0 0 3px rgba(120, 217, 255, 0.35);
+}
+
+.description-textarea.disabled {
+    color: var(--jello-muted);
+    cursor: default;
 }
 
 .char-counter {
-  opacity: 0;
-  font-size: 0.7rem;
-  color: #9ca3af;
-  transition: color 0.15s;
-  margin-right: 0.3rem;
+    font-size: 0.8rem;
+    color: var(--jello-text-soft);
 }
 
-.description-container:focus-within .char-counter {
-  opacity: 1;
+.near-limit {
+    color: #f59e0b;
 }
 
-/* perto do limite: amarelo/laranja */
-.char-counter.near-limit {
-  color: #f59e0b;
-}
-
-/* no limite: vermelho */
-.char-counter.at-limit {
-  color: #d32f2f;
-  font-weight: 600;
-}
-
-@media (max-width: 580px) {
-    .description-container {
-        padding-inline: 12px;
-    }
+.at-limit {
+    color: #d32f2f;
+    font-weight: 600;
 }

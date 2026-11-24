@@ -1,106 +1,143 @@
-
 import { useState } from "react";
-import {
-  Menu,
-  Compass,
-  House,
-  Users,
-  CircleUserRound,
-  Settings,
-  LogOut,
-  ChevronLeft,
-} from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { CircleUserRound, House, Users, Settings, ShieldCheck, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 
-import "./sidebar.css";
+import Avatar from "../Avatar";
+import FollowButton from "../FollowButton";
+import { useAuth } from "../../hooks/useAuth.js";
+import { useSuggestions } from "../../hooks/useSuggestions.js";
+import { useLogout } from "../../hooks/useLogout.js";
+import compassIcon from "../../assets/figma/compass.svg";
+import logoutIcon from "../../assets/figma/logout.svg";
+import styles from "./sidebar.module.css";
 
-const navigation = [
-  { name: "Início", icon: House },
-  { name: "Comunidade", icon: Users },
-  { name: "Perfil", icon: CircleUserRound },
-  { name: "Configurações", icon: Settings },
-];
+const STORAGE_KEY = "jello:sidebar-expanded";
 
-export default function Sidebar({ active, setActive }) {
-  const [expanded, setExpanded] = useState(false);
+function readExpanded() {
+    try {
+        return localStorage.getItem(STORAGE_KEY) !== "false";
+    } catch {
+        return true;
+    }
+}
 
-  return (
-    <aside
-      className={`sidebar ${expanded ? "sidebar-expanded" : ""}`}
-    >
-      <button
-        type="button"
-        className="sidebar-menu"
-        onClick={() => setExpanded((previous) => !previous)}
-        aria-label={expanded ? "Recolher menu" : "Expandir menu"}
-        aria-expanded={expanded}
-        title={expanded ? "Recolher menu" : "Expandir menu"}
-      >
-        {expanded ? <ChevronLeft size={20} /> : <Menu size={20} />}
+export default function Sidebar() {
+    const { user, isModerator } = useAuth();
+    const handleLogout = useLogout();
+    const [expanded, setExpanded] = useState(readExpanded);
+    const { suggestions, setFollowing } = useSuggestions(3, Boolean(user));
 
-        {expanded && <span>Recolher menu</span>}
-      </button>
+    const toggle = () => {
+        setExpanded((prev) => {
+            try {
+                localStorage.setItem(STORAGE_KEY, String(!prev));
+            } catch { /* sem storage, segue o jogo */ }
+            return !prev;
+        });
+    };
 
-      <button
-        type="button"
-        className="avatar-button"
-        onClick={() => setActive("Perfil")}
-        aria-label="Meu perfil"
-        title="Meu perfil"
-      >
-        <img
-          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80"
-          alt="Avatar do usuário"
-        />
+    const fullName = `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim() || user?.username || "";
 
-        {expanded && <span>Meu perfil</span>}
-      </button>
+    const links = [
+        { to: "/", label: "Início", icon: <House size={26} strokeWidth={2.4} />, end: true },
+        { to: "/friends", label: "Amigos", icon: <Users size={26} strokeWidth={2.4} /> },
+        { to: "/my-profile", label: "Seu perfil", icon: <CircleUserRound size={26} strokeWidth={2.4} /> },
+        { to: "/settings", label: "Configurações", icon: <Settings size={26} strokeWidth={2.4} /> },
+    ];
 
-      <button
-        type="button"
-        className={`explore-button ${
-          active === "Explorar" ? "selected" : ""
-        }`}
-        onClick={() => setActive("Explorar")}
-        title="Explorar"
-        aria-label="Explorar"
-      >
-        <Compass size={19} />
+    if (isModerator) {
+        links.push({ to: "/moderation", label: "Moderação", icon: <ShieldCheck size={26} strokeWidth={2.4} /> });
+    }
 
-        {expanded && <span>Explorar</span>}
-      </button>
+    return (
+        <aside className={`${styles.sidebar} ${expanded ? styles.expanded : styles.collapsed}`} aria-label="Menu principal">
+            <button
+                type="button"
+                className={styles.toggle}
+                onClick={toggle}
+                aria-label={expanded ? "Recolher menu" : "Expandir menu"}
+                aria-expanded={expanded}
+                title={expanded ? "Recolher menu" : "Expandir menu"}
+            >
+                {expanded ? <PanelLeftClose size={28} /> : <PanelLeftOpen size={28} />}
+            </button>
 
-      <nav className="side-navigation" aria-label="Menu principal">
-        {navigation.map(({ name, icon: Icon }) => (
-          <button
-            type="button"
-            key={name}
-            className={`nav-button ${
-              active === name ? "selected" : ""
-            }`}
-            onClick={() => setActive(name)}
-            title={name}
-            aria-label={name}
-            aria-current={active === name ? "page" : undefined}
-          >
-            <Icon size={19} />
+            <div className={styles.profile}>
+                <Avatar
+                    avatarId={user?.avatarId}
+                    name={fullName}
+                    size={expanded ? 160 : 60}
+                    to="/my-profile"
+                />
+                {expanded && (
+                    <>
+                        <p className={styles.name}>{fullName}</p>
+                        {isModerator && (
+                            <span className={styles.badge}>
+                                <ShieldCheck size={18} aria-hidden="true" /> Moderador
+                            </span>
+                        )}
+                    </>
+                )}
+            </div>
 
-            {expanded && <span>{name}</span>}
-          </button>
-        ))}
-      </nav>
+            <NavLink
+                to="/explore"
+                className={({ isActive }) => `${styles.explore} ${isActive ? styles.exploreActive : ""}`}
+                title="Explorar"
+            >
+                <img src={compassIcon} alt="" width={24} height={22} />
+                {expanded && <span>Explorar</span>}
+            </NavLink>
 
-      <div className="sidebar-bottom">
-        <button
-          type="button"
-          className="nav-button"
-          title="Sair"
-          aria-label="Sair"
-        >
-          <LogOut size={19} />
+            <nav className={styles.nav} aria-label="Navegação">
+                {links.map((link) => (
+                    <NavLink
+                        key={link.to}
+                        to={link.to}
+                        end={link.end}
+                        title={link.label}
+                        aria-label={link.label}
+                        className={({ isActive }) => `${styles.link} ${isActive ? styles.linkActive : ""}`}
+                    >
+                        {link.icon}
+                        {expanded && <span>{link.label}</span>}
+                    </NavLink>
+                ))}
+            </nav>
 
-          {expanded && <span>Sair</span>}
-        </button>
-      </div>
-    </aside>
-  );
+            <div className={styles.bottom}>
+                {expanded && suggestions.length > 0 && (
+                    <section className={styles.suggestions} aria-label="Sugestões de perfis">
+                        <h2>Sugestões</h2>
+                        <ul>
+                            {suggestions.map((person) => (
+                                <li key={person.id}>
+                                    <Avatar
+                                        avatarId={person.avatarId}
+                                        name={person.firstName}
+                                        size={52}
+                                        to={`/user-profile/${person.id}`}
+                                    />
+                                    <NavLink to={`/user-profile/${person.id}`} className={styles.suggestionName}>
+                                        {person.firstName} {person.lastName}
+                                    </NavLink>
+                                    <FollowButton
+                                        userId={person.id}
+                                        following={person.following}
+                                        onChange={(value) => setFollowing(person.id, value)}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                )}
+
+                <button type="button" className={styles.logout} onClick={handleLogout} title="Sair">
+                    <img src={logoutIcon} alt="" width={30} height={28} />
+                    {expanded && <span>Fazer Logout</span>}
+                </button>
+            </div>
+        </aside>
+    );
 }

@@ -1,31 +1,36 @@
 .profile-wrapper {
-    width: 24rem;
+    width: 100%;
     display: flex;
     flex-direction: column;
 }
 
 .text-label {
+    font-size: 16px;
     font-weight: 600;
 }
 
 .profile-input {
-    background: transparent;
-    border: 2px solid #D9D5D5FF;
-    padding: .5rem 1rem;
-    border-radius: 10px;
-    outline: none;
-    color: #333333;
     width: 100%;
+    height: 56px;
+    padding: 0 18px;
+    border: 1px solid var(--jello-border);
+    border-radius: 10px;
+    background: var(--jello-surface);
+    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.25);
+    color: var(--jello-text);
+    font-size: 16px;
+    font-weight: 600;
+    outline: none;
 }
 
-.profile-input:focus-within {
-    border-color: #169EF92A;
+.profile-input:focus {
+    border-color: #78d9ff;
+    box-shadow: 0 0 0 3px rgba(120, 217, 255, 0.35);
 }
 
 .profile-input.disabled {
-    background-color: #f3f3f3;
-    color: #afa9a9;
-    cursor: not-allowed;
+    background-color: var(--jello-surface);
+    cursor: default;
 }
 
 @keyframes shake {
@@ -37,18 +42,20 @@
   100% { transform: translateX(0); }
 }
 
+.profile-wrapper-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
 .profile-input.error {
-    border-color: #d32f2f84;
+    border-color: #d32f2f;
     animation: shake 0.35s ease-in-out;
 }
 
-.profile-input.error:focus {
-    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
-}
-/* Mensagem embaixo, bem pequena */
 .error-message {
   color: #d32f2f;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   margin: 0.25rem 0 0 0.5rem;
   line-height: 1.2;
 }
@@ -57,40 +64,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0rem;
 }
 
 .char-counter {
-  opacity: 0;
-  font-size: 0.7rem;
-  color: #9ca3af;
-  transition: color 0.15s;
-  margin-right: 0.3rem;
+  font-size: 0.75rem;
+  color: var(--jello-text-soft);
 }
 
-.profile-wrapper-group:focus-within .char-counter {
-  opacity: 1;
-}
-
-/* perto do limite: amarelo/laranja */
-.char-counter.near-limit {
+.near-limit {
   color: #f59e0b;
 }
 
-/* no limite: vermelho */
-.char-counter.at-limit {
+.at-limit {
   color: #d32f2f;
   font-weight: 600;
 }
 
-@media (max-width: 1200px) {
-    .profile-wrapper {
-        width: 20rem;
-    }
-}
-
-@media (max-width: 760px) {
-    .profile-wrapper {
-        width: 100%;
+@media (prefers-reduced-motion: reduce) {
+    .profile-input.error {
+        animation: none;
     }
 }

@@ -1,39 +1,67 @@
-.report {
+.wrapper {
+    position: relative;
+}
+
+.trigger {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 36px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--jello-text);
+    cursor: pointer;
+}
+
+.trigger:hover {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.trigger:focus-visible {
+    outline: 3px solid var(--jello-link);
+}
+
+.menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    z-index: 20;
     display: flex;
     flex-direction: column;
-    padding: .5rem;
-    background-color: white;
-    border-radius: 16px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.300);
-
-    position: absolute;
-    right: 0;
-    z-index: 999;
-    opacity: 0;
-    transform: scale(0.8);
-    transform-origin: top right;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    min-width: 290px;
+    padding: 6px 4px;
+    border: 1px solid #78d9ff;
+    border-radius: 12px;
+    background: var(--jello-surface);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
-.report-open {
-   opacity: 1;
-    transform: scale(1);
-    visibility: visible;
-    pointer-events: auto;
-}
-
-.options {
+.menu button {
     display: flex;
-    gap: .5rem;
-    cursor: pointer;
-    padding: .5rem;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    border: 0;
     border-radius: 8px;
-    transition: 0.2s ease background-color;
+    background: transparent;
+    color: var(--jello-text);
+    font-size: 17px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
 }
 
-.options:hover {
-    background-color: #DFF6FF;
+.menu button:hover {
+    background: var(--jello-sky-soft);
 }
 
+.menu button:focus-visible {
+    outline: 2px solid var(--jello-link);
+}
+
+@media (max-width: 560px) {
+    .menu {
+        min-width: 240px;
+    }
+}

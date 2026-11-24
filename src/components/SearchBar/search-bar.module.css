@@ -1,0 +1,50 @@
+.bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 780px;
+    height: 62px;
+    padding: 0 12px 0 32px;
+    border-radius: var(--jello-radius);
+    background: var(--jello-surface);
+    box-shadow: var(--jello-shadow-card);
+}
+
+.bar:focus-within {
+    box-shadow: var(--jello-shadow-card), 0 0 0 3px rgba(120, 217, 255, 0.6);
+}
+
+.bar input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--jello-text);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.bar input::placeholder {
+    color: var(--jello-muted);
+}
+
+.bar button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+}
+
+.bar button:hover {
+    background: var(--jello-hover);
+}
+
+.bar button:focus-visible {
+    outline: 3px solid var(--jello-link);
+}

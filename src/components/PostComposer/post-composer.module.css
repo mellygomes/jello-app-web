@@ -1,0 +1,57 @@
+.composer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+    padding: 18px 28px;
+    border-radius: var(--jello-radius);
+    background: var(--jello-sky);
+    box-shadow: var(--jello-shadow-card);
+}
+
+.prompt {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 4px;
+    border: 0;
+    background: transparent;
+    color: var(--jello-text-soft);
+    font-size: 22px;
+    font-weight: 400;
+    text-align: left;
+    cursor: text;
+}
+
+.prompt:focus-visible,
+.send:focus-visible {
+    outline: 3px solid var(--jello-link);
+    outline-offset: 2px;
+}
+
+.send {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--jello-btn);
+    color: var(--jello-btn-text);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.send:hover {
+    background: var(--jello-btn-hover);
+}
+
+@media (max-width: 640px) {
+    .composer {
+        padding: 14px 16px;
+    }
+    .prompt {
+        font-size: 17px;
+    }
+}

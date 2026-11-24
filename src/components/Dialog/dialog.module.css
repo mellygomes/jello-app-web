@@ -1,0 +1,76 @@
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    background: rgba(40, 40, 40, 0.55);
+}
+
+.box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: calc(100vh - 48px);
+    padding: 32px 34px 28px;
+    border-radius: 20px;
+    background: var(--jello-surface);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    outline: none;
+}
+
+.close {
+    position: absolute;
+    top: 22px;
+    right: 24px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--jello-text-soft);
+    cursor: pointer;
+}
+
+.close:hover {
+    background: var(--jello-hover);
+    color: var(--jello-text);
+}
+
+.close:focus-visible {
+    outline: 3px solid var(--jello-link);
+}
+
+.title {
+    margin: 0 56px 18px 0;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 22px;
+}
+
+@media (max-width: 560px) {
+    .box {
+        padding: 24px 18px 20px;
+    }
+    .title {
+        font-size: 24px;
+    }
+}

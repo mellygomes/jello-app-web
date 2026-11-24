@@ -1,54 +1,91 @@
 .jello-button {
-  --btn-bg: #1f1f1f;
-  --btn-bg-hover: #2b2b2b;
-  --btn-text: #ffffff;
-  --btn-border: none;       
-  
-  display: inline-flex;            
+  --btn-bg: var(--jello-btn);
+  --btn-bg-hover: var(--jello-btn-hover);
+  --btn-text: var(--jello-btn-text);
+  --btn-border: none;
+
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
 
   width: fit-content;
-  min-width: 150px;
-  padding: 0.4rem 0.5rem;
+  min-width: 132px;
+  padding: 0.6rem 1.4rem;
 
   background-color: var(--btn-bg);
   color: var(--btn-text);
-  border: var(--btn-border);    
+  border: var(--btn-border);
 
   border-radius: 999px;
-  font-size: 14px;
-  font-weight: 600;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.18);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18);
   cursor: pointer;
   transition: background-color 0.15s, box-shadow 0.15s,
               transform 0.1s, color 0.15s, border-color 0.15s;
 }
 
-.jello-button:hover {
+.jello-button:hover:not(:disabled) {
     background-color: var(--btn-bg-hover);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.152);  /* ← MAS aplica o shadow padrão */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     transform: translateY(-1px);
 }
 
+.jello-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.jello-button:focus-visible {
+  outline: 3px solid var(--jello-link);
+  outline-offset: 2px;
+}
+
 .primary {
-  --btn-bg: #1E1E1E;
-  --btn-bg-hover: #373737;
+  --btn-bg: var(--jello-btn);
+  --btn-bg-hover: var(--jello-btn-hover);
 }
 
 .ghost {
-  --btn-bg: transparent;
-  --btn-bg-hover: #f3f4f6;
-  --btn-text: #6b7280;      /* cinza do texto */
-  --btn-border: 1px solid #9ca3af;   /* borda cinza */
+  --btn-bg: var(--jello-surface);
+  --btn-bg-hover: var(--jello-hover);
+  --btn-text: var(--jello-text-soft);
+  --btn-border: 2px solid var(--jello-border);
 
   border: var(--btn-border);
   box-shadow: none;
 }
 
-.ghost:hover {
-  --btn-bg: #f3f4f6;
-  --btn-bg-hover: #e5e7eb;
-  --btn-text: #576272;
+.ghost:hover:not(:disabled) {
+  --btn-text: var(--jello-text);
+}
+
+.light {
+  --btn-bg: var(--jello-sky);
+  --btn-bg-hover: var(--jello-hover);
+  --btn-text: var(--jello-text);
+}
+
+.danger {
+  --btn-bg: #d32f2f;
+  --btn-bg-hover: #b71c1c;
+  --btn-text: #ffffff;
+}
+
+.small {
+  min-width: 0;
+  padding: 0.35rem 1rem;
+  font-size: 14px;
+}
+
+/* botão de formulário do login/cadastro: largura toda, cantos 12 */
+.block {
+  width: 100%;
+  height: 56px;
+  border-radius: 12px;
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--btn-text);
 }

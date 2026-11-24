@@ -11,7 +11,7 @@ export function useTags() {
                 const response = await getTags();
                 setTags(response.data);
             } catch (error) {
-                console.log(error);
+                console.error("Erro ao carregar tags:", error);
             }
         }
 

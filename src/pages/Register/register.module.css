@@ -1,13 +1,25 @@
 .erro {
-  background-color: #fdecea;
+  background-color: var(--jello-danger-bg);
   color: #b71c1c;
   border: 1px solid #f5c6cb;
-  border-radius: 10px;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  margin-top: 0.75rem;
+  border-radius: 12px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0;
 }
 
-/* .erro::before { // Achei feio isso aqui
-  content: "⚠ ";
-} */
+.name-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.gap {
+  height: 12px;
+}
+
+@media (max-width: 520px) {
+  .name-row {
+    grid-template-columns: 1fr;
+  }
+}

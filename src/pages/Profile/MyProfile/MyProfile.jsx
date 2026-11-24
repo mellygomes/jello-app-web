@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./my-profile.module.css";
 import {
     Button,
@@ -5,7 +6,8 @@ import {
     ProfileDescription,
     ProfileHeader,
     ProfileAvatar,
-    Spinner
+    Spinner,
+    TopBar
 } from "../../../components";
 import ProfileInput from "./ProfileInput";
 import { useLoggedProfile } from "../../../hooks";
@@ -33,71 +35,87 @@ export default function MyProfile() {
         handleSave
     } = useLoggedProfile();
 
-    if (loading || loadingProfile) return <p><Spinner size={14} color="#fff" aria-hidden="true" /> Carregando perfil...</p>;
-    if (!user) return <p>Entre na sua conta para ver seu perfil.</p>;
-    if (!profile && error) return <p>{error}</p>
+    if (loading || loadingProfile) {
+        return <p className="page-loading"><Spinner size={22} color="#282828" aria-hidden="true" />&nbsp;Carregando perfil...</p>;
+    }
+    if (!user) return <p className="page-loading">Entre na sua conta para ver seu perfil.</p>;
+    if (!profile) {
+        // sem perfil carregado a pessoa ainda pode sair ou tentar de novo
+        return (
+            <>
+                <TopBar />
+                <div className={styles["load-error"]}>
+                    <p>{error || "Não foi possível carregar seu perfil."}</p>
+                    <Button onClick={() => window.location.reload()}>Tentar de novo</Button>
+                </div>
+            </>
+        );
+    }
 
     return (
         <main className={styles["page-wrapper"]}>
+            <TopBar />
 
-            <div className={styles["profile-container"]}>
-
+            <div className={styles["cover-area"]}>
                 <ProfileCover
                     src={coverUrl}
                     onChange={handleCoverChange}
                     disabled={!isEditing}
                 />
-                <ProfileAvatar
-                    src={avatarUrl}
-                    onChange={handleAvatarChange}
-                    disabled={!isEditing}
-                />
-
             </div>
 
-            <div className={`${styles["info-container"]} container`}>
-                <div className={styles["header-wrapper"]}>
-                    <ProfileHeader
-                        name={`${formData.firstName} ${formData.lastName}`}
-                        followers={`${profile?.followers ?? 0} seguidores`}
-                        following={`${profile?.following ?? 0} seguindo`}
-                        posts={`${profile?.posts ?? 0} posts`}
+            <div className={styles["info-container"]}>
+                <div className={styles["avatar-col"]}>
+                    <ProfileAvatar
+                        src={avatarUrl}
+                        onChange={handleAvatarChange}
+                        disabled={!isEditing}
+                        size={180}
                     />
-                    <div className="d-flex gap-2">
-                        {isEditing ? (
-                            <>
-                                <Button
-                                    onClick={handleCancel} variant="ghost"> Cancelar
-                                </Button>
-                                <Button onClick={handleSave} disabled={saving} variant="primary">
-                                    {saving ? (
-                                        <>
-                                            <Spinner size={14} aria-hidden="true" />
-                                            <span>Salvando...</span>
-                                        </>
-                                    ) : (
-                                        "Salvar"
-                                    )}
-                                </Button>
-                            </>
-                        ) : (
-                            <Button onClick={() => setIsEditing(true)}>
-                                Editar
-                            </Button>
-                        )}
-                    </div>
                 </div>
 
-                <ProfileDescription
-                    title="Descrição"
-                    value={formData.bio}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    maxLength={255}
-                />
+                <div className={styles["content-col"]}>
+                    <div className={styles["header-wrapper"]}>
+                        <ProfileHeader
+                            name={`${formData.firstName} ${formData.lastName}`}
+                            followers={`${profile?.followers ?? 0} seguidores`}
+                            following={`${profile?.following ?? 0} seguindo`}
+                            posts={`${profile?.posts ?? 0} posts`}
+                        />
+                        <div className={styles.actions}>
+                            {isEditing ? (
+                                <>
+                                    <Button onClick={handleCancel} variant="ghost" disabled={saving}>Cancelar</Button>
+                                    <Button onClick={handleSave} disabled={saving} variant="primary">
+                                        {saving ? (
+                                            <>
+                                                <Spinner size={16} aria-hidden="true" />
+                                                <span>Salvando...</span>
+                                            </>
+                                        ) : (
+                                            "Salvar"
+                                        )}
+                                    </Button>
+                                </>
+                            ) : (
+                                <Button onClick={() => setIsEditing(true)}>
+                                    Editar
+                                </Button>
+                            )}
+                        </div>
+                    </div>
 
-                <div className={`container ${styles["form-wrapper"]}`}>
-                    <div className={styles["input-wrapper"]}>
+                    {error && <p className={styles.error} role="alert">{error}</p>}
+
+                    <ProfileDescription
+                        title="Descrição"
+                        value={formData.bio}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                        maxLength={255}
+                    />
+
+                    <div className={styles["form-wrapper"]}>
                         <ProfileInput
                             id="firstName"
                             name="firstName"
@@ -107,9 +125,9 @@ export default function MyProfile() {
                             disabled={!isEditing}
                             maxLength={30}
                             errorValidate={errorsValidate.firstName}
-                            // Notinhaaa: esse shakeKey serve basicamente pra fazer a validação rodar de novo sempre 
-                            // que clica em confirm, daí a animação aparece no campo com erro e usuário pode ver :)  
-                            shakeKey={submitAttempt} 
+                            // Notinhaaa: esse shakeKey serve basicamente pra fazer a validação rodar de novo sempre
+                            // que clica em confirm, daí a animação aparece no campo com erro e usuário pode ver :)
+                            shakeKey={submitAttempt}
                         />
                         <ProfileInput
                             id="lastName"
@@ -120,21 +138,19 @@ export default function MyProfile() {
                             disabled={!isEditing}
                             maxLength={30}
                             errorValidate={errorsValidate.lastName}
-                            shakeKey={submitAttempt} 
+                            shakeKey={submitAttempt}
                         />
-                    </div>
-                    <div className={styles["input-wrapper"]}>
                         <ProfileInput
                             id="email"
                             name="email"
-                            label="E-mail"
+                            label="Email"
                             type="email"
                             value={formData.email}
                             onChange={handleChange}
                             disabled={!isEditing}
                             maxLength={80}
                             errorValidate={errorsValidate.email}
-                            shakeKey={submitAttempt} 
+                            shakeKey={submitAttempt}
                         />
                         <ProfileInput
                             id="username"
@@ -143,11 +159,15 @@ export default function MyProfile() {
                             value={formData.username}
                             onChange={handleChange}
                             disabled={!isEditing}
-                            maxLength={20}
+                            maxLength={30}
                             errorValidate={errorsValidate.username}
-                            shakeKey={submitAttempt} 
+                            shakeKey={submitAttempt}
                         />
                     </div>
+
+                    <p className={styles.hint}>
+                        Pra trocar a senha, vá em <Link to="/settings">Configurações</Link>. Quer ver como os outros enxergam seu perfil? <Link to="/my-profile">Abrir meu perfil</Link>.
+                    </p>
                 </div>
             </div>
         </main>
